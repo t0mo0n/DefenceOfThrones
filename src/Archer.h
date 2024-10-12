@@ -1,5 +1,5 @@
-#ifndef TOWER1_H
-#define TOWER1_H
+#ifndef ARCHER_H
+#define ARCHER_H
 
 #include <QObject>
 #include <QGraphicsItem>
@@ -8,19 +8,19 @@
 #include <QTimer>
 #include <Projectile.h>
 
-class tower1 : public Tower_frame
+class Archer : public TowerFrame
 {
     Q_OBJECT
 public:
-    explicit tower1(QPoint pos_=QPoint(0,0));
-    void Attack()override;
+    explicit Archer(QPoint pos_=QPoint(0,0));
+    void attack()override;
     QTimer *aimTimer;
     QTimer *attackTimer;
 
 signals:
 public slots:
-    void Upgrade()override;
+    void upgrade()override;
 
 };
 
-#endif // TOWER1_H
+#endif // ARCHER_H

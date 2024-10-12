@@ -9,17 +9,17 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    Archer.cpp \
     Projectile.cpp \
-    Tower1.cpp \
     TowerFrame.cpp \
     main.cpp \
     GameController.cpp \
     movingitem.cpp
 
 HEADERS += \
+    Archer.h \
     GameController.h \
     Projectile.h \
-    Tower1.h \
     TowerFrame.h \
     movingitem.h
 
