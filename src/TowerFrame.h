@@ -9,6 +9,7 @@
 #include <QPoint>
 #include <QPainter>
 #include <QDebug>
+#include <Projectile.h>
 #include <QVector>
 
 class Tower_frame : public QObject,public QGraphicsItem
@@ -29,24 +30,27 @@ protected:
 
     QString pic_dir;
     QVector<int> upgrade_fee;
+    QVector<Projectile*> projectile_list;
 
 
 public:
     explicit Tower_frame(QPoint pos_=QPoint(0,0),int type=0);
     virtual void Attack()=0;
     static int tower_size;
-    void Findenemy();
+    void FindEnemy();//跟踪并且瞄准敌人
 
     int get_BuyCost(){return buy_cost;};
     int get_SellPrice(){return sellPrice;};
     int get_UpdateCost(){return upgrade_fee[level];};//这里可能出问题，升级的坐标不能超过界限！！1-3级
     void set_target(QGraphicsItem* target_out=nullptr){target=target_out;};
-
+    void ResetTarget();//如果敌人死了，调用这个方法把这个防御塔的敌人置空；
 
     void paint(QPainter * painterconst,const QStyleOptionGraphicsItem *option, QWidget *widget)override;//画出防御塔
     QRectF boundingRect() const override;
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override ;
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
+
+    QPointF TowerCentral;//相对于场景的坐标
 
 signals:
 public slots:

@@ -15,6 +15,7 @@ public:
     explicit tower1(QPoint pos_=QPoint(0,0));
     void Attack()override;
     QTimer *aimTimer;
+    QTimer *attackTimer;
 
 signals:
 public slots:

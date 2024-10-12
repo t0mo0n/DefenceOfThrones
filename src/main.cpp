@@ -48,11 +48,11 @@ int main(int argc, char *argv[])
     QTimer timer;
     QObject::connect(&timer, &QTimer::timeout, item, &MovingItem::moveItem);
 
-    // QObject::connect(&timer, &QTimer::timeout, [tow1,item]() {
+    // QObject::connect(&timer, &QTimer::timeout,item, [tow1,item]() {
     //     // 检查碰撞
     //     if (tow1->collidesWithItem(item)) {
     //         qDebug() << "Collision detected!";
-    //         tow1->Attack(item);
+    //         tow1->Attack();
     //     } else {
     //         qDebug() << "No collision.";
     //     }
