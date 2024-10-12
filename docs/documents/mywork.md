@@ -10,7 +10,7 @@
 
 ## 类设计
 
-### 7. **TowerFrame (防御塔基类)**
+### 7. **TowerFrame (防御塔基类)**//不需要调用基类,调用它的子类就行
 
 - **全局**
     - 希望全局控制者能维护一个敌人队列，每次从队列中取出一个敌人给防御塔攻击
@@ -33,15 +33,15 @@
 
 - **主要方法:**
     - `explicit TowerFrame(QPoint pos_=QPoint(0,0),int type=0);`:防御塔基类构造函数
-    - `virtual void attack()=0;`:攻击
-    - `void findEnemy();`//跟踪并且瞄准敌人
+    - `virtual void attack()=0;`:攻击(需要手动调用)
+    - `void findEnemy();`(不需要手动调用)跟踪并且瞄准敌人
 
     - `int getBuyCost(){return buy_cost;};`:获得购买的价格
     - `int getSellPrice(){return sellPrice;};`:获得出售的价格
     - `int getUpdateCost()`:获得升级需要的价格
     - `void setTarget(QGraphicsItem* target_out=nullptr);`:给防御塔设置敌人
+    - 
     - `void resetTarget();`:(不需要手动调用,已经自动实现)如果敌人死了,调用这个方法把这个防御塔和投掷物的敌人置空
-
     - `void paint(QPainter * painterconst,const QStyleOptionGraphicsItem *option, QWidget *widget)override;`//画出防御塔
     - `QRectF boundingRect() const override;`
     - `void mousePressEvent(QGraphicsSceneMouseEvent *event) override ;`
@@ -57,6 +57,10 @@
   - **主要接口**
     - `explicit Archer(QPoint pos_=QPoint(0,0));`:弓箭手的位置
     - `void attack()override;`:调用弓箭手攻击,每次调用都会自动向敌人发出炮弹
+    - `int getBuyCost(){return buy_cost;};`:获得购买的价格
+    - `int getSellPrice(){return sellPrice;};`:获得出售的价格
+    - `int getUpdateCost()`:获得升级需要的价格
+    - `void setTarget(QGraphicsItem* target_out=nullptr);`:给防御塔设置敌人
 
 ### 7.2 **Tower2 (增益塔)**
 
@@ -95,3 +99,30 @@
     - `static qreal pix_size;`:子弹的大小
     - `void outOfRange();`:删除超过攻击范围的子弹
     - `void destroy();`:子弹销毁的信号
+
+
+```
+部分函数使用示例代码
+    QGraphicsScene scene;
+    scene.setSceneRect(0, 0, 1000, 1000);
+    scene.setBackgroundBrush(QBrush(Qt::lightGray));
+
+    MovingItem *item = new MovingItem();
+    item->setPos(QPointF(10,250));
+    scene.addItem(item);
+
+
+    Archer *tow1=new Archer(QPoint(300,300));
+
+    Archer *tow2=new Archer(QPoint(500,100));
+    scene.addItem(tow1);
+    scene.addItem(tow2);
+    tow1->setTarget(item);
+    tow2->setTarget(item);
+
+    QGraphicsView view(&scene);
+    view.setFixedSize(1000, 1000);
+    view.show();
+    QTimer timer;
+    QObject::connect(&timer, &QTimer::timeout, item, &MovingItem::moveItem);
+    timer.start(100);
