@@ -14,7 +14,7 @@
 #include <MovingItem.h>
 #include <QApplication>
 #include <TowerFrame.h>
-#include <tower1.h>
+#include <Archer.h>
 
 int main(int argc, char *argv[])
 {
@@ -31,13 +31,13 @@ int main(int argc, char *argv[])
     scene.addItem(item);
 
 
-    tower1 *tow1=new tower1(QPoint(300,300));
+    Archer *tow1=new Archer(QPoint(300,300));
 
-    tower1 *tow2=new tower1(QPoint(500,100));
+    Archer *tow2=new Archer(QPoint(500,100));
     scene.addItem(tow1);
     scene.addItem(tow2);
-    tow1->set_target(item);
-    tow2->set_target(item);
+    tow1->setTarget(item);
+    tow2->setTarget(item);
 
     QGraphicsView view(&scene);
     view.setFixedSize(1000, 1000);
@@ -47,6 +47,7 @@ int main(int argc, char *argv[])
 
     QTimer timer;
     QObject::connect(&timer, &QTimer::timeout, item, &MovingItem::moveItem);
+
 
     // QObject::connect(&timer, &QTimer::timeout,item, [tow1,item]() {
     //     // 检查碰撞
@@ -59,6 +60,11 @@ int main(int argc, char *argv[])
     // });
     timer.start(100);
     // timer2.start(1000);
+
+
+
+
+
 
     return a.exec();
 }

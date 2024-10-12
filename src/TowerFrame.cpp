@@ -1,6 +1,6 @@
 #include "TowerFrame.h"
 
-Tower_frame::Tower_frame(QPoint pos_,int type)
+TowerFrame::TowerFrame(QPoint pos_,int type)
 {
     if(type==0)
     {
@@ -14,14 +14,14 @@ Tower_frame::Tower_frame(QPoint pos_,int type)
     this->setPos(pos_);
     towertype=type;
     level=1;
-    setTransformOriginPoint(tower_size/2,tower_size/2); // 设置变换原点
+    setTransformOriginPoint(towerSize/2,towerSize/2); // 设置变换原点
     target=nullptr;
-    TowerCentral=QPointF(pos_.x()+tower_size/2,pos_.y()+tower_size/2);
+    TowerCentral=QPointF(pos_.x()+towerSize/2,pos_.y()+towerSize/2);
 }
 
-int Tower_frame::tower_size=100;
+int TowerFrame::towerSize=100;
 
-void Tower_frame::paint(QPainter * painterconst,const QStyleOptionGraphicsItem *option, QWidget *widget)
+void TowerFrame::paint(QPainter * painterconst,const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     Q_UNUSED(option);
     Q_UNUSED(widget);
@@ -30,17 +30,17 @@ void Tower_frame::paint(QPainter * painterconst,const QStyleOptionGraphicsItem *
     QRectF rect = boundingRect();
     painterconst->setPen(Qt::red); // 设置边界框颜色
     painterconst->drawRect(rect); // 绘制边界矩形
-    painterconst->drawEllipse(tower_size/2-attack_range,tower_size/2-attack_range,2*attack_range,2*attack_range); // 绘制边界矩形
+    painterconst->drawEllipse(towerSize/2-attackRange,towerSize/2-attackRange,2*attackRange,2*attackRange); // 绘制边界矩形
 
-    painterconst->drawPixmap(QRect(0,0,tower_size,tower_size),QPixmap(pic_dir));
+    painterconst->drawPixmap(QRect(0,0,towerSize,towerSize),QPixmap(picDir));
 }
 
-QRectF Tower_frame::boundingRect()const
+QRectF TowerFrame::boundingRect()const
 {
-    return QRectF(tower_size/2-attack_range,tower_size/2-attack_range,2*attack_range,2*attack_range);
+    return QRectF(towerSize/2-attackRange,towerSize/2-attackRange,2*attackRange,2*attackRange);
 }
 
-void Tower_frame::Sell()
+void TowerFrame::sell()
 {
     QGraphicsScene *game_map=this->scene();
     if(game_map!=nullptr)
@@ -49,7 +49,7 @@ void Tower_frame::Sell()
     }
 }
 
-void Tower_frame::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+void TowerFrame::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
     QMenu menu;
     QAction *action1 = menu.addAction("upgrade");
@@ -60,7 +60,7 @@ void Tower_frame::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
     QGraphicsItem::contextMenuEvent(event);
 }
 
-void Tower_frame:: mousePressEvent(QGraphicsSceneMouseEvent *event)
+void TowerFrame:: mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     // 处理鼠标按下事件
     qDebug() << "Item clicked!";
@@ -68,7 +68,7 @@ void Tower_frame:: mousePressEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsItem::mousePressEvent(event); // 确保调用基类实现
 }
 
-void Tower_frame::FindEnemy()
+void TowerFrame::FindEnemy()
 {
     if (target!=nullptr) {
         // 获取塔的位置
@@ -88,14 +88,27 @@ void Tower_frame::FindEnemy()
         qDebug()<<"tower攻击的目标无效";
     }
 }
-void Tower_frame::ResetTarget()// 把塔的敌人制空，同时把所有子弹的敌人置空
+void TowerFrame::resetTarget()// 把塔的敌人制空，同时把所有子弹的敌人置空
 {
     target=nullptr;
-    if(!projectile_list.isEmpty())
+    if(!projectileList.isEmpty())
     {
-        for(auto item: projectile_list)
+        for(auto item: projectileList)
         {
-            item->SetTarget();
+            if(item)
+            {
+                item->setTarget();
+            }
+
         }
+    }
+}
+
+void TowerFrame::setTarget(QGraphicsItem* target_out)
+{
+    target=target_out;
+    MovingItem* movingItem = dynamic_cast<MovingItem*>(target);//这里仅做测试
+    if (movingItem) {
+        connect(movingItem, &MovingItem::destroyed, this, &TowerFrame::resetTarget);
     }
 }

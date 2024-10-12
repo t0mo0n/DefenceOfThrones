@@ -5,21 +5,21 @@ Projectile::Projectile(QPointF pos,QPointF Tower_c,qreal attack_range)
     delta=QPointF(0,0);
     setPos(pos);
     moveTimer = new QTimer(this);
-    connect(moveTimer, &QTimer::timeout, this, &Projectile::MoveToEneny);
-    connect(moveTimer, &QTimer::timeout, this, &Projectile::OutOfRange);
+    connect(moveTimer, &QTimer::timeout, this, &Projectile::moveToEneny);
+    connect(moveTimer, &QTimer::timeout, this, &Projectile::outOfRange);
     moveTimer->start(100); // 每50ms调用一次move()
-    Tower_cor=Tower_c;
+    towerCor=Tower_c;
     src=":/img/asset/GOT.jpg";
     speed=20;
-    Tattack_range=attack_range;
+    tattackRange=attack_range;
 }
 qreal Projectile::pix_size=10;
-void Projectile::SetTarget(QGraphicsItem * target)
+void Projectile::setTarget(QGraphicsItem * target)
 {
     enemys=target;
 }
 
-void Projectile::MoveToEneny()
+void Projectile::moveToEneny()
 {
     if (enemys!=nullptr) {
         // 获取projectile的位置
@@ -65,12 +65,13 @@ void Projectile::paint(QPainter *painter1, const QStyleOptionGraphicsItem *optio
     painter1->drawPixmap(QRect(0,0,pix_size,pix_size),QPixmap(src));
 }
 
-void Projectile::OutOfRange()
+void Projectile::outOfRange()
 {
-    qreal distance=QLineF(this->pos(),Tower_cor).length();
+    qreal distance=QLineF(this->pos(),towerCor).length();
 
-    if(distance>Tattack_range)
+    if(distance>tattackRange)
     {
+        emit destroy();
         moveTimer->stop();
         scene()->removeItem(this);
         delete this;  // 删除子弹对象

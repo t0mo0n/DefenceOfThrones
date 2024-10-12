@@ -1,16 +1,3 @@
-
-## 系统架构
-### 1. 游戏引擎与框架
-
-- **开发语言**: C++
-
-- **UI 框架**: Qt (Qt Widgets)
-
-- **图形库**: QGraphicsView, QGraphicsScene 用于场景管理
-
-- **声音库**: Qt Multimedia
-
-
 ## 功能需求
 
 ### 1 . **防御塔功能**
@@ -23,31 +10,53 @@
 
 ## 类设计
 
-### 7. **Tower_frame (防御塔基类)**
+### 7. **TowerFrame (防御塔基类)**
 
-- **全局变量**
-   - ~~`enermy_queue`:敌人队列,产生一个敌人就往队列尾部添加一个敌人,如果敌人被击败就从前端删掉一个敌人~~ 后续可以改成图形项组,应该在地图类中维护,地图类中应该维护不同种类的图形项组
+- **全局**
+    - 希望全局控制者能维护一个敌人队列，每次从队列中取出一个敌人给防御塔攻击
 - **主要成员变量:**
-    - `projType`: 投掷物种类
-    - `towertype`:防御塔的种类,范围在1-3中
-    - `level`:现在防御塔的等级,在1-3中
-    - `range`: 攻击范围
-    - `attackSpeed`: 攻击速度
-    - `buyCost`: 购买的花费
-    - `sellPrice`: 拆除返回的价格
-    - `int upgradeCost[]`: 第一类升级花费 (提升攻击范围与速度),第二类升级花费 (觉醒特殊能力, 比如说减速, 群伤, 一次性投出两个/对投掷物升级)
-    - `tower_size`:防御塔本体的大小(静态)
+    - `towerSize`:防御塔本体的大小(静态)
+    - `int projectType`//投掷物的种类
+    - `int towertype`//防御塔的种类
+    - `int level`//防御塔现在的等级
+
+    - `int attackRange`:攻击范围
+    - `int attackSpeed`:攻击速度
+    - `int buyCost`:购买花费
+    - `int sellPrice;`:出售价格
+    - `QGraphicsItem* target`:攻击的敌人
+
+    - `QString picDir`:图片位置
+    - `QVector<int> upgradeFee`:升级费用
+    - `QVector<Projectile*> projectileList`:投掷物列表
+    - `QPointF TowerCentral;`//相对于场景的坐标
+
 - **主要方法:**
-	- `Tower_frame(QGraphicsItem *parent = nullptr,QPoint pos_=QPoint(0,0),int type=0)`
-    - `void Attack(QGraphicsItem* target)`: 攻击敌人,每次调用攻击就从敌人队列中取出一个敌人获得他的位置,并且攻击它
-    - `void Upgrade()`: 升级塔的属性, type 指定升级的类型
-    - `int Sell(QGraphicsScene *game_map)`: /出售植物,从场景中移除并且返回出售后获得的钱,这里的gamemap是指游戏的地图的场景类
-    - `int get_BuyCost()`: 返回 buyCost
-    - `int get_SellPrice()`:返回出售的价格
-    - `int get_UpdateCost()`:返回升级的费用
+    - `explicit TowerFrame(QPoint pos_=QPoint(0,0),int type=0);`:防御塔基类构造函数
+    - `virtual void attack()=0;`:攻击
+    - `void findEnemy();`//跟踪并且瞄准敌人
 
-### 7.1 **Tower1(进攻塔)** 
+    - `int getBuyCost(){return buy_cost;};`:获得购买的价格
+    - `int getSellPrice(){return sellPrice;};`:获得出售的价格
+    - `int getUpdateCost()`:获得升级需要的价格
+    - `void setTarget(QGraphicsItem* target_out=nullptr);`:给防御塔设置敌人
+    - `void resetTarget();`:(不需要手动调用,已经自动实现)如果敌人死了,调用这个方法把这个防御塔和投掷物的敌人置空
 
+    - `void paint(QPainter * painterconst,const QStyleOptionGraphicsItem *option, QWidget *widget)override;`//画出防御塔
+    - `QRectF boundingRect() const override;`
+    - `void mousePressEvent(QGraphicsSceneMouseEvent *event) override ;`
+    - `void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;`:右键防御塔会出现升级和出售
+
+
+
+- **public slots:**
+    - `virtual void Upgrade()=0;`//升级植物,界面设计者要根据现有的钱和updatecost比较获得是否可行,别忘了扣钱
+    - `void Sell();`//出售植物并将植物删除
+
+### 7.1 **Archer(弓箭手)** 
+  - **主要接口**
+    - `explicit Archer(QPoint pos_=QPoint(0,0));`:弓箭手的位置
+    - `void attack()override;`:调用弓箭手攻击,每次调用都会自动向敌人发出炮弹
 
 ### 7.2 **Tower2 (增益塔)**
 
@@ -62,68 +71,27 @@
 
 
 
-### 9. **Projectile (投射物)**
+### 9. **Projectile (投射物基类)**
 
 - **功能:** 定义防御塔发射的子弹或魔法攻击。
 - **主要成员变量:**
-    - `speed`: 移动速度
-    - `damage`: 伤害
-    - `target`: 目标, 它移动的逻辑可以是朝着目标走去
+    - `int speed;`:子弹的速度
+    - `int damage;`:子弹的伤害
+    - `QString src;`:投掷物的图片
+    - `QGraphicsItem* enemys;`:子弹的目标
+    - `QPointF delta;`:子弹位移的偏移量
+    - `QTimer* moveTimer ;`:子弹移动的计时器
+    - `QPointF towerCor;`:子弹所属防御塔中心坐标
+    - `qreal tattackRange;`:塔的攻击范围
+
+
+
 - **主要方法:**
-    - `move()`: 更新投射物的位置
-    - `hitTarget()`: 命中敌人时触发的效果
-
-### 类之间的关系
-
-- **注意: 本项目的位置除了网格地图外, 均是实际位置! 地图的位置在绘制时也需要转成实际位置, 这样便于碰撞检测和对象管理. 需要求对象位置时, 直接用 pos() 和 setPos() 方法即可, 不用特地存放 pos 的信息. 所以所有的实体都得是 QGraphicsItem 的子类.**
-- `GameController` 负责管理游戏的整体流程，包括显示主菜单、关卡选择菜单和游戏场景。也包括对于 `Player` 信息的获取与修改
-- `MainMenu` 和 `LevelSelectMenu` 通过信号和槽与 `GameController` 交互，通知 `GameController` 用户的选择。
-- `GameScene` 负责显示游戏中的所有图形元素，并与 `GameController` 交互以更新游戏状态。
-- `SettingsMenu` 允许玩家调整游戏参数，并与 `GameController` 交互以应用设置。
-- `Tower` 可以在 `GameScene` 的鼠标事件下完成放置, 升级与出售防御塔, 并通过信号与槽, 在 `GameController` 中对玩家金币信息进行修改. 它会通过 attack 方法生成 projectile 攻击敌人.
-- `Enemy` 会按照 `Map` 给出的路线移动, 被攻击到会扣除血量. 达到终点则扣除玩家血量, 自己也消亡. 如果血量被扣除完, 则会通过信号告诉 `GameController` 给玩家增加钱, 自己消亡.
-- `Projectile` 由 tower 生成, 会跟踪敌人位置攻击敌人. 发生碰撞后会扣除敌人的血量. 具体怎么实现, 可以考虑 qt 自带的碰撞判定以及信号和槽.
-- `Map` 给出二维数组表示的地图, 结合关卡数字进行关卡设计; 包括路线, 空闲方块, 敌人出生点, 萝卜位置, 障碍物初始位置. 需要将障碍物初始位置传递出来, 需要将敌人的出生点与路线传递出来. 通过 `GameController`, 在构造 `Enemy` 时就通过构造函数传进去.
-- `Obstacles` 是障碍物, 被破坏时会通过信号告诉 `GameController`, 增加金币.
-
-  
-## 开发计划
-
-### **第 1 阶段**: 核心游戏玩法开发
-
-   - 完成地图、敌人和塔的交互逻辑。
-   - 实现敌人路径规划与防御塔攻击功能。
-   - 实现基本的几个页面与功能
-
-**DDL:** 10.18
-
-### **第 2 阶段**: UI 与关卡设计
-
-   - 设计并实现多个关卡和地图。
-   - 加入难度系统
-
-**DDL:** 10.25
-
-### **第 3 阶段**: 完善与测试
-
-   - 添加音效和游戏效果。
-   - 美化 UI 与贴图
-   - 修复 bug，并进行优化。
-   - 丰富功能, 如加入玩家得分系统, 加入游戏得分纪录系统; 加入炮台"集火"功能
-
-**DDL:** 11.2
-
-### **第 4 阶段**: 发布与优化
-
-   - 完成最终版本，优化性能，发布游戏。
-
-### **分工**
-- Tower 及其子类开发; 游戏图片素材的搜寻.
-- Enemy, Projectile 及其子类开发.
-- MainMenu, LevelSelectMenu, SettingsMenu, Obstacle开发
-- GameScene, Map 开发; 关卡设计与难度系统设计.
-1. 毛绎然: 统筹各方, 项目总体设计, 代码整合, 流程管理, 代码 Debug 与优化; GameController, Player 部分开发; UI 设计
-2. 滕燎原:
-3. 陈旺:
-4. 苏敬茗:
-5. 梁大楷:
+    - `explicit Projectile(QPointF pos,QPointF Tower_c,qreal attack_range);`
+    - `void setTarget(QGraphicsItem* Enemy=nullptr);`:设置子弹的攻击敌人
+    - `void moveToEneny();`:自动向敌人移动
+    - `void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)override;`
+    - `QRectF boundingRect() const override;`
+    - `static qreal pix_size;`:子弹的大小
+    - `void outOfRange();`:删除超过攻击范围的子弹
+    - `void destroy();`:子弹销毁的信号
