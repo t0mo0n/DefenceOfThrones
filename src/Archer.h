@@ -6,6 +6,7 @@
 #include <TowerFrame.h>
 #include <QGraphicsItemAnimation>
 #include <QTimer>
+#include <FireArrow.h>
 #include <Projectile.h>
 
 class Archer : public TowerFrame

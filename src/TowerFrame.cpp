@@ -12,7 +12,7 @@ TowerFrame::TowerFrame(QPoint pos_,int type)
     }
 
     this->setPos(pos_);
-    towertype=type;
+    towerType=type;
     level=1;
     setTransformOriginPoint(towerSize/2,towerSize/2); // 设置变换原点
     target=nullptr;
@@ -46,6 +46,7 @@ void TowerFrame::sell()
     if(game_map!=nullptr)
     {
         game_map->removeItem(this);
+        delete this;
     }
 }
 
@@ -54,8 +55,8 @@ void TowerFrame::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
     QMenu menu;
     QAction *action1 = menu.addAction("upgrade");
     QAction *action2 = menu.addAction("sell");
-    connect(action1,SIGNAL(triggered()),this,SLOT(Upgrade()));
-    connect(action2,SIGNAL(triggered()),this,SLOT(Sell()));
+    connect(action1,SIGNAL(triggered()),this,SLOT(upgrade()));
+    connect(action2,SIGNAL(triggered()),this,SLOT(sell()));
     menu.exec(event->screenPos()); //在按下鼠标左键的地方弹出菜单
     QGraphicsItem::contextMenuEvent(event);
 }
@@ -85,7 +86,7 @@ void TowerFrame::FindEnemy()
     }
     else
     {
-        qDebug()<<"tower攻击的目标无效";
+        // qDebug()<<"tower攻击的目标无效";
     }
 }
 void TowerFrame::resetTarget()// 把塔的敌人制空，同时把所有子弹的敌人置空

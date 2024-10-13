@@ -9,6 +9,7 @@ Archer::Archer(QPoint pos_)
     buyCost=1000;
     sellPrice=900;
     picDir=":/img/asset/3.png";
+    towerType=1;
 
     upgradeFee.push_back(1000);
     upgradeFee.push_back(2000);
@@ -40,13 +41,27 @@ void Archer::attack()
             QPointF bulletStartPos(bulletX, bulletY);
 
             // 创建并发射投掷物
-            Projectile * bullet = new Projectile(bulletStartPos,TowerCentral,attackRange);
-            projectileList.push_back(bullet);
-            connect(bullet, &Projectile::destroy, this, [this, bullet]() {
-                projectileList.removeOne(bullet);  // 从列表中移除该子弹
-            });
-            bullet->setTarget(target);
-            scene()->addItem(bullet);
+            Projectile * bullet=nullptr ;
+            assert(1<=level&&level<=2);
+            if (level==1)
+            {
+                bullet = new Projectile(bulletStartPos,TowerCentral,attackRange);
+            }
+            else if(level==2)
+            {
+                bullet = new FireArrow(bulletStartPos,TowerCentral,attackRange);
+            }
+            if(bullet)
+            {
+                projectileList.push_back(bullet);
+
+                connect(bullet, &Projectile::destroy, this, [this, bullet]() {
+                    projectileList.removeOne(bullet);  // 从列表中移除该子弹
+                });
+                bullet->setTarget(target);
+                scene()->addItem(bullet);
+            }
+
 
         }
         else {
@@ -62,7 +77,9 @@ void Archer::attack()
 
 void Archer::upgrade()
 {
+    qDebug()<<this->pos()<<"upgrade!";
     level++;
     attackRange+=100;
     attackSpeed+=100;
+    update();
 }

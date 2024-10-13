@@ -11,8 +11,10 @@ CONFIG += c++17
 SOURCES += \
     Archer.cpp \
     Dragon.cpp \
+    FireArrow.cpp \
     JohnSnow.cpp \
     Projectile.cpp \
+    Stone.cpp \
     StoneThrower.cpp \
     TowerFrame.cpp \
     main.cpp \
@@ -22,9 +24,11 @@ SOURCES += \
 HEADERS += \
     Archer.h \
     Dragon.h \
+    FireArrow.h \
     GameController.h \
     JohnSnow.h \
     Projectile.h \
+    Stone.h \
     StoneThrower.h \
     TowerFrame.h \
     movingitem.h

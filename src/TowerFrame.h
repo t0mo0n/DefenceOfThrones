@@ -20,7 +20,7 @@ class TowerFrame : public QObject,public QGraphicsItem
     Q_INTERFACES(QGraphicsItem)
 protected:
     int projectType;//投掷物的种类
-    int towertype;//防御塔的种类
+    int towerType;//防御塔的种类
     int level;//防御塔现在的等级
 
     int attackRange;

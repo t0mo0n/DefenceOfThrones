@@ -12,6 +12,7 @@ Projectile::Projectile(QPointF pos,QPointF Tower_c,qreal attack_range)
     src=":/img/asset/GOT.jpg";
     speed=20;
     tattackRange=attack_range;
+    type=0;
 }
 qreal Projectile::pix_size=10;
 void Projectile::setTarget(QGraphicsItem * target)
@@ -41,9 +42,13 @@ void Projectile::moveToEneny()
     }
     else
     {
-        qDebug()<<"攻击的目标无效";
-
-        this->setPos(this->pos().x()+delta.x(),this->pos().y()+delta.y());
+        qDebug()<<"攻击的目标无效"<<this->pos();
+        emit destroy();
+        moveTimer->stop();
+        scene()->removeItem(this);
+        delete this;  // 删除子弹对象
+        return;
+        // this->setPos(this->pos().x()+delta.x(),this->pos().y()+delta.y());
     }
 }
 
