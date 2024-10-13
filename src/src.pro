@@ -10,7 +10,10 @@ CONFIG += c++17
 
 SOURCES += \
     Archer.cpp \
+    Dragon.cpp \
+    JohnSnow.cpp \
     Projectile.cpp \
+    StoneThrower.cpp \
     TowerFrame.cpp \
     main.cpp \
     GameController.cpp \
@@ -18,8 +21,11 @@ SOURCES += \
 
 HEADERS += \
     Archer.h \
+    Dragon.h \
     GameController.h \
+    JohnSnow.h \
     Projectile.h \
+    StoneThrower.h \
     TowerFrame.h \
     movingitem.h
 
