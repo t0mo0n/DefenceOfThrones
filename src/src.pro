@@ -17,7 +17,6 @@ SOURCES += \
     TowerFrame.cpp \
     main.cpp \
     GameController.cpp \
-    movingitem.cpp
 
 HEADERS += \
     Archer.h \
@@ -27,7 +26,6 @@ HEADERS += \
     Projectile.h \
     StoneThrower.h \
     TowerFrame.h \
-    movingitem.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
