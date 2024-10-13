@@ -86,7 +86,7 @@ void TowerFrame::FindEnemy()
     }
     else
     {
-        // qDebug()<<"tower攻击的目标无效";
+        qDebug()<<"tower攻击的目标无效";
     }
 }
 void TowerFrame::resetTarget()// 把塔的敌人制空，同时把所有子弹的敌人置空

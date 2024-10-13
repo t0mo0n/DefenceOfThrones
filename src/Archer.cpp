@@ -77,7 +77,10 @@ void Archer::attack()
 
 void Archer::upgrade()
 {
-    qDebug()<<this->pos()<<"upgrade!";
+    if(level>=2)
+    {
+        return;
+    }
     level++;
     attackRange+=100;
     attackSpeed+=100;

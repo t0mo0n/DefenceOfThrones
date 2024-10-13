@@ -10,7 +10,7 @@ Projectile::Projectile(QPointF pos,QPointF Tower_c,qreal attack_range)
     moveTimer->start(100); // 每50ms调用一次move()
     towerCor=Tower_c;
     src=":/img/asset/GOT.jpg";
-    speed=20;
+    speed=40;
     tattackRange=attack_range;
     type=0;
 }
