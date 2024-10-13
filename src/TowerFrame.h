@@ -11,7 +11,7 @@
 #include <QDebug>
 #include <Projectile.h>
 #include <QVector>
-#include <movingitem.h>
+//#include <movingitem.h>
 
 class TowerFrame : public QObject,public QGraphicsItem
 {
