@@ -1,5 +1,6 @@
 #include "GameScene.h"
 
-GameScene::GameScene(QWidget *parent)
-    : QWidget{parent}
-{}
+GameScene::GameScene(QGraphicsView *parent)
+    : QGraphicsView{parent}
+{
+}

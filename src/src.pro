@@ -10,17 +10,20 @@ CONFIG += c++17
 
 SOURCES += \
     Archer.cpp \
+    Button.cpp \
     Dragon.cpp \
     GameScene.cpp \
     JohnSnow.cpp \
     Projectile.cpp \
     StoneThrower.cpp \
     TowerFrame.cpp \
+    TowerSelectMenu.cpp \
     main.cpp \
     GameController.cpp \
 
 HEADERS += \
     Archer.h \
+    Button.h \
     Dragon.h \
     GameController.h \
     GameScene.h \
@@ -28,6 +31,7 @@ HEADERS += \
     Projectile.h \
     StoneThrower.h \
     TowerFrame.h \
+    TowerSelectMenu.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
