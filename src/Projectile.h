@@ -22,7 +22,9 @@ public:
     QRectF boundingRect() const override;
     static qreal pix_size;
     void outOfRange();//删除超过攻击范围的子弹
-    int getType(){return type;};//获得投掷物的类型 0 普通子弹 1 火箭
+    int getType(){return type;};//获得投掷物的类型 0 普通子弹 1 火箭 2石头
+    int getDamage(){return damage;};
+    ~Projectile(){emit destroy();};
 
 protected:
     int type;

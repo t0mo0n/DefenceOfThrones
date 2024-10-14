@@ -11,7 +11,7 @@
 #include <QDebug>
 #include <Projectile.h>
 #include <QVector>
-#include <movingitem.h>
+#include <Enemy.h>
 
 class TowerFrame : public QObject,public QGraphicsItem
 {
@@ -54,8 +54,13 @@ public:
 
     QPointF TowerCentral;//相对于场景的坐标
     void removeProjectileList();
+    void CheckForItemsInBoundingRect();
+    ~TowerFrame(){emit destroy();};
+
+
 
 signals:
+    void destroy();
 public slots:
     virtual void upgrade()=0;//升级植物,界面设计者要根据现有的钱和updatecost比较获得是否可行,别忘了扣钱
     void sell();//出售植物并将植物删除

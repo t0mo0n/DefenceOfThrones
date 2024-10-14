@@ -7,7 +7,7 @@ Projectile::Projectile(QPointF pos,QPointF Tower_c,qreal attack_range)
     moveTimer = new QTimer(this);
     connect(moveTimer, &QTimer::timeout, this, &Projectile::moveToEneny);
     connect(moveTimer, &QTimer::timeout, this, &Projectile::outOfRange);
-    moveTimer->start(100); // 每50ms调用一次move()
+    moveTimer->start(100); // 每调用一次move()
     towerCor=Tower_c;
     src=":/img/asset/GOT.jpg";
     speed=40;
@@ -43,7 +43,6 @@ void Projectile::moveToEneny()
     else
     {
         qDebug()<<"攻击的目标无效"<<this->pos();
-        emit destroy();
         moveTimer->stop();
         scene()->removeItem(this);
         delete this;  // 删除子弹对象
@@ -76,7 +75,6 @@ void Projectile::outOfRange()
 
     if(distance>tattackRange)
     {
-        emit destroy();
         moveTimer->stop();
         scene()->removeItem(this);
         delete this;  // 删除子弹对象
