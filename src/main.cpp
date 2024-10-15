@@ -5,7 +5,6 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    GameController w;
-    w.show();
+    GameController dotGame;
     return a.exec();
 }
