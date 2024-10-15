@@ -17,6 +17,12 @@ TowerFrame::TowerFrame(QPoint pos_,int type)
     setTransformOriginPoint(towerSize/2,towerSize/2); // 设置变换原点
     target=nullptr;
     TowerCentral=QPointF(pos_.x()+towerSize/2,pos_.y()+towerSize/2);
+    aimTimer=new QTimer;
+    connect(aimTimer, &QTimer::timeout, this, [this](){
+        FindEnemy();
+    });
+    aimTimer->start(10);
+
 }
 
 int TowerFrame::towerSize=100;
@@ -52,13 +58,17 @@ void TowerFrame::sell()
 
 void TowerFrame::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
-    QMenu menu;
-    QAction *action1 = menu.addAction("upgrade");
-    QAction *action2 = menu.addAction("sell");
-    connect(action1,SIGNAL(triggered()),this,SLOT(upgrade()));
-    connect(action2,SIGNAL(triggered()),this,SLOT(sell()));
-    menu.exec(event->screenPos()); //在按下鼠标左键的地方弹出菜单
-    QGraphicsItem::contextMenuEvent(event);
+    if(QRectF(0,0,towerSize,towerSize).contains(event->pos()))
+    {
+        QMenu menu;
+        QAction *action1 = menu.addAction("upgrade");
+        QAction *action2 = menu.addAction("sell");
+        connect(action1,SIGNAL(triggered()),this,SLOT(upgrade()));
+        connect(action2,SIGNAL(triggered()),this,SLOT(sell()));
+        menu.exec(event->screenPos()); //在按下鼠标左键的地方弹出菜单
+        QGraphicsItem::contextMenuEvent(event);
+    }
+
 }
 
 void TowerFrame:: mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -84,9 +94,10 @@ void TowerFrame::FindEnemy()
         setRotation(angle * 180.0 / M_PI); // 将弧度转换为度
 
     }
-    else
+    else if(target==nullptr)
     {
         qDebug()<<"tower攻击的目标无效";
+        checkForItemsInBoundingRect();
     }
 }
 void TowerFrame::resetTarget()// 把塔的敌人制空，同时把所有子弹的敌人置空
@@ -105,16 +116,15 @@ void TowerFrame::resetTarget()// 把塔的敌人制空，同时把所有子弹�
     }
 }
 
-void TowerFrame::setTarget(QGraphicsItem* target_out)
+void TowerFrame::setTarget(Enemy* target_out)
 {
     target=target_out;
-    Enemy* enemy = dynamic_cast<Enemy*>(target);//这里仅做测试
-    if (enemy) {
-        connect(enemy, &Enemy::destroyed, this, &TowerFrame::resetTarget);
+    if (target_out) {
+        connect(target_out, &Enemy::destroyed, this, &TowerFrame::resetTarget);
     }
 }
 
-void TowerFrame::CheckForItemsInBoundingRect() {
+void TowerFrame::checkForItemsInBoundingRect() {
     // 获取当前项的 boundingRect，并将其转换为场景坐标
     QRectF sceneBoundingRect = mapRectToScene(boundingRect());
 
@@ -125,18 +135,38 @@ void TowerFrame::CheckForItemsInBoundingRect() {
     itemsInBoundingRect.removeOne(this);
 
     if (!itemsInBoundingRect.isEmpty()) {
-        qDebug() << "Found items within boundingRect!";
+        Enemy* min_item=nullptr;
+        qreal min_distance=attackRange+300;
         for (auto* item : itemsInBoundingRect) {
-            Projectile* projectile = dynamic_cast<Projectile*>(item);
-            if(projectile){
-                // 如果 item 是 Projectile 类或其子类的指针
-                qDebug() << "This item is a Projectile!";
-                qDebug() << "Item at:" << item->pos();
-            } else {
-                qDebug() << "This item is not a Projectile.";
+            Enemy* enemy_p = dynamic_cast<Enemy*>(item);
+            if(enemy_p==nullptr)
+            {
+                continue;
+            }
+            qreal distance=QLineF(enemy_p->pos(),this->pos()).length();
+            if(distance<min_distance)
+            {
+                min_item=enemy_p;
+            }
+
+        }
+        if(min_item){
+            if(target==nullptr)
+            {
+                qDebug()<<"设置新目标";
+                setTarget(min_item);
             }
         }
+
+
     } else {
-        qDebug() << "No items found within boundingRect.";
+        // qDebug() << "No items found within boundingRect.";
     }
 }
+TowerFrame::~TowerFrame()
+{
+    emit destroy();
+    aimTimer->stop();
+    delete aimTimer;
+}
+

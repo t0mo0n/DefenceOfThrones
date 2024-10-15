@@ -15,8 +15,8 @@ class Archer : public TowerFrame
 public:
     explicit Archer(QPoint pos_=QPoint(0,0));
     void attack()override;
-    QTimer *aimTimer;
     QTimer *attackTimer;
+    ~Archer(){attackTimer->stop(); delete attackTimer;};
 
 signals:
 public slots:

@@ -9,6 +9,7 @@
 #include <QPainter>
 #include <QTimer>
 #include <QLine>
+#include <Enemy.h>
 
 class Projectile : public QObject,public QGraphicsItem
 {
@@ -16,7 +17,7 @@ class Projectile : public QObject,public QGraphicsItem
     Q_INTERFACES(QGraphicsItem)
 public:
     explicit Projectile(QPointF pos,QPointF Tower_c,qreal attack_range);
-    void setTarget(QGraphicsItem* Enemy=nullptr);//在进攻时会自己调用
+    void setTarget(Enemy* enemy_=nullptr);//在进攻时会自己调用
     void moveToEneny();
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)override;
     QRectF boundingRect() const override;
@@ -24,22 +25,25 @@ public:
     void outOfRange();//删除超过攻击范围的子弹
     int getType(){return type;};//获得投掷物的类型 0 普通子弹 1 火箭 2石头
     int getDamage(){return damage;};
-    ~Projectile(){emit destroy();};
+    void checkCollision();
+    ~Projectile();
 
 protected:
     int type;
     int speed;
     int damage;
     QString src;//投掷物的图片
-    QGraphicsItem* enemys;
+    Enemy* enemys;
     QPointF delta;
     QTimer* moveTimer ;
     QPointF towerCor;
     qreal tattackRange;
-
+    QTimer*moveTimer2;
 
 signals:
     void destroy();
+    void outrange();
+    void collision(int damage_,int type_);
 };
 
 #endif // PROJECTILE_H

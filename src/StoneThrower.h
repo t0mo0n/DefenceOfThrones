@@ -10,6 +10,7 @@ class StoneThrower :public TowerFrame
 public:
     explicit StoneThrower();
 
+
 signals:
 };
 

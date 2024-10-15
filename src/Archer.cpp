@@ -17,11 +17,8 @@ Archer::Archer(QPoint pos_)
     aimTimer=new QTimer(this);
     attackTimer=new QTimer(this);
 
-    connect(aimTimer, &QTimer::timeout, this, [this](){
-        FindEnemy();
-    });
+
     connect(attackTimer,&QTimer::timeout,this,&Archer::attack);
-    aimTimer->start(10);
     attackTimer->start(attackSpeed);    // 根据攻击速度设置定时器间隔
 }
 
@@ -29,9 +26,8 @@ void Archer::attack()
 {
     if(target)
     {
-        if (this->collidesWithItem(target)) {
-            qDebug() << "Collision detected!";
-
+        if (this->collidesWithItem(target))
+        {
 
             // 获取塔的位置
             QPointF towerPos = this->pos();
@@ -54,9 +50,12 @@ void Archer::attack()
             if(bullet)
             {
                 projectileList.push_back(bullet);
+                connect(bullet,&Projectile::collision,target,&Enemy::recieve);
 
-                connect(bullet, &Projectile::destroy, this, [this, bullet]() {
+                connect(bullet, &Projectile::outrange, this, [this, bullet]() {
                     projectileList.removeOne(bullet);  // 从列表中移除该子弹
+                    scene()->removeItem(bullet);
+                    delete bullet;
                 });
                 bullet->setTarget(target);
                 scene()->addItem(bullet);
@@ -65,13 +64,15 @@ void Archer::attack()
 
         }
         else {
-            qDebug() << "No collision.";
+
+            resetTarget();
+            // qDebug() << "No collision.";
         }
 
     }
     else
     {
-        qDebug()<<"敌人无效";
+        // qDebug()<<"敌人无效";
     }
 }
 
@@ -84,5 +85,6 @@ void Archer::upgrade()
     level++;
     attackRange+=100;
     attackSpeed+=100;
+    projectType=1;
     update();
 }

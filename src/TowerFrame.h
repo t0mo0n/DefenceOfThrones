@@ -27,11 +27,12 @@ protected:
     int attackSpeed;
     int buyCost;
     int sellPrice;
-    QGraphicsItem* target;
+    Enemy* target;
 
     QString picDir;
     QVector<int> upgradeFee;
     QVector<Projectile*> projectileList;
+    QTimer *aimTimer;
 
 
 
@@ -44,7 +45,7 @@ public:
     int getBuyCost(){return buyCost;};
     int getSellPrice(){return sellPrice;};
     int getUpdateCost(){return upgradeFee[level];};//这里可能出问题，升级的坐标不能超过界限！！1-3级
-    void setTarget(QGraphicsItem* target_out=nullptr);//仍有仅作测试的内容！！！！！！？？？？？
+    void setTarget(Enemy* target_out=nullptr);//仍有仅作测试的内容！！！！！！？？？？？
     void resetTarget();//如果敌人死了，调用这个方法把这个防御塔的敌人置空；
 
     void paint(QPainter * painterconst,const QStyleOptionGraphicsItem *option, QWidget *widget)override;//画出防御塔
@@ -54,8 +55,9 @@ public:
 
     QPointF TowerCentral;//相对于场景的坐标
     void removeProjectileList();
-    void CheckForItemsInBoundingRect();
-    ~TowerFrame(){emit destroy();};
+    void checkForItemsInBoundingRect();
+
+    ~TowerFrame();
 
 
 
