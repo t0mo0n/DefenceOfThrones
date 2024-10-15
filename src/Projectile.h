@@ -18,7 +18,7 @@ class Projectile : public QObject,public QGraphicsItem
 public:
     explicit Projectile(QPointF pos,QPointF Tower_c,qreal attack_range);
     void setTarget(Enemy* enemy_=nullptr);//在进攻时会自己调用
-    void moveToEneny();
+    virtual void moveToEneny();
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)override;
     QRectF boundingRect() const override;
     static qreal pix_size;

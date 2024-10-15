@@ -42,22 +42,6 @@ void Projectile::moveToEneny()
 
         // 更新子弹的位置
         this->setPos(ProjectilePos.x() + dx, ProjectilePos.y() + dy);
-        // 获取projectile的位置
-        // QPointF ProjectilePos = this->pos();
-        // // 获取目标的位置
-        // QPointF enemyPos = enemys->pos();
-
-        // qreal rate = (enemyPos.y() - ProjectilePos.y())/ (enemyPos.x() - ProjectilePos.x());
-        // qreal dx = speed  ;
-        // qreal dy = dx * rate ;
-        // if(enemyPos.x()-ProjectilePos.x()<0)
-        // {
-        //     dx=-speed;
-        //     dy=dx*rate;
-        // }
-
-        // delta=QPointF(dx,dy);
-        // this->setPos(ProjectilePos.x()+delta.x(),ProjectilePos.y()+delta.y());
     }
     else
     {

@@ -33,6 +33,8 @@ protected:
     QVector<int> upgradeFee;
     QVector<Projectile*> projectileList;
     QTimer *aimTimer;
+    QTimer *attackTimer;
+
 
 
 
@@ -40,7 +42,7 @@ public:
     explicit TowerFrame(QPoint pos_=QPoint(0,0),int type=0);
     virtual void attack()=0;
     static int towerSize;
-    void FindEnemy();//跟踪并且瞄准敌人
+   virtual void  FindEnemy()=0;//跟踪并且瞄准敌人
 
     int getBuyCost(){return buyCost;};
     int getSellPrice(){return sellPrice;};
@@ -55,7 +57,7 @@ public:
 
     QPointF TowerCentral;//相对于场景的坐标
     void removeProjectileList();
-    void checkForItemsInBoundingRect();
+    virtual void checkForItemsInBoundingRect()=0;
 
     ~TowerFrame();
 
