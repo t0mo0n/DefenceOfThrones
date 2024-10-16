@@ -118,7 +118,7 @@ void Archer::FindEnemy()
 
             }
             if(min_item){
-                qDebug()<<"设置新目标";
+                // qDebug()<<"设置新目标";
                 setTarget(min_item);
             }
 

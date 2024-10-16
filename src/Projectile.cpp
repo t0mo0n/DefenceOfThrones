@@ -66,7 +66,7 @@ void Projectile::moveToEneny()
 QRectF Projectile:: boundingRect() const
 {
     // 返回项的边界矩形
-    return QRectF(0, 0, 20, 20); // 示例边界矩形
+    return QRectF(0, 0, pix_size, pix_size); // 示例边界矩形
 }
 
 void Projectile::paint(QPainter *painter1, const QStyleOptionGraphicsItem *option, QWidget *widget)

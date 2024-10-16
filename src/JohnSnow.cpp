@@ -1,5 +1,5 @@
 #include "JohnSnow.h"
-
+//还没有添加友军增益效果
 JohnSnow::JohnSnow(QPoint pos_)
     :TowerFrame(pos_,3)
 {
@@ -57,7 +57,7 @@ void JohnSnow::FindEnemy()
 
             }
             if(min_item){
-                qDebug()<<"设置新目标";
+                // qDebug()<<"设置新目标";
                 setTarget(min_item);
                 connect(this,&JohnSnow::snowAttack,target,&Enemy::recieveSnow);
 

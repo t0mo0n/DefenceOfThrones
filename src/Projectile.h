@@ -19,21 +19,21 @@ public:
     explicit Projectile(QPointF pos,QPointF Tower_c,qreal attack_range);
     void setTarget(Enemy* enemy_=nullptr);//在进攻时会自己调用
     virtual void moveToEneny();
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)override;
-    QRectF boundingRect() const override;
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)override;
+    virtual QRectF boundingRect() const override;
     static qreal pix_size;
     // void outOfRange();//删除超过攻击范围的子弹
-    int getType(){return type;};//获得投掷物的类型 0 普通子弹 1 火箭 2石头
+    int getType(){return type;};//获得投掷物的类型 0 普通子弹 1 火箭 2 石头 3 狼 4 龙火焰弹 5 龙焰
     int getDamage(){return damage;};
     void checkCollision();
     ~Projectile();
+    Enemy* enemys;
 
 protected:
     int type;
     int speed;
     int damage;
     QString src;//投掷物的图片
-    Enemy* enemys;
     QPointF delta;
     QTimer* moveTimer ;
     QPointF towerCor;

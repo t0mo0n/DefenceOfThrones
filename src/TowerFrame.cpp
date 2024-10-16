@@ -19,6 +19,7 @@ TowerFrame::TowerFrame(QPoint pos_,int type)
     TowerCentral=QPointF(pos_.x()+towerSize/2,pos_.y()+towerSize/2);
     aimTimer=new QTimer(this);
     attackTimer=new QTimer(this);
+    towerAngle=0;
 
     connect(aimTimer, &QTimer::timeout, this,&TowerFrame::FindEnemy);
     aimTimer->start(10);

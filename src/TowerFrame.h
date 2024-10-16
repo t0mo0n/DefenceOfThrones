@@ -34,6 +34,7 @@ protected:
     QVector<Projectile*> projectileList;
     QTimer *aimTimer;
     QTimer *attackTimer;
+    qreal towerAngle;
 
 
 

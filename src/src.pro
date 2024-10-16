@@ -11,6 +11,8 @@ CONFIG += c++17
 SOURCES += \
     Archer.cpp \
     Dragon.cpp \
+    DragonBall.cpp \
+    DragonFlame.cpp \
     Enemy.cpp \
     FireArrow.cpp \
     JohnSnow.cpp \
@@ -25,6 +27,8 @@ SOURCES += \
 HEADERS += \
     Archer.h \
     Dragon.h \
+    DragonBall.h \
+    DragonFlame.h \
     Enemy.h \
     FireArrow.h \
     GameController.h \
