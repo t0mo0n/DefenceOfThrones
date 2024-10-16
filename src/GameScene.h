@@ -20,16 +20,17 @@ class GameScene : public QGraphicsView
 {
     Q_OBJECT
 public:
-    GameScene(QGraphicsView *parent = nullptr);
-    void addTower(Tower *);
+    GameScene(int level, bool isHardMode, QGraphicsView *parent = nullptr);
+    void addTower(TowerFrame *);
     void addEnemy();
     void addObstacles();
     void updateScene();
     void pauseScene();
     void mousePressEvent(QMouseEvent *event);
+    void closeEvent(QCloseEvent *event);
 
-public
-    slot : void onPauseButtonClicked();
+public:
+    void onPauseButtonClicked();
     void onResumeButtonClicked();
     void onGameEndButtonClicked();
     void onTowerSelectButtonClicked(int cost);
@@ -53,6 +54,8 @@ private:
     QList<Obstacle *> obstacles;
     TowerSelectMenu *towerSelectMenu;
     QGraphicsItem *pausedMenu;
+    int level;
+    bool isHardMode;
 
 signals:
     void gameEnd();

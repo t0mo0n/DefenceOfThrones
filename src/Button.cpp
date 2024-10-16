@@ -5,5 +5,6 @@ Button::Button(QString UnHoverImagePath, QString HoverImagePath, QGraphicsItem *
 {
     this->UnHoverImagePath = UnHoverImagePath;
     this->HoverImagePath = HoverImagePath;
+    setAcceptHoverEvents(true);
 
 }

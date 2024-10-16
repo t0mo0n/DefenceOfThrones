@@ -1,5 +1,6 @@
 #include "TowerSelectMenu.h"
 
-TowerSelectMenu::TowerSelectMenu(QWidget *parent)
-    : QWidget{parent}
-{}
+TowerSelectMenu::TowerSelectMenu(QGraphicsItem *parent)
+    : QGraphicsItem{parent}
+{
+}

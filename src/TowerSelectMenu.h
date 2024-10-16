@@ -2,12 +2,15 @@
 #define TOWERSELECTMENU_H
 
 #include <QWidget>
+#include <QGraphicsView>
+#include <QGraphicsItem>
 
-class TowerSelectMenu : public QWidget
+
+class TowerSelectMenu : public QGraphicsItem
 {
     Q_OBJECT
 public:
-    explicit TowerSelectMenu(QWidget *parent = nullptr);
+    explicit TowerSelectMenu(QGraphicsItem *parent = nullptr);
 
 signals:
 };
