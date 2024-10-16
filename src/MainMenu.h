@@ -1,6 +1,7 @@
 #ifndef MAINMENU_H
 #define MAINMENU_H
 
+
 #include <QWidget>
 #include <QPushButton>
 #include <QPaintEvent>
@@ -21,6 +22,11 @@ public:
     void paintEvent(QPaintEvent *event);
 
 signals:
+    void startNewGame();
+    void openLevelMenu();
+    void openSettingMenu();
+    void exitGame();
+
 private:
     Ui::MainMenu *ui;
     QList<QPushButton*> buttons={new QPushButton("START",this),
@@ -33,6 +39,7 @@ private:
                                ":/img/asset/1.png",
                                 ":/img/asset/1.png",};
     //0:startButton 1:levelSelectButton 2:settingButton 4:exitButton;
+public slots:
 
 };
 

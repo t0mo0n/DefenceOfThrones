@@ -17,6 +17,7 @@ SOURCES += \
     MainMenu.cpp \
     Map.cpp \
     Projectile.cpp \
+    SettingsMenu.cpp \
     StoneThrower.cpp \
     TowerFrame.cpp \
     main.cpp \
@@ -32,6 +33,7 @@ HEADERS += \
     MainMenu.h \
     Map.h \
     Projectile.h \
+    SettingsMenu.h \
     StoneThrower.h \
     TowerFrame.h \
 

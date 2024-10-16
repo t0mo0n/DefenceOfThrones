@@ -114,10 +114,10 @@ GameController::~GameController() {
 
 void GameController::startGame()
 {
-    gameScene_ = new GameScene(currentLevel,hardMode);
-    mainMenu_->hide();
-    connect(gameScene_,&GameScene::gameEnd,this,&GameController::endGame);
-    gameScene_->show();
+    // gameScene_ = new GameScene(currentLevel,hardMode);
+    // mainMenu_->hide();
+    // connect(gameScene_,&GameScene::gameEnd,this,&GameController::endGame);
+    // gameScene_->show();
 }
 
 void GameController::endGame()
@@ -139,17 +139,17 @@ void GameController::exitGame()
 
 void GameController::showSettingMenu()
 {
-    settingMenu_ = new SettingsMenu();
-    settingMenu_->exec();
-    connect(settingMenu_,&SettingsMenu::volumeChanged,this,&GameController::changeVolumn);
-    connect(settingMenu_,&SettingsMenu::gameBgmChanged,this,&GameController::changeGameBgm);
-}
+//     settingMenu_ = new SettingsMenu();
+//     settingMenu_->exec();
+//     connect(settingMenu_,&SettingsMenu::volumeChanged,this,&GameController::changeVolumn);
+//     connect(settingMenu_,&SettingsMenu::gameBgmChanged,this,&GameController::changeGameBgm);
+ }
 
 void GameController::showLevelSelectMenu()
 {
-    lvMenu_ = new LevelSelectMenu(maxLevel,mainMenu_);
-    lvMenu_->exec();
-    connect(lvMenu_,&LevelSelectMenu::selectLevel,this,&GameController::loadLevel);
+    // lvMenu_ = new LevelSelectMenu(maxLevel,mainMenu_);
+    // lvMenu_->exec();
+    // connect(lvMenu_,&LevelSelectMenu::selectLevel,this,&GameController::loadLevel);
 }
 
 void GameController::loadLevel(int level)
