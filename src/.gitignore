@@ -1,6 +1,11 @@
 # This file is used to ignore files which are generated
 # ----------------------------------------------------------------------------
 
+build/
+Enemy.cpp
+Enemy.h
+main.cpp
+
 *~
 *.autosave
 *.a
@@ -72,7 +77,3 @@ CMakeLists.txt.user*
 *.dll
 *.exe
 
-src/build/
-src/Enemy.cpp
-src/Enemy.h
-src/main.cpp
