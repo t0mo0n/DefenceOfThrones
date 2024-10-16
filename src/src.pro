@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -11,7 +11,9 @@ CONFIG += c++17
 SOURCES += \
     Archer.cpp \
     Dragon.cpp \
+    GameScene.cpp \
     JohnSnow.cpp \
+    LevelSelectMenu.cpp \
     MainMenu.cpp \
     Map.cpp \
     Projectile.cpp \
@@ -24,7 +26,9 @@ HEADERS += \
     Archer.h \
     Dragon.h \
     GameController.h \
+    GameScene.h \
     JohnSnow.h \
+    LevelSelectMenu.h \
     MainMenu.h \
     Map.h \
     Projectile.h \
