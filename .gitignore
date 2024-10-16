@@ -5,4 +5,10 @@ levelselectmenu.cpp
 mainmenu.h
 mainmenu.cpp
 settingsmenu.h
+<<<<<<< HEAD
 settingsmenu.cpp
+=======
+settingsmenu.cpp
+
+src/build/
+>>>>>>> e4f9916b57952f6054dfe0f49f7b066f9d731c57
