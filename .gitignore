@@ -6,3 +6,6 @@ mainmenu.h
 mainmenu.cpp
 settingsmenu.h
 settingsmenu.cpp
+settingsmenu.cpp
+
+src/build/
