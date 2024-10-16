@@ -28,6 +28,7 @@ void Projectile::setTarget(Enemy * target)
         connect(target,&Enemy::destroy,this,[this](){
             emit outrange();
         });
+        connect(this,&Projectile::collision,target,&Enemy::recieve);
     }
 }
 

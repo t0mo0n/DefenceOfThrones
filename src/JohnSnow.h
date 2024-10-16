@@ -8,8 +8,9 @@ class JohnSnow : public TowerFrame
 {
     Q_OBJECT
 public:
-    explicit JohnSnow();
-
+    explicit JohnSnow(QPoint pos_=QPoint(0,0));
+    void attack()override;
+    void FindEnemy()override;
 signals:
 };
 

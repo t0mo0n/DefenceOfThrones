@@ -48,7 +48,6 @@ void Archer::attack()
             if(bullet)
             {
                 projectileList.push_back(bullet);
-                connect(bullet,&Projectile::collision,target,&Enemy::recieve);
 
                 connect(bullet, &Projectile::outrange, this, [this, bullet]() {
                     projectileList.removeOne(bullet);  // 从列表中移除该子弹
@@ -99,7 +98,7 @@ void Archer::FindEnemy()
     }
     if(target==nullptr)
     {
-        qDebug()<<"tower攻击的目标无效";
+        // qDebug()<<"tower攻击的目标无效";
         QList<QGraphicsItem*> itemsInBoundingRect =checkForItemsInBoundingRect();
 
         if (!itemsInBoundingRect.isEmpty()) {
