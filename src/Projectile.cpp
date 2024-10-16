@@ -7,7 +7,7 @@ Projectile::Projectile(QPointF pos,QPointF Tower_c,qreal attack_range)
     moveTimer = new QTimer(this);
     moveTimer2=new QTimer(this);
     connect(moveTimer, &QTimer::timeout, this, &Projectile::moveToEneny);
-    connect(moveTimer, &QTimer::timeout, this, &Projectile::outOfRange);
+    // connect(moveTimer, &QTimer::timeout, this, &Projectile::outOfRange);
     connect(moveTimer2, &QTimer::timeout, this, &Projectile::checkCollision);
     moveTimer->start(70); // 每调用一次move()
     moveTimer2->start(10);
@@ -85,17 +85,17 @@ void Projectile::paint(QPainter *painter1, const QStyleOptionGraphicsItem *optio
     }
 }
 
-void Projectile::outOfRange()
-{
-    qreal distance=QLineF(this->pos(),towerCor).length();
+// void Projectile::outOfRange()
+// {
+//     qreal distance=QLineF(this->pos(),towerCor).length();
 
-    if(distance>tattackRange)
-    {
-        emit outrange();
-        // moveTimer->stop();
-        return;
-    }
-}
+//     if(distance>tattackRange)
+//     {
+//         emit outrange();
+//         // moveTimer->stop();
+//         return;
+//     }
+// }
 
 void Projectile::checkCollision()
 {

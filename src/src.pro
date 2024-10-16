@@ -18,6 +18,7 @@ SOURCES += \
     Stone.cpp \
     StoneThrower.cpp \
     TowerFrame.cpp \
+    Wolf.cpp \
     main.cpp \
     GameController.cpp
 
@@ -31,7 +32,8 @@ HEADERS += \
     Projectile.h \
     Stone.h \
     StoneThrower.h \
-    TowerFrame.h
+    TowerFrame.h \
+    Wolf.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
