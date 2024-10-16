@@ -1,3 +1,4 @@
+#include<QGraphicsBlurEffect>
 #include "GameScene.h"
 #define SHILLING 100
 #define HEALTH 20
@@ -26,6 +27,23 @@ void GameScene::onPauseButtonClicked()
     {
         pausedMenu = new QGraphicsRectItem(QRectF(scene->sceneRect()));
         pausedMenu->setBrush(QBrush(QColor(255,255,255,128)));
+        pausedMenu->setZValue(100);
+
+        QGraphicsBlurEffect* pauseMenuEffect = new QGraphicsBlurEffect();
+        pauseMenuEffect->setBlurRadius(100);
+        pausedMenu->setGraphicsEffect(pauseMenuEffect);
+        scene->addItem(pausedMenu);
+        resumeGameButton = new Button("路径1","路径2",550,350);
+        resumeGameButton->setParentItem(pausedMenu);
+        resumeGameButton->setZValue(101);
+        scene->addItem(resumeGameButton);
+    }
+}
+
+void GameScene::onResumeButtonClicked()
+{
+    if(pausedMenu)
+    {
 
     }
 }
