@@ -71,3 +71,8 @@ CMakeLists.txt.user*
 # --------
 *.dll
 *.exe
+
+src\build
+src\Enemy.cpp
+src\Enemy.h
+src\main.cpp
