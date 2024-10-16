@@ -22,6 +22,16 @@ qreal Projectile::pix_size=10;
 void Projectile::setTarget(Enemy * target)
 {
     enemys=target;
+
+    if(target)
+    {
+        connect(target,&Enemy::destroy,this,[this](){
+            emit outrange();
+        });
+    }
+
+
+
 }
 
 void Projectile::moveToEneny()
@@ -96,7 +106,7 @@ void Projectile::checkCollision()
         emit collision(damage,type);
         emit outrange();
         // int enemy_type=enemys->getEnemyType();
-        /*这里还有一个条件判断*/
+        /*这里还有一个条件判断是不是异鬼*/
         qDebug()<<"碰到敌人";
     }
 }

@@ -64,14 +64,9 @@ void Archer::attack()
         else {
 
             resetTarget();
-            // qDebug() << "No collision.";
         }
+    }
 
-    }
-    else
-    {
-        // qDebug()<<"敌人无效";
-    }
 }
 
 void Archer::upgrade()
@@ -86,54 +81,7 @@ void Archer::upgrade()
     projectType=1;
     update();
 }
-void Archer::checkForItemsInBoundingRect() {
-    // 获取当前项的 boundingRect，并将其转换为场景坐标
-    QRectF sceneBoundingRect = mapRectToScene(boundingRect());
 
-    // 获取在该区域内的所有项
-    QList<QGraphicsItem*> itemsInBoundingRect = scene()->items(sceneBoundingRect);
-
-    // 移除自身（当前塔）避免自检测
-    itemsInBoundingRect.removeOne(this);
-
-    if (!itemsInBoundingRect.isEmpty()) {
-        Enemy* min_item=nullptr;
-        qreal min_distance=attackRange;
-        for (auto* item : itemsInBoundingRect) {
-            Enemy* enemy_p = dynamic_cast<Enemy*>(item);
-            if(enemy_p==nullptr)
-            {
-                continue;
-            }
-            qreal distance=QLineF(enemy_p->pos(),this->pos()).length();
-            if(distance<min_distance)
-            {
-                min_item=enemy_p;
-            }
-
-        }
-        if(min_item){
-            // if(target==nullptr)
-            // {
-            qDebug()<<"设置新目标";
-            setTarget(min_item);
-            // }
-        }
-    }
-    // if (target!=nullptr) {
-    //     // 获取塔的位置
-    //     QPointF towerPos = this->pos();
-    //     // 获取目标的位置
-    //     QPointF targetPos = target->pos();
-
-    //     // 计算方向
-    //     qreal angle = std::atan2(targetPos.y() - towerPos.y(), targetPos.x() - towerPos.x());
-
-    //     // 设置塔的旋转（如果需要旋转显示）
-    //     setRotation(angle * 180.0 / M_PI); // 将弧度转换为度
-
-    // }
-}
 void Archer::FindEnemy()
 {
     if (target!=nullptr) {
@@ -149,9 +97,39 @@ void Archer::FindEnemy()
         setRotation(angle * 180.0 / M_PI); // 将弧度转换为度
 
     }
-    else if(target==nullptr)
+    if(target==nullptr)
     {
         qDebug()<<"tower攻击的目标无效";
-        checkForItemsInBoundingRect();
+        QList<QGraphicsItem*> itemsInBoundingRect =checkForItemsInBoundingRect();
+
+        if (!itemsInBoundingRect.isEmpty()) {
+            Enemy* min_item=nullptr;
+            qreal min_distance=attackRange;
+            for (auto* item : itemsInBoundingRect) {
+                Enemy* enemy_p = dynamic_cast<Enemy*>(item);
+                if(enemy_p==nullptr)
+                {
+                    continue;
+                }
+                qreal distance=QLineF(QPointF(enemy_p->pos().x()+enemy_p->size/2,enemy_p->pos().y()+enemy_p->size/2),this->TowerCentral).length()-10;
+                if(distance<=min_distance)
+                {
+                    min_item=enemy_p;
+                }
+
+            }
+            if(min_item){
+                qDebug()<<"设置新目标";
+                setTarget(min_item);
+            }
+
+        }
+        else
+        {
+            resetTarget();
+        }
+
     }
+
+
 }

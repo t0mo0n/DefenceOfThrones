@@ -17,7 +17,7 @@ TowerFrame::TowerFrame(QPoint pos_,int type)
     setTransformOriginPoint(towerSize/2,towerSize/2); // 设置变换原点
     target=nullptr;
     TowerCentral=QPointF(pos_.x()+towerSize/2,pos_.y()+towerSize/2);
-    aimTimer=new QTimer;
+    aimTimer=new QTimer(this);
     attackTimer=new QTimer(this);
 
     connect(aimTimer, &QTimer::timeout, this,&TowerFrame::FindEnemy);
@@ -54,7 +54,7 @@ void TowerFrame::sell()
     if(game_map!=nullptr)
     {
         game_map->removeItem(this);
-        delete this;
+        delete this;//这里可以考虑外部delete
     }
 }
 
@@ -116,3 +116,16 @@ TowerFrame::~TowerFrame()
     delete attackTimer;
 }
 
+QList<QGraphicsItem*> TowerFrame::checkForItemsInBoundingRect() {
+    // 获取当前项的 boundingRect，并将其转换为场景坐标
+    QRectF sceneBoundingRect = mapRectToScene(boundingRect());
+
+    // 获取在该区域内的所有项
+    QList<QGraphicsItem*> itemsInBoundingRect = scene()->items(sceneBoundingRect);
+
+    // 移除自身（当前塔）避免自检测
+    itemsInBoundingRect.removeOne(this);
+
+    return itemsInBoundingRect;
+
+}

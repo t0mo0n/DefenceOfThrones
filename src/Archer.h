@@ -16,8 +16,8 @@ public:
     explicit Archer(QPoint pos_=QPoint(0,0));
     void attack()override;
     ~Archer(){};
-    void checkForItemsInBoundingRect()override;
     void FindEnemy()override;
+
 signals:
 public slots:
     void upgrade()override;

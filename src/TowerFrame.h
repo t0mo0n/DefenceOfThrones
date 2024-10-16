@@ -57,7 +57,7 @@ public:
 
     QPointF TowerCentral;//相对于场景的坐标
     void removeProjectileList();
-    virtual void checkForItemsInBoundingRect()=0;
+    QList<QGraphicsItem*> checkForItemsInBoundingRect();
 
     ~TowerFrame();
 
