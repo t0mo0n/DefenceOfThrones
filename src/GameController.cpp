@@ -73,7 +73,12 @@ GameController::GameController(QObject *parent)
     connect(mainMenu_,&MainMenu::openSettingMenu,this,&GameController::showSettingMenu);
     connect(mainMenu_,&MainMenu::openLevelMenu,this,&GameController::showLevelSelectMenu);
 
-    // TODO: 根据gameBgm的数值来生成对应的游戏背景音乐
+    // 根据gameBgm的数值来生成对应的游戏背景音乐
+    bgmPlayer = new QMediaPlayer(this);
+    bgmOutput = new QAudioOutput(this);
+    bgmOutput->setVolume(volumnLevel);
+    bgmPlayer->setAudioOutput(bgmOutput);
+    changeGameBgm(gameBgm);
 }
 
 GameController::~GameController() {
@@ -95,7 +100,10 @@ GameController::~GameController() {
         qWarning() << "无法打开文件进行写入";
     }
 
-    // TODO:关闭Bgm的Media设备
+    // 关闭Bgm的Media设备
+    bgmPlayer->stop();
+    delete bgmOutput;
+    delete bgmPlayer;
 
     delete gameScene_;
     delete lvMenu_;
@@ -149,9 +157,10 @@ void GameController::loadLevel(int level)
     startGame();
 }
 
-void GameController::changeVolumn(int volumn)
+void GameController::changeVolumn(float volumn)
 {
     volumnLevel = volumn;
+    bgmOutput->setVolume(volumnLevel);
 }
 
 void GameController::startHardMode(bool hardmode)
@@ -162,6 +171,29 @@ void GameController::startHardMode(bool hardmode)
 void GameController::changeGameBgm(int bgm)
 {
     gameBgm = bgm;
+    switch (gameBgm){
+    case 1:
+        bgmPlayer->setSource(QUrl("qrc:/sound/music/The_Rains_of_Castamere.mp3")); // The Rains of Castamere
+        break;
+    case 2:
+        bgmPlayer->setSource(QUrl("qrc:/sound/music/Light_of_the_Seven_-_Ramin_Djawadi_Complete_Transcription.mp3"));
+        break;
+    case 3:
+        bgmPlayer->setSource(QUrl("qrc:/sound/music/The_Night_King_-_Ramin_Djawadi.mp3"));
+        break;
+    case 4:
+        bgmPlayer->setSource(QUrl("qrc:/sound/music/Jenny_of_Oldstones_.mp3"));
+        break;
+    case 5:
+        bgmPlayer->setSource(QUrl("qrc:/sound/music/Light_of_Nibel_-_Ori_and_the_Blind_Forest.mp3"));
+        break;
+    default:
+        bgmPlayer->setSource(QUrl("qrc:/sound/music/The_Night_King_-_Ramin_Djawadi.mp3"));
+        qDebug() << "error bgm";
+        break;
+    }
+    bgmPlayer->setLoops(-1);
+    bgmPlayer->play();
 }
 
 
