@@ -6,6 +6,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsItem>
 #include <QGraphicsTextItem>
+#include <QGraphicsRectItem>
 #include <QmouseEvent>
 #include <QList>
 #include "Player.h"
@@ -53,7 +54,7 @@ private:
     QList<Enemy *> enemies;
     QList<Obstacle *> obstacles;
     TowerSelectMenu *towerSelectMenu;
-    QGraphicsItem *pausedMenu;
+    QGraphicsRectItem *pausedMenu;
     int level;
     bool isHardMode;
 

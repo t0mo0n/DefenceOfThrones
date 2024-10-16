@@ -6,7 +6,6 @@
 #include <QString>
 #include <QPixmap>
 #include <QPainter>
-
 class Button : public QGraphicsItem
 {
     Q_OBJECT
@@ -21,8 +20,6 @@ protected:
     int posY;
     QRectF boundingRect() const;                                                            // 按钮的边界矩形
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget); // 绘制按钮的图像
-    void hoverEnterEvent(QGraphicsSceneHoverEvent *event);                                  // 鼠标悬停在按钮上时的事件
-    void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);                                  // 鼠标离开按钮时的事件
     void mousePressEvent(QGraphicsSceneMouseEvent *event);                                  // 鼠标点击按钮时的事件
 signals:
     void clicked(); // 按钮被点击的信号
