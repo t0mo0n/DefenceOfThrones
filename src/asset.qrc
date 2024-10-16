@@ -5,4 +5,11 @@
         <file>asset/3.png</file>
         <file>asset/GOT.jpg</file>
     </qresource>
+    <qresource prefix="/sound">
+        <file>music/The_Rains_of_Castamere.mp3</file>
+        <file>music/Light_of_Nibel_-_Ori_and_the_Blind_Forest.mp3</file>
+        <file>music/Light_of_the_Seven_-_Ramin_Djawadi_Complete_Transcription.mp3</file>
+        <file>music/The_Night_King_-_Ramin_Djawadi.mp3</file>
+        <file>music/Jenny_of_Oldstones_.mp3</file>
+    </qresource>
 </RCC>
