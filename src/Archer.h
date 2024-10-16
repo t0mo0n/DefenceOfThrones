@@ -13,15 +13,14 @@ class Archer : public TowerFrame
 {
     Q_OBJECT
 public:
-    explicit Archer(QPoint pos_=QPoint(0,0));
-    void attack()override;
-    ~Archer(){};
-    void FindEnemy()override;
+    explicit Archer(QPoint pos_ = QPoint(0, 0));
+    void attack() override;
+    ~Archer() {};
+    void FindEnemy() override;
 
 signals:
 public slots:
-    void upgrade()override;
-
+    void upgrade() override;
 };
 
 #endif // ARCHER_H

@@ -5,20 +5,19 @@
 #include <TowerFrame.h>
 #include <Stone.h>
 #include <Enemy.h>
-class StoneThrower :public TowerFrame
+class StoneThrower : public TowerFrame
 {
     Q_OBJECT
 public:
-    explicit StoneThrower(QPoint pos_=QPoint(0,0));
-    void attack()override;
-    ~StoneThrower(){};
-    void upgrade()override;
-    void FindEnemy()override;
-
+    explicit StoneThrower(QPoint pos_ = QPoint(0, 0));
+    void attack() override;
+    ~StoneThrower() {};
+    void upgrade() override;
+    void FindEnemy() override;
 
 protected:
-    QList<Enemy*> enemyList;
-    QList<Stone*> smallBullet;
+    QList<Enemy *> enemyList;
+    QList<Stone *> smallBullet;
 
 signals:
 };

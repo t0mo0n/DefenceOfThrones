@@ -1,40 +1,40 @@
 #include "Projectile.h"
 
-Projectile::Projectile(QPointF pos,QPointF Tower_c,qreal attack_range)
+Projectile::Projectile(QPointF pos, QPointF Tower_c, qreal attack_range)
 {
-    delta=QPointF(0,0);
+    delta = QPointF(0, 0);
     setPos(pos);
     moveTimer = new QTimer(this);
-    moveTimer2=new QTimer(this);
+    moveTimer2 = new QTimer(this);
     connect(moveTimer, &QTimer::timeout, this, &Projectile::moveToEneny);
     // connect(moveTimer, &QTimer::timeout, this, &Projectile::outOfRange);
     connect(moveTimer2, &QTimer::timeout, this, &Projectile::checkCollision);
     moveTimer->start(70); // 每调用一次move()
     moveTimer2->start(10);
-    towerCor=Tower_c;
-    src=":/img/asset/GOT.jpg";
-    speed=20;
-    tattackRange=attack_range;
-    type=0;
-    damage=300;
+    towerCor = Tower_c;
+    src = ":/img/asset/GOT.jpg";
+    speed = 20;
+    tattackRange = attack_range;
+    type = 0;
+    damage = 300;
 }
-qreal Projectile::pix_size=10;
-void Projectile::setTarget(Enemy * target)
+qreal Projectile::pix_size = 10;
+void Projectile::setTarget(Enemy *target)
 {
-    enemys=target;
+    enemys = target;
 
-    if(target)
+    if (target)
     {
-        connect(target,&Enemy::destroy,this,[this](){
-            emit outrange();
-        });
-        connect(this,&Projectile::collision,target,&Enemy::recieve);
+        connect(target, &Enemy::destroy, this, [this]()
+                { emit outrange(); });
+        connect(this, &Projectile::collision, target, &Enemy::recieve);
     }
 }
 
 void Projectile::moveToEneny()
 {
-    if (enemys!=nullptr) {
+    if (enemys != nullptr)
+    {
 
         // 获取 projectile 的当前位置
         QPointF ProjectilePos = this->pos();
@@ -45,15 +45,15 @@ void Projectile::moveToEneny()
         qreal angle = std::atan2(enemyPos.y() - ProjectilePos.y(), enemyPos.x() - ProjectilePos.x());
 
         // 计算 x 和 y 的增量，基于速度
-        qreal dx = speed * std::cos(angle);  // x方向的速度分量
-        qreal dy = speed * std::sin(angle);  // y方向的速度分量
+        qreal dx = speed * std::cos(angle); // x方向的速度分量
+        qreal dy = speed * std::sin(angle); // y方向的速度分量
 
         // 更新子弹的位置
         this->setPos(ProjectilePos.x() + dx, ProjectilePos.y() + dy);
     }
     else
     {
-        qDebug()<<"攻击的目标无效"<<this->pos();
+        qDebug() << "攻击的目标无效" << this->pos();
         // moveTimer->stop();
         emit outrange();
         // scene()->removeItem(this);
@@ -63,7 +63,7 @@ void Projectile::moveToEneny()
     }
 }
 
-QRectF Projectile:: boundingRect() const
+QRectF Projectile::boundingRect() const
 {
     // 返回项的边界矩形
     return QRectF(0, 0, pix_size, pix_size); // 示例边界矩形
@@ -74,14 +74,13 @@ void Projectile::paint(QPainter *painter1, const QStyleOptionGraphicsItem *optio
     // 绘制项的内容
     Q_UNUSED(option);
     Q_UNUSED(widget);
-    if(src==nullptr)
+    if (src == nullptr)
     {
-        qDebug()<<"projectile pix error";
+        qDebug() << "projectile pix error";
     }
-    if(painter1)
+    if (painter1)
     {
-        painter1->drawPixmap(QRect(0,0,pix_size,pix_size),QPixmap(src));
-
+        painter1->drawPixmap(QRect(0, 0, pix_size, pix_size), QPixmap(src));
     }
 }
 
@@ -99,19 +98,19 @@ void Projectile::paint(QPainter *painter1, const QStyleOptionGraphicsItem *optio
 
 void Projectile::checkCollision()
 {
-    if(this->collidesWithItem(enemys))
+    if (this->collidesWithItem(enemys))
     {
-        emit collision(damage,type);
+        emit collision(damage, type);
         emit outrange();
         // int enemy_type=enemys->getEnemyType();
         /*这里还有一个条件判断是不是异鬼*/
-        qDebug()<<"碰到敌人";
+        qDebug() << "碰到敌人";
     }
 }
 Projectile::~Projectile()
 {
     emit destroy();
-    qDebug()<<"projectile被消除";
+    qDebug() << "projectile被消除";
     moveTimer->stop();
     moveTimer2->stop();
     delete moveTimer2;

@@ -10,16 +10,15 @@ class Dragon : public TowerFrame
 {
     Q_OBJECT
 public:
-    explicit Dragon(QPoint pos_=QPoint(0,0));
-    void attack()override;
-    ~Dragon(){};
-    void upgrade()override;
-    void FindEnemy()override;
-
+    explicit Dragon(QPoint pos_ = QPoint(0, 0));
+    void attack() override;
+    ~Dragon() {};
+    void upgrade() override;
+    void FindEnemy() override;
 
 protected:
-    QList<Enemy*> enemyList;
-    QList<DragonBall*> smallBullet;
+    QList<Enemy *> enemyList;
+    QList<DragonBall *> smallBullet;
 signals:
 };
 

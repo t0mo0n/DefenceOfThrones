@@ -11,39 +11,39 @@
 #include <QLine>
 #include <Enemy.h>
 
-class Projectile : public QObject,public QGraphicsItem
+class Projectile : public QObject, public QGraphicsItem
 {
     Q_OBJECT
     Q_INTERFACES(QGraphicsItem)
 public:
-    explicit Projectile(QPointF pos,QPointF Tower_c,qreal attack_range);
-    void setTarget(Enemy* enemy_=nullptr);//在进攻时会自己调用
+    explicit Projectile(QPointF pos, QPointF Tower_c, qreal attack_range);
+    void setTarget(Enemy *enemy_ = nullptr); // 在进攻时会自己调用
     virtual void moveToEneny();
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)override;
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
     virtual QRectF boundingRect() const override;
     static qreal pix_size;
     // void outOfRange();//删除超过攻击范围的子弹
-    int getType(){return type;};//获得投掷物的类型 0 普通子弹 1 火箭 2 石头 3 狼 4 龙火焰弹 5 龙焰
-    int getDamage(){return damage;};
+    int getType() { return type; }; // 获得投掷物的类型 0 普通子弹 1 火箭 2 石头 3 狼 4 龙火焰弹 5 龙焰
+    int getDamage() { return damage; };
     void checkCollision();
     ~Projectile();
-    Enemy* enemys;
+    Enemy *enemys;
 
 protected:
     int type;
     int speed;
     int damage;
-    QString src;//投掷物的图片
+    QString src; // 投掷物的图片
     QPointF delta;
-    QTimer* moveTimer ;
+    QTimer *moveTimer;
     QPointF towerCor;
     qreal tattackRange;
-    QTimer*moveTimer2;
+    QTimer *moveTimer2;
 
 signals:
     void destroy();
     void outrange();
-    void collision(int damage_,int type_);
+    void collision(int damage_, int type_);
 };
 
 #endif // PROJECTILE_H

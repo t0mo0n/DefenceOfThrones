@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -13,7 +13,6 @@ SOURCES += \
     Dragon.cpp \
     DragonBall.cpp \
     DragonFlame.cpp \
-    Enemy.cpp \
     FireArrow.cpp \
     JohnSnow.cpp \
     Projectile.cpp \
@@ -22,14 +21,13 @@ SOURCES += \
     TowerFrame.cpp \
     Wolf.cpp \
     main.cpp \
-    GameController.cpp
+    GameController.cpp \
 
 HEADERS += \
     Archer.h \
     Dragon.h \
     DragonBall.h \
     DragonFlame.h \
-    Enemy.h \
     FireArrow.h \
     GameController.h \
     JohnSnow.h \
