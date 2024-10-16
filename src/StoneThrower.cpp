@@ -220,23 +220,25 @@ void StoneThrower::FindEnemy()
                 {
                     continue;
                 }
+                qreal distance=QLineF(enemy_p->pos(),this->pos()).length();
+                if(distance<=attackRange+25)
+                {
+                    connect(enemy_p,&Enemy::destroy,this,[this,enemy_p](){
+                        enemyList.removeOne(enemy_p);/*敌人类中是否会自己调用removescene？？*/
+                    });
+                    enemyList.push_back(enemy_p);
+                }
 
-                connect(enemy_p,&Enemy::destroy,this,[this,enemy_p](){
-                    enemyList.removeOne(enemy_p);/*敌人类中是否会自己调用removescene？？*/
-                });
-                enemyList.push_back(enemy_p);
+
 
             }
-        }
-        else
-        {
-            resetTarget();
+
         }
         if(!enemyList.isEmpty())
         {
             setTarget(enemyList.front());
         }
-        else
+        else if(enemyList.isEmpty())
         {
             resetTarget();
         }

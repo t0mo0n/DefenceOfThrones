@@ -29,9 +29,6 @@ void Projectile::setTarget(Enemy * target)
             emit outrange();
         });
     }
-
-
-
 }
 
 void Projectile::moveToEneny()
