@@ -12,7 +12,7 @@ class Button : public QGraphicsItem
     Q_OBJECT
 public:
     Button(QString UnHoverImagePath, QString HoverImagePath, int posX, int posY, QGraphicsItem *parent = nullptr); // 未悬停时和悬停时的图片路径
-private:
+protected:
     QString UnHoverImagePath;
     QString HoverImagePath;
     QPixmap UnHoverImage;
