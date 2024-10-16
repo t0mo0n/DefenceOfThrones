@@ -12,6 +12,8 @@ SOURCES += \
     Archer.cpp \
     Dragon.cpp \
     JohnSnow.cpp \
+    MainMenu.cpp \
+    Map.cpp \
     Projectile.cpp \
     StoneThrower.cpp \
     TowerFrame.cpp \
@@ -23,9 +25,14 @@ HEADERS += \
     Dragon.h \
     GameController.h \
     JohnSnow.h \
+    MainMenu.h \
+    Map.h \
     Projectile.h \
     StoneThrower.h \
     TowerFrame.h \
+
+FORMS += \
+    mainmenu.ui\
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

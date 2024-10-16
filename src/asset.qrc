@@ -5,4 +5,7 @@
         <file>asset/3.png</file>
         <file>asset/GOT.jpg</file>
     </qresource>
+    <qresource prefix="/imgBackground">
+        <file>asset/mainMenuBackground.jpg</file>
+    </qresource>
 </RCC>

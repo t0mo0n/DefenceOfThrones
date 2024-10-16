@@ -104,11 +104,4 @@ void TowerFrame::resetTarget()// 把塔的敌人制空，同时把所有子弹�
     }
 }
 
-void TowerFrame::setTarget(QGraphicsItem* target_out)
-{
-    target=target_out;
-    MovingItem* movingItem = dynamic_cast<MovingItem*>(target);//这里仅做测试
-    if (movingItem) {
-        connect(movingItem, &MovingItem::destroyed, this, &TowerFrame::resetTarget);
-    }
-}
+
