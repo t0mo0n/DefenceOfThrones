@@ -15,12 +15,8 @@ SOURCES += \
     Projectile.cpp \
     StoneThrower.cpp \
     TowerFrame.cpp \
-    gamescene.cpp \
-    levelselectmenu.cpp \
     main.cpp \
     GameController.cpp \
-    mainmenu.cpp \
-    settingsmenu.cpp
 
 HEADERS += \
     Archer.h \
@@ -30,10 +26,6 @@ HEADERS += \
     Projectile.h \
     StoneThrower.h \
     TowerFrame.h \
-    gamescene.h \
-    levelselectmenu.h \
-    mainmenu.h \
-    settingsmenu.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
