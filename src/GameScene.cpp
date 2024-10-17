@@ -10,8 +10,25 @@ GameScene::GameScene(int level, bool isHardMode, QGraphicsView *parent)
     this->player = new Player(SHILLING, HEALTH);
     this->map = new Map();
     pauseGameButton = new Button("路径1","路径2",1000,700);
+    scene->addItem(pauseGameButton);
+
     gameEndButton = new Button("路径1","路径2",1100,700);
+    scene->addItem(gameEndButton);
+
+    resumeGameButton = nullptr;
     pausedMenu = nullptr;
+
+    healthTextItem = new QGraphicsTextItem(QString("HEALTH: %1").arg(HEALTH));
+    scene->addItem(healthTextItem);
+    healthTextItem->setPos(1000,0);
+    healthTextItem->setDefaultTextColor(Qt::red);
+
+    moneyTextItem = new QGraphicsTextItem(QString("SHILLING: %1").arg(SHILLING));
+    moneyTextItem ->setPos(1000,100);
+    moneyTextItem ->setDefaultTextColor(Qt::yellow);
+
+
+
 
 }
 
@@ -23,6 +40,7 @@ void GameScene::closeEvent(QCloseEvent *event)
 
 void GameScene::onPauseButtonClicked()
 {
+    pauseScene();
     if(!pausedMenu)
     {
         pausedMenu = new QGraphicsRectItem(QRectF(scene->sceneRect()));
@@ -44,6 +62,12 @@ void GameScene::onResumeButtonClicked()
 {
     if(pausedMenu)
     {
+        scene->removeItem(pausedMenu);
+        scene->removeItem(resumeGameButton);
+        delete pausedMenu;
+        delete resumeGameButton;
+        pausedMenu = nullptr;
+        resumeGameButton = nullptr;
 
     }
 }
