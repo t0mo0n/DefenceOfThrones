@@ -3,12 +3,22 @@
 
 #include <QObject>
 #include <TowerFrame.h>
+#include <DragonBall.h>
+#include <DragonFlame.h>
+
 class Dragon : public TowerFrame
 {
     Q_OBJECT
 public:
-    explicit Dragon();
+    explicit Dragon(QPoint pos_ = QPoint(0, 0));
+    void attack() override;
+    ~Dragon() {};
+    void upgrade() override;
+    void FindEnemy() override;
 
+protected:
+    QList<Enemy *> enemyList;
+    QList<DragonBall *> smallBullet;
 signals:
 };
 
