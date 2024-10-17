@@ -8,7 +8,7 @@ Archer::Archer(QPoint pos_)
     attackSpeed = 800;
     buyCost = 1000;
     sellPrice = 900;
-    picDir = ":/img/asset/3.png";
+    picDir = ":/img/asset/1.png";
     towerType = 1;
 
     upgradeFee.push_back(1000);
