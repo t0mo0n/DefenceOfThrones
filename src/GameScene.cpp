@@ -12,9 +12,11 @@ GameScene::GameScene(int level, bool isHardMode, QGraphicsView *parent)
     pauseGameButton = new Button("路径1", "路径2", 1000, 700);
     scene = new QGraphicsScene(this);
     scene->addItem(pauseGameButton);
+    pauseGameButton->setZValue(90);
 
     gameEndButton = new Button("路径1", "路径2", 1100, 700);
     scene->addItem(gameEndButton);
+    gameEndButton->setZValue(90);
 
     resumeGameButton = nullptr;
     pausedMenu = nullptr;
@@ -23,25 +25,23 @@ GameScene::GameScene(int level, bool isHardMode, QGraphicsView *parent)
     scene->addItem(healthTextItem);
     healthTextItem->setPos(1000, 0);
     healthTextItem->setDefaultTextColor(Qt::red);
+    healthTextItem->setZValue(90);
 
     moneyTextItem = new QGraphicsTextItem(QString("SHILLING: %1").arg(SHILLING));
     moneyTextItem->setPos(1000, 100);
     moneyTextItem->setDefaultTextColor(Qt::yellow);
+    healthTextItem->setZValue(90);
 
     towerSelectMenu = nullptr;
 
-    QTimer * updateTimer = new QTimer((this));
+    QTimer * updateTimer = new QTimer(this);
     updateTimer->start(50);
     connect(updateTimer, &QTimer::timeout, this, &GameScene::updateScene);
 
-
+    loadMap(level);
 }
 
-void GameScene::closeEvent(QCloseEvent *event)
-{
-    emit gameEnd();
-    event->accept();
-}
+
 
 void GameScene::onPauseButtonClicked()
 {
@@ -60,23 +60,12 @@ void GameScene::onPauseButtonClicked()
         resumeGameButton->setParentItem(pausedMenu);
         resumeGameButton->setZValue(101);
         scene->addItem(resumeGameButton);
-
-
-
     }
 }
 
 void GameScene::onResumeButtonClicked()
 {
-    for(Enemy* i:enemies)
-    {
-        i->enemyResume();
-    }
-    for(TowerFrame* i :towers)
-    {
-        i->towerResume();
-    }
-
+    resumeScene();
     if (pausedMenu)
     {
         scene->removeItem(pausedMenu);
@@ -131,8 +120,46 @@ void GameScene::pauseScene()
         i->towerPause();
     }
 }
-
+void GameScene::resumeScene()
+{
+    for(Enemy* i:enemies)
+    {
+        i->enemyResume();
+    }
+    for(TowerFrame* i :towers)
+    {
+        i->towerResume();
+    }
+}
 void GameScene::mousePressEvent(QMouseEvent* event)
 {
+    QPointF pressPos = event->pos();
+    QPoint pressPosInt = pressPos.toPoint();
+    if(map->isPlaceAble(pressPosInt))
+    {
+        pauseScene();
+        towerSelectMenu = new TowerSelectMenu(pressPosInt);
+        scene->addItem(towerSelectMenu);
+        towerSelectMenu->setZValue(95);
+        connect(towerSelectMenu,&TowerSelectMenu::selectTowerType,this,&GameScene::onTowerSelectButtonClicked);
+        connect(towerSelectMenu, &::TowerSelectMenu::closeTowerSelectMenu,[=](){
+            scene->removeItem(towerSelectMenu);
+            delete towerSelectMenu;
+        });
 
+    }
+}
+
+void GameScene::closeEvent(QCloseEvent *event)
+{
+    emit gameEnd();
+    event->accept();
+}
+
+void GameScene::loadMap(int level)
+{
+    map->loadMap(level);
+    addObstacles();
+    //todo
+    //背景怎么办
 }

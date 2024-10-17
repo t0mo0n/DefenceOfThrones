@@ -32,14 +32,18 @@ public:
     void addObstacles();
     void updateScene();
     void pauseScene();
+    void resumeScene();
     void mousePressEvent(QMouseEvent *event) override;
     void closeEvent(QCloseEvent *event) override;
+    void loadMap(int level);
 
 public slots:
     void onPauseButtonClicked();
     void onResumeButtonClicked();
     void onGameEndButtonClicked();
-    void onTowerSelectButtonClicked(int cost);
+    void onTowerSelectButtonClicked(int type);
+    void onTowerUpdated(int cost);
+    void onDeleteTowerButtonClicked(int cost);
     void updatePlayerLives(int lives);
     void onEnemyDead(int reward);
     void onEnemyArrive(int damage);

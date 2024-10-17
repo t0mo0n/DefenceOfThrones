@@ -2,7 +2,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include "Button.h"
 
-Button::Button(QString UnHoverImagePath, QString HoverImagePath,int posX=0,int posY=0, QGraphicsObject *parent=nullptr)
+Button::Button(QString UnHoverImagePath, QString HoverImagePath,int posX,int posY, QGraphicsObject *parent=nullptr)
     : QGraphicsObject{parent}
 {
     this->UnHoverImagePath = UnHoverImagePath;
