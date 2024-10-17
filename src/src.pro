@@ -18,6 +18,20 @@ SOURCES += \
     main.cpp \
     GameController.cpp \
     Enemy.cpp \
+    GreyjoySoldier.cpp \
+    KingSlayer.cpp \
+    LannisterSoldier.cpp \
+    Melisandre.cpp \
+    Mountain.cpp \
+    NightKing.cpp \
+    Obstacle.cpp \
+    Player.cpp \
+    Vesalion.cpp \
+    Wilder.cpp \
+    main.cpp \
+    mainwindow.cpp \
+     Deadalive.cpp \
+
 
 HEADERS += \
     Archer.h \
@@ -28,6 +42,17 @@ HEADERS += \
     StoneThrower.h \
     TowerFrame.h \
     Enemy.h \
+    GreyjoySoldier.h \
+    KingSlayer.h \
+    LannisterSoldier.h \
+    Melisandre.h \
+    Mountain.h \
+    NightKing.h \
+    Obstacle.h \
+    Player.h \
+    Vesalion.h \
+    Wilder.h \
+     Deadalive.h \
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
