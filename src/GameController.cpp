@@ -139,10 +139,11 @@ void GameController::exitGame()
 
 void GameController::showSettingMenu()
 {
-//     settingMenu_ = new SettingsMenu();
-//     settingMenu_->exec();
-//     connect(settingMenu_,&SettingsMenu::volumeChanged,this,&GameController::changeVolumn);
-//     connect(settingMenu_,&SettingsMenu::gameBgmChanged,this,&GameController::changeGameBgm);
+    settingMenu_ = new SettingsMenu();
+    //TODO:different origins
+    settingMenu_->show();
+    connect(settingMenu_,&SettingsMenu::volumeChanged,this,&GameController::changeVolumn);
+    connect(settingMenu_,&SettingsMenu::gameBgmChanged,this,&GameController::changeGameBgm);
  }
 
 void GameController::showLevelSelectMenu()
