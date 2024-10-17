@@ -4,7 +4,10 @@
         <file>asset/2.png</file>
         <file>asset/3.png</file>
         <file>asset/GOT.jpg</file>
-    </qresource>
+</qresource>
+    <qresource prefix="/imgBackground">
+        <file>asset/mainMenuBackground.jpg</file>
+</qresource>
     <qresource prefix="/sound">
         <file>music/The_Rains_of_Castamere.mp3</file>
         <file>music/Light_of_Nibel_-_Ori_and_the_Blind_Forest.mp3</file>
