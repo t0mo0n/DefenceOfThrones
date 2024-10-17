@@ -13,11 +13,16 @@ SOURCES += \
     Button.cpp \
     Dragon.cpp \
     GameScene.cpp \
+    DragonBall.cpp \
+    DragonFlame.cpp \
+    FireArrow.cpp \
     JohnSnow.cpp \
     Projectile.cpp \
+    Stone.cpp \
     StoneThrower.cpp \
     TowerFrame.cpp \
     TowerSelectMenu.cpp \
+    Wolf.cpp \
     main.cpp \
     GameController.cpp \
 
@@ -25,13 +30,18 @@ HEADERS += \
     Archer.h \
     Button.h \
     Dragon.h \
+    DragonBall.h \
+    DragonFlame.h \
+    FireArrow.h \
     GameController.h \
     GameScene.h \
     JohnSnow.h \
     Projectile.h \
+    Stone.h \
     StoneThrower.h \
     TowerFrame.h \
     TowerSelectMenu.h
+    Wolf.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -6,21 +6,21 @@
 #include <TowerFrame.h>
 #include <QGraphicsItemAnimation>
 #include <QTimer>
+#include <FireArrow.h>
 #include <Projectile.h>
 
 class Archer : public TowerFrame
 {
     Q_OBJECT
 public:
-    explicit Archer(QPoint pos_=QPoint(0,0));
-    void attack()override;
-    QTimer *aimTimer;
-    QTimer *attackTimer;
+    explicit Archer(QPoint pos_ = QPoint(0, 0));
+    void attack() override;
+    ~Archer() {};
+    void FindEnemy() override;
 
 signals:
 public slots:
-    void upgrade()override;
-
+    void upgrade() override;
 };
 
 #endif // ARCHER_H
