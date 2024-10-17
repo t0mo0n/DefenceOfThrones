@@ -1,6 +1,11 @@
 # This file is used to ignore files which are generated
 # ----------------------------------------------------------------------------
 
+build/
+Enemy.cpp
+Enemy.h
+main.cpp
+
 *~
 *.autosave
 *.a
