@@ -71,14 +71,15 @@ void GameScene::onResumeButtonClicked()
 
 void GameScene::addTower(TowerFrame *tower)
 {
-    scene->addItem(tower);
+    scene->addItem(dynamic_cast<QGraphicsItem*>(tower));
     towers.append(tower);
 }
 
 void GameScene::addEnemy()
 {
     Enemy* enemy = new Enemy(map->getPath,map->getEnemyType());
-    scene->addItem(enemy);
+    scene->addItem(dynamic_cast<QGraphicsItem*>(enemy));
+    enemies.append(enemy);
 
 
 }
