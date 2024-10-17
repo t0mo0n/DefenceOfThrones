@@ -9,7 +9,7 @@
 #include <QGraphicsRectItem>
 #include <QmouseEvent>
 #include <QList>
-#include <QPointF>
+#include <QPoint>
 #include "Player.h"
 #include "Enemy.h"
 #include "TowerFrame.h" //但文档里好像说是"Tower.h"

@@ -25,7 +25,6 @@ SOURCES += \
     Wolf.cpp \
     main.cpp \
     GameController.cpp \
-    Enemy.cpp \
 
 HEADERS += \
     Archer.h \
@@ -43,7 +42,6 @@ HEADERS += \
     TowerFrame.h \
     TowerSelectMenu.h
     Wolf.h \
-    Enemy.h \
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
