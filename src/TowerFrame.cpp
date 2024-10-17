@@ -93,6 +93,7 @@ void TowerFrame::resetTarget() // 把塔的敌人制空，同时把所有子弹�
     }
 }
 
+
 void TowerFrame::setTarget(Enemy *target_out)
 {
     target = target_out;
@@ -124,3 +125,4 @@ QList<QGraphicsItem *> TowerFrame::checkForItemsInBoundingRect()
 
     return itemsInBoundingRect;
 }
+

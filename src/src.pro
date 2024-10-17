@@ -17,7 +17,11 @@ SOURCES += \
     DragonFlame.cpp \
     FireArrow.cpp \
     JohnSnow.cpp \
+    LevelSelectMenu.cpp \
+    MainMenu.cpp \
+    Map.cpp \
     Projectile.cpp \
+    SettingsMenu.cpp \
     Stone.cpp \
     StoneThrower.cpp \
     TowerFrame.cpp \
@@ -37,7 +41,11 @@ HEADERS += \
     GameController.h \
     GameScene.h \
     JohnSnow.h \
+    LevelSelectMenu.h \
+    MainMenu.h \
+    Map.h \
     Projectile.h \
+    SettingsMenu.h \
     Stone.h \
     StoneThrower.h \
     TowerFrame.h \
@@ -45,6 +53,9 @@ HEADERS += \
     Wolf.h \
     Enemy.h \
 
+
+FORMS += \
+    mainmenu.ui\
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
