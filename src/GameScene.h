@@ -8,19 +8,23 @@
 #include <QGraphicsTextItem>
 #include <QGraphicsRectItem>
 #include <QmouseEvent>
+#include <QTimer>
 #include <QList>
+#include <QVector>
 #include <QPoint>
-#include "Player.h"
+#include <QPointF>
+//#include "Player.h"
 #include "Enemy.h"
 #include "TowerFrame.h" //但文档里好像说是"Tower.h"
 #include "Map.h"
-#include "Obstacle.h"
+//#include "Obstacle.h"
 #include "TowerSelectMenu.h"
 #include "Button.h"
 
 class GameScene : public QGraphicsView
 {
     Q_OBJECT
+
 public:
     GameScene(int level, bool isHardMode, QGraphicsView *parent = nullptr);
     void addTower(TowerFrame * tower);
@@ -28,10 +32,10 @@ public:
     void addObstacles();
     void updateScene();
     void pauseScene();
-    void mousePressEvent(QMouseEvent *event);
-    void closeEvent(QCloseEvent *event);
+    void mousePressEvent(QMouseEvent *event) override;
+    void closeEvent(QCloseEvent *event) override;
 
-public:
+public slots:
     void onPauseButtonClicked();
     void onResumeButtonClicked();
     void onGameEndButtonClicked();
@@ -42,7 +46,7 @@ public:
     void onObstacleDestroyed(int reward);
 
 private:
-    Player *player;
+ //   Player *player;
     Map *map;
     Button *pauseGameButton;
     Button *resumeGameButton;
@@ -53,7 +57,7 @@ private:
     QGraphicsTextItem *moneyTextItem;
     QList<TowerFrame *> towers;
     QList<Enemy *> enemies;
-    QList<Obstacle *> obstacles;
+  //  QList<Obstacle *> obstacles;
     TowerSelectMenu *towerSelectMenu;
     QGraphicsRectItem *pausedMenu;
     int level;

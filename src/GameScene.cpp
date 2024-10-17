@@ -3,13 +3,14 @@
 #define SHILLING 100
 #define HEALTH 20
 GameScene::GameScene(int level, bool isHardMode, QGraphicsView *parent)
-    : QGraphicsView{parent}
+    : QGraphicsView(parent)
 {
     this->level = level;
     this->isHardMode = isHardMode;
-    this->player = new Player(SHILLING, HEALTH);
+    //this->player = new Player(SHILLING, HEALTH);
     this->map = new Map();
     pauseGameButton = new Button("路径1", "路径2", 1000, 700);
+    scene = new QGraphicsScene(this);
     scene->addItem(pauseGameButton);
 
     gameEndButton = new Button("路径1", "路径2", 1100, 700);
@@ -28,6 +29,12 @@ GameScene::GameScene(int level, bool isHardMode, QGraphicsView *parent)
     moneyTextItem->setDefaultTextColor(Qt::yellow);
 
     towerSelectMenu = nullptr;
+
+    QTimer * updateTimer = new QTimer((this));
+    updateTimer->start(50);
+    connect(updateTimer, &QTimer::timeout, this, &GameScene::updateScene);
+
+
 }
 
 void GameScene::closeEvent(QCloseEvent *event)
@@ -53,11 +60,23 @@ void GameScene::onPauseButtonClicked()
         resumeGameButton->setParentItem(pausedMenu);
         resumeGameButton->setZValue(101);
         scene->addItem(resumeGameButton);
+
+
+
     }
 }
 
 void GameScene::onResumeButtonClicked()
 {
+    for(Enemy* i:enemies)
+    {
+        i->enemyResume();
+    }
+    for(TowerFrame* i :towers)
+    {
+        i->towerResume();
+    }
+
     if (pausedMenu)
     {
         scene->removeItem(pausedMenu);
@@ -71,15 +90,49 @@ void GameScene::onResumeButtonClicked()
 
 void GameScene::addTower(TowerFrame *tower)
 {
-    scene->addItem(dynamic_cast<QGraphicsItem*>(tower));
+    scene->addItem(tower);
+    tower->setZValue(3);
     towers.append(tower);
 }
 
 void GameScene::addEnemy()
 {
-    Enemy* enemy = new Enemy(map->getPath,map->getEnemyType());
-    scene->addItem(dynamic_cast<QGraphicsItem*>(enemy));
+    Enemy* enemy = new Enemy(map->getPath,map->getEnemyTypes());
+    scene->addItem(enemy);
+    enemy->setZValue(1);
     enemies.append(enemy);
+}
 
+void GameScene::addObstacles()
+{
+    QVector<QVector<int>> obsPos = map->getObsPosType();
+    for(int i=0;i<obsPos.size();i++)
+    {
+        Obstacle* obstacle = new Obstacle(QPoint(i[0],i[1]),i[2]);
+        scene->addItem(obstacle);
+        obstacle->setZValue(2);
+        obstacles.append(obstacle);
+    }
+}
+
+void GameScene::updateScene()
+{
+    scene->update();
+}
+
+void GameScene::pauseScene()
+{
+    for(Enemy* i:enemies)
+    {
+        i->enemyPause();
+    }
+    for(TowerFrame* i :towers)
+    {
+        i->towerPause();
+    }
+}
+
+void GameScene::mousePressEvent(QMouseEvent* event)
+{
 
 }
