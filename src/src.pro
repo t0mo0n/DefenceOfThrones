@@ -41,7 +41,7 @@ HEADERS += \
     StoneThrower.h \
     TowerFrame.h \
     TowerSelectMenu.h
-    Wolf.h
+    Wolf.h \
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

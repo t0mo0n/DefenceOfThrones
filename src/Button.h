@@ -6,7 +6,8 @@
 #include <QString>
 #include <QPixmap>
 #include <QPainter>
-class Button : public QGraphicsItem
+#include <QGraphicsObject>
+class Button : public QGraphicsObject
 {
     Q_OBJECT
 public:

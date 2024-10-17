@@ -1,4 +1,4 @@
-#include<QGraphicsBlurEffect>
+#include <QGraphicsBlurEffect>
 #include "GameScene.h"
 #define SHILLING 100
 #define HEALTH 20
@@ -9,10 +9,10 @@ GameScene::GameScene(int level, bool isHardMode, QGraphicsView *parent)
     this->isHardMode = isHardMode;
     this->player = new Player(SHILLING, HEALTH);
     this->map = new Map();
-    pauseGameButton = new Button("路径1","路径2",1000,700);
+    pauseGameButton = new Button("路径1", "路径2", 1000, 700);
     scene->addItem(pauseGameButton);
 
-    gameEndButton = new Button("路径1","路径2",1100,700);
+    gameEndButton = new Button("路径1", "路径2", 1100, 700);
     scene->addItem(gameEndButton);
 
     resumeGameButton = nullptr;
@@ -20,16 +20,14 @@ GameScene::GameScene(int level, bool isHardMode, QGraphicsView *parent)
 
     healthTextItem = new QGraphicsTextItem(QString("HEALTH: %1").arg(HEALTH));
     scene->addItem(healthTextItem);
-    healthTextItem->setPos(1000,0);
+    healthTextItem->setPos(1000, 0);
     healthTextItem->setDefaultTextColor(Qt::red);
 
     moneyTextItem = new QGraphicsTextItem(QString("SHILLING: %1").arg(SHILLING));
-    moneyTextItem ->setPos(1000,100);
-    moneyTextItem ->setDefaultTextColor(Qt::yellow);
+    moneyTextItem->setPos(1000, 100);
+    moneyTextItem->setDefaultTextColor(Qt::yellow);
 
-
-
-
+    towerSelectMenu = nullptr;
 }
 
 void GameScene::closeEvent(QCloseEvent *event)
@@ -41,17 +39,17 @@ void GameScene::closeEvent(QCloseEvent *event)
 void GameScene::onPauseButtonClicked()
 {
     pauseScene();
-    if(!pausedMenu)
+    if (!pausedMenu)
     {
         pausedMenu = new QGraphicsRectItem(QRectF(scene->sceneRect()));
-        pausedMenu->setBrush(QBrush(QColor(255,255,255,128)));
+        pausedMenu->setBrush(QBrush(QColor(255, 255, 255, 128)));
         pausedMenu->setZValue(100);
 
-        QGraphicsBlurEffect* pauseMenuEffect = new QGraphicsBlurEffect();
+        QGraphicsBlurEffect *pauseMenuEffect = new QGraphicsBlurEffect();
         pauseMenuEffect->setBlurRadius(100);
         pausedMenu->setGraphicsEffect(pauseMenuEffect);
         scene->addItem(pausedMenu);
-        resumeGameButton = new Button("路径1","路径2",550,350);
+        resumeGameButton = new Button("路径1", "路径2", 550, 350);
         resumeGameButton->setParentItem(pausedMenu);
         resumeGameButton->setZValue(101);
         scene->addItem(resumeGameButton);
@@ -60,7 +58,7 @@ void GameScene::onPauseButtonClicked()
 
 void GameScene::onResumeButtonClicked()
 {
-    if(pausedMenu)
+    if (pausedMenu)
     {
         scene->removeItem(pausedMenu);
         scene->removeItem(resumeGameButton);
@@ -68,6 +66,15 @@ void GameScene::onResumeButtonClicked()
         delete resumeGameButton;
         pausedMenu = nullptr;
         resumeGameButton = nullptr;
-
     }
+}
+
+void GameScene::addTower(TowerFrame *tower)
+{
+    towers.append(tower);
+}
+
+void GameScene::addEnemy
+{
+
 }

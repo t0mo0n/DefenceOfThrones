@@ -4,20 +4,21 @@
 #include <QWidget>
 #include <QGraphicsView>
 #include <QGraphicsItem>
+#include <QGraphicsObject>
 #include "TowerFrame.h"
 #include "Button.h"
 
-class TowerSelectMenu : public QGraphicsItem
+class TowerSelectMenu : public QGraphicsObject
 {
     Q_OBJECT
 public:
-    TowerSelectMenu(QGraphicsItem *parent = nullptr);
+    TowerSelectMenu(QGraphicsObject *parent = nullptr);
 
 private:
     TowerFrame *towerToBeSelected;
     Button *selectArcher;
     Button *selectStoneThrower;
-    Button *selectJhonSnow;
+    Button *selectJohnSnow;
     Button *selectDragon;
     Button *deleteMenu;
 signals:

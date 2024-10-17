@@ -9,6 +9,7 @@
 #include <QGraphicsRectItem>
 #include <QmouseEvent>
 #include <QList>
+#include <QPointF>
 #include "Player.h"
 #include "Enemy.h"
 #include "TowerFrame.h" //但文档里好像说是"Tower.h"
@@ -22,7 +23,7 @@ class GameScene : public QGraphicsView
     Q_OBJECT
 public:
     GameScene(int level, bool isHardMode, QGraphicsView *parent = nullptr);
-    void addTower(TowerFrame *);
+    void addTower(TowerFrame * tower, QPointF & position);
     void addEnemy();
     void addObstacles();
     void updateScene();
