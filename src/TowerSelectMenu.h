@@ -22,6 +22,7 @@ private:
     Button *selectDragon;
     Button *deleteMenu;
 signals:
+    void closeTowerSelectMenu();
 };
 
 #endif // TOWERSELECTMENU_H

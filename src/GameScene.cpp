@@ -71,10 +71,14 @@ void GameScene::onResumeButtonClicked()
 
 void GameScene::addTower(TowerFrame *tower)
 {
+    scene->addItem(tower);
     towers.append(tower);
 }
 
-void GameScene::addEnemy
+void GameScene::addEnemy()
 {
+    Enemy* enemy = new Enemy(map->getPath,map->getEnemyType());
+    scene->addItem(enemy);
+
 
 }

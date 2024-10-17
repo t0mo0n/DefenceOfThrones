@@ -23,7 +23,7 @@ class GameScene : public QGraphicsView
     Q_OBJECT
 public:
     GameScene(int level, bool isHardMode, QGraphicsView *parent = nullptr);
-    void addTower(TowerFrame * tower, QPointF & position);
+    void addTower(TowerFrame * tower);
     void addEnemy();
     void addObstacles();
     void updateScene();
