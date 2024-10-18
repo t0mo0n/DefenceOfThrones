@@ -5,7 +5,7 @@ Dragon::Dragon(QPoint pos_)
 {
     projectType = 4;
     attackRange = 200;
-    attackSpeed = 4000;
+    attackSpeed = 1000;
     buyCost = 1500;
     sellPrice = 900;
     picDir = ":/img/asset/GOT.jpg";
@@ -36,7 +36,7 @@ void Dragon::attack()
 
             DragonBall *bullet1 = new DragonBall(bulletStartPos, TowerCentral, attackRange);
             DragonBall *bullet2 = new DragonBall(bulletStartPos, TowerCentral, attackRange);
-
+            assert(smallBullet.isEmpty()==true);
             if (bullet1)
             {
                 smallBullet.push_back(bullet1);
@@ -50,6 +50,7 @@ void Dragon::attack()
 
             int enemyNum = enemyList.length();
             assert(enemyNum > 0);
+
             for (auto bullet : smallBullet)
             {
                 if (enemyNum >= 2)
@@ -82,31 +83,34 @@ void Dragon::attack()
     }
     else if (level == 2)
     {
-        // 获取塔的位置
-        QPointF towerPos = this->pos();
-        // 获取目标的位置
-        qreal bulletX = towerPos.x() + towerSize / 2;
-        qreal bulletY = towerPos.y() + towerSize / 2;
-        QPointF bulletStartPos(bulletX, bulletY);
 
-        // 创建并发射投掷物
-        assert(1 <= level && level <= 2);
+            // 获取塔的位置
+            QPointF towerPos = this->pos();
+            // 获取目标的位置
+            qreal bulletX = towerPos.x() + towerSize / 2;
+            qreal bulletY = towerPos.y() + towerSize / 2;
+            QPointF bulletStartPos(bulletX, bulletY);
 
-        DragonFlame *bullet = new DragonFlame(bulletStartPos, TowerCentral, attackRange);
+            // 创建并发射投掷物
+            assert(1 <= level && level <= 2);
 
-        if (bullet)
-        {
-            projectileList.push_back(bullet);
-            bullet->setDire(towerAngle);
-            connect(bullet, &DragonFlame::outrange, this, [this, bullet]()
-                    {
-                projectileList.removeOne(bullet);  // 从列表中移除该子弹
-                scene()->removeItem(bullet);
-                delete bullet; });
-            scene()->addItem(bullet);
-            update();
-            assert(bullet->enemys == nullptr);
-        }
+            DragonFlame *bullet = new DragonFlame(bulletStartPos, TowerCentral, attackRange);
+
+            if (bullet)
+            {
+                projectileList.push_back(bullet);
+                bullet->setDire(towerAngle);
+                connect(bullet, &DragonFlame::outrange, this, [this, bullet]()
+                        {
+                            projectileList.removeOne(bullet);  // 从列表中移除该子弹
+                            scene()->removeItem(bullet);
+                            delete bullet; });
+                scene()->addItem(bullet);
+                update();
+                assert(bullet->enemys == nullptr);
+            }
+
+
     }
 }
 
@@ -150,7 +154,7 @@ void Dragon::FindEnemy()
                 continue;
             }
             qreal distance = QLineF(enemy_p->pos(), this->pos()).length();
-            if (distance <= attackRange + 25)
+            if (distance <= attackRange+25)
             {
                 connect(enemy_p, &Enemy::destroy, this, [this, enemy_p]()
                         {

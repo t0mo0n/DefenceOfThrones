@@ -4,7 +4,7 @@
 DragonBall::DragonBall(QPointF pos,QPointF Tower_c,qreal attack_range)
     :Projectile(pos,Tower_c,attack_range)
 {
-    src=":/img/asset/1.png";
+    src=":/img/asset/2.png";
     type=4;
     damage=500;
 }

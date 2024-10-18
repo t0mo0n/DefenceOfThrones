@@ -1,5 +1,5 @@
 #include "TowerFrame.h"
-
+//子弹在发射之后马上把塔删掉，会导致子弹没有归属
 TowerFrame::TowerFrame(QPoint pos_, int type)
 {
     if (type == 0)
@@ -95,6 +95,7 @@ void TowerFrame::resetTarget() // 把塔的敌人制空，同时把所有子弹�
 
 void TowerFrame::setTarget(Enemy *target_out)
 {
+    update();
     target = target_out;
     if (target_out)
     {
@@ -109,6 +110,7 @@ TowerFrame::~TowerFrame()
     delete aimTimer;
     attackTimer->stop();
     delete attackTimer;
+    resetTarget();
 }
 
 QList<QGraphicsItem *> TowerFrame::checkForItemsInBoundingRect()
