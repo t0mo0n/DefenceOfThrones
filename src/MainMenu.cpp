@@ -13,16 +13,24 @@ MainMenu::MainMenu(QWidget *parent)
     this->setFixedSize(1200,800);
     this->setWindowTitle("Defense of Thrones");
 
+    //init font
+    // int fontId = QFontDatabase::addApplicationFont(":/font/font/Argor Got Scaqh.ttf");
+    // QString fontFamily =QFontDatabase::applicationFontFamilies(fontId).at(0);
+    // QFont font(fontFamily);
+    // font.setPointSize(12);
+
     //init buttons
     for(int i=0;i<4;i++){
-        buttons[i]->setGeometry(50,50+i*100,200,100);
+        buttons[i]->setGeometry(870-65*i,390+i*90,280,100);
+        //buttons[i]->setFont(font);
         QString styleSheet =QString(
             "QPushButton{"
+            "color: #DEDEDE;"
             "border-image:url(%1);"
+            "width: 280px;"
+            "height: 100px;"
             "}"
-            "QPushButton:pressed{"
-            "border-image:url(%2);"
-            "}").arg(buttonsPix[i]).arg(buttonsPix[i]);
+            ).arg(buttonsPix[i]);
         buttons[i]->setStyleSheet(styleSheet);
     }
 
@@ -48,8 +56,9 @@ void MainMenu::paintEvent(QPaintEvent *event){
     QPainter painter(this);
 
     //QPixmap pix()
-    QPixmap pixMainMenuBackground(":/imgBackground/asset/mainMenuBackground.jpg");
+    QPixmap pixMainMenuBackground(":/img/asset/mainMenuBackground.png");
     painter.drawPixmap(0,0,this->width(),this->height(),pixMainMenuBackground);
+
 }
 
 MainMenu::~MainMenu()

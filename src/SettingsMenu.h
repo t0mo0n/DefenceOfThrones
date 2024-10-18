@@ -1,17 +1,20 @@
 #ifndef SETTINGSMENU_H
 #define SETTINGSMENU_H
 
-#include <QWidget>
+#include <QDialog>
 #include <QSlider>
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QComboBox>
+#include <QPaintEvent>
+#include <QPainter>
 
-class SettingsMenu : public QWidget
+class SettingsMenu : public QDialog
 {
     Q_OBJECT
 public:
     explicit SettingsMenu(QWidget *parent = nullptr);
+    void paintEvent(QPaintEvent *event);
     ~SettingsMenu();
 signals:
     void volumeChanged(float volumn);

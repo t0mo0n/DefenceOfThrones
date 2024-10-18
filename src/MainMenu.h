@@ -5,6 +5,7 @@
 #include <QWidget>
 #include <QPushButton>
 #include <QPaintEvent>
+#include <QFontDatabase>
 #define WIDTH 1200
 #define HIGTH 800
 
@@ -34,11 +35,12 @@ private:
                                 new QPushButton("SETTING",this),
                                 new QPushButton("EXIT",this)};
     //TODO:
-    QStringList buttonsPix={":/img/asset/1.png",
-                               ":/img/asset/1.png",
-                               ":/img/asset/1.png",
-                                ":/img/asset/1.png",};
+    QStringList buttonsPix={":/img/asset/button1.png",
+                               ":/img/asset/button1.png",
+                               ":/img/asset/button1.png",
+                                ":/img/asset/button1.png",};
     //0:startButton 1:levelSelectButton 2:settingButton 4:exitButton;
+
 public slots:
 
 };
