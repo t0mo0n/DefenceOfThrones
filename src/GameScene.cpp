@@ -207,20 +207,20 @@ void GameScene::addEnemy()
     connect(enemies.last(),&Enemy::isArrived,this,&GameScene::onEnemyArrive);
 }
 
-void GameScene::addObstacles()
-{
-    QVector<QPair<QPoint,int>> obsPos = map->getObsPosType();
-    for (int i = 0; i < obsPos.size(); i++)
-    {
-        QPoint toScenePos(obsPos[i].first.x()*CELL_SIZE,obsPos[i].first.y()*CELL_SIZE);
-        //todo加上price和health
-        Obstacle *obstacle = new Obstacle(toScenePos,obsPos[i].second);
-        scene->addItem(obstacle);
-        obstacle->setZValue(10);
-        obstacles.append(obstacle);
+// void GameScene::addObstacles()
+// {
+//     QVector<QPair<QPoint,int>> obsPos = map->getObsPosType();
+//     for (int i = 0; i < obsPos.size(); i++)
+//     {
+//         QPoint toScenePos(obsPos[i].first.x()*CELL_SIZE,obsPos[i].first.y()*CELL_SIZE);
+//         //todo加上price和health
+// //        Obstacle *obstacle = new Obstacle(toScenePos,obsPos[i].second);
+//         scene->addItem(obstacle);
+//         obstacle->setZValue(10);
+//         obstacles.append(obstacle);
 
-    }
-}
+//     }
+// }
 
 void GameScene::updateScene()
 {
