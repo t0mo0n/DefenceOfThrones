@@ -1,11 +1,1 @@
-gamescene.h
-gamescene.cpp
-levelselectmenu.h
-levelselectmenu.cpp
-mainmenu.h
-mainmenu.cpp
-settingsmenu.h
-settingsmenu.cpp
-settingsmenu.cpp
-
-src/build/
+src/assert.qrc

@@ -5,6 +5,11 @@ build/
 Enemy.cpp
 Enemy.h
 main.cpp
+assert.qrc
+asset/
+music/
+src.pro
+
 
 *~
 *.autosave

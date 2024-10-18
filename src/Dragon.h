@@ -15,10 +15,10 @@ public:
     ~Dragon() {};
     void upgrade() override;
     void FindEnemy() override;
-
-protected:
     QList<Enemy *> enemyList;
     QList<DragonBall *> smallBullet;
+protected:
+
 signals:
 };
 
