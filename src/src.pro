@@ -11,8 +11,17 @@ CONFIG += c++17
 SOURCES += \
     Archer.cpp \
     Dragon.cpp \
+    GameScene.cpp \
+    DragonBall.cpp \
+    DragonFlame.cpp \
+    FireArrow.cpp \
     JohnSnow.cpp \
+    LevelSelectMenu.cpp \
+    MainMenu.cpp \
+    Map.cpp \
     Projectile.cpp \
+    SettingsMenu.cpp \
+    Stone.cpp \
     StoneThrower.cpp \
     TowerFrame.cpp \
     main.cpp \
@@ -30,15 +39,21 @@ SOURCES += \
     Wilder.cpp \
     main.cpp \
     mainwindow.cpp \
-     Deadalive.cpp \
+    Deadalive.cpp \
 
 
 HEADERS += \
     Archer.h \
     Dragon.h \
     GameController.h \
+    GameScene.h \
     JohnSnow.h \
+    LevelSelectMenu.h \
+    MainMenu.h \
+    Map.h \
     Projectile.h \
+    SettingsMenu.h \
+    Stone.h \
     StoneThrower.h \
     TowerFrame.h \
     Enemy.h \
@@ -52,7 +67,10 @@ HEADERS += \
     Player.h \
     Vesalion.h \
     Wilder.h \
-     Deadalive.h \
+    Deadalive.h \
+
+FORMS += \
+    mainmenu.ui\
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
