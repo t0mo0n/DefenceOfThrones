@@ -261,7 +261,7 @@ void GameScene::mousePressEvent(QMouseEvent *event)
         towerSelectMenu->setZValue(95);
         connect(towerSelectMenu, &TowerSelectMenu::selectTowerType, this, &GameScene::onTowerSelectButtonClicked);
         connect(towerSelectMenu, &::TowerSelectMenu::closeTowerSelectMenu, [=]()
-    {
+        {
             scene->removeItem(towerSelectMenu);
             delete towerSelectMenu; });
     }
@@ -275,7 +275,7 @@ void GameScene::closeEvent(QCloseEvent *event)
 
 void GameScene::loadMap(int level)
 {
-    map->loadMap(level);
+    map->load(level,isHardMode);
     addObstacles();
 
     // todo
