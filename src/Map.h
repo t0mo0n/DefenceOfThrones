@@ -10,6 +10,7 @@
 #include <QJsonArray>
 #include <QDebug>
 
+
 class Map : public QObject {
     Q_OBJECT
 
@@ -17,7 +18,15 @@ public:
     Map(QObject *parent = nullptr);
 
     void load(int level,bool isHardMode);
-    const QVector<QPoint>& getSpawnPoints() const{
+    void refresh();
+
+    bool isPlacaAble(QPoint pos_){
+        if(map[pos_.x()][pos_.y()]=='1'){
+            return true;
+        }
+        return false;
+    }
+    const QPoint& getSpawnPoints() const{
         return spawnPoints;
     }
     const QVector<QPoint>& getPath() const{
@@ -29,10 +38,12 @@ public:
     int getEnemyTypes() {
         enemyNum++;
         if(enemyNum>=enemyTotalNum){
-            qDebug()<<"get too much enemy"<<endl;
+            qDebug()<<"get too much enemy";
         }
         return enemyTypes[enemyNum];
     }
+
+
     //TODO: obstacles
 
 private:
@@ -40,9 +51,12 @@ private:
     //player info
     int playerHealth;
     int playerMoney;
+    QPoint playerPosition;
+
 
     //map info
-    QVector<QPoint> spawnPoints;
+    char map[15][10]={0};
+    QPoint spawnPoints;
 
     //enermy info
     QVector<QPoint> enemyPath;

@@ -5,25 +5,38 @@ SettingsMenu::SettingsMenu(QWidget *parent)
 {
     this->setFixedSize(600,400);
     this->setWindowTitle("Defense of Thrones");
+    //TODO:setIcon
 
     QFont font("Arial",24);
     int labelX=50;
-    int barX=120;
+    int barX=300;
+    int barW=200;
+    int barH=30;
 
     //set volume
     volumeLabel =new QLabel("Volume:50",this);
     volumeLabel->setFont(font);
     volumeLabel->move(labelX,100);
+    volumeLabel->setFixedSize(150,60);
+    volumeLabel->setStyleSheet(
+        "QLabel{"
+        "border-image:url(:/img/asset/button.png);"
+        "background-position:center;"
+        "background-repeat:no-repeat;"
+        "color:DEDEDE;"
+        "}"
+        );
 
 
     volumeSlider=new QSlider(Qt::Horizontal,this);
     volumeSlider->setRange(0,100);
     volumeSlider->setValue(50);
+    volumeSlider->setFixedWidth(barW);
     volumeSlider->move(barX,100);
     volumeSlider->setStyleSheet(
         "QSlider::groove:horizontal {"
         "    border: 1px solid #4c4c4c;"
-        "    height: 40px;"
+        "    height: 200px;"
         "    background: #4c4c4c;"
         "    margin: 2px 0;"
         "}"
@@ -34,7 +47,7 @@ SettingsMenu::SettingsMenu(QWidget *parent)
         "    margin: -2px 0;"
         "    border-radius: 3px;"
         "}"
-        );
+    );
 
 
     connect(volumeSlider,&QSlider::valueChanged,this,[=](int value){
@@ -42,25 +55,35 @@ SettingsMenu::SettingsMenu(QWidget *parent)
         emit volumeChanged(value/100.0);
     });
 
-    //
 
     //set hard mode
-    hardModeComboBox=new QComboBox(this);
-    hardModeComboBox->addItem("Easy");
-    hardModeComboBox->addItem("Hard");
 
     hardModeLabel =new QLabel("Mode:",this);
+    hardModeLabel->move(labelX,200);
+    hardModeLabel->setStyleSheet(
+        "QLabel{"
+        "border-image:url(:/img/asset/button.png);"
+        "background-position:center;"
+        "background-repeat:no-repeat;"
+        "}"
+        );
+
+    hardModeComboBox=new QComboBox(this);
+    hardModeComboBox->move(barX,200);
+    hardModeComboBox->addItem("Easy");
+    hardModeComboBox->addItem("Hard");
+    hardModeComboBox->setFixedSize(barW,barH);
     hardModeComboBox->setStyleSheet(
         "QComboBox {"
         "    border: 0px solid gray;"
-        "    border-radius: 3px;"
+        "    border-radius: 0px;"
         "    padding: 1px 18px 1px 3px;"
-        "    min-width: 6em;"
+        "    color: #4c4c4c;"
         "}"
         "QComboBox::drop-down {"
         "    subcontrol-origin: padding;"
         "    subcontrol-position: top right;"
-        "    width: 15px;"
+        "    width: 20px;"
         "    border-left-width: 1px;"
         "    border-left-color: darkgray;"
         "    border-left-style: solid;"
@@ -83,7 +106,14 @@ SettingsMenu::SettingsMenu(QWidget *parent)
 
     bgmChangedLabel =new QLabel("BGM:");
     bgmChangedLabel->setFont(font);
-    bgmChangedLabel->move(labelX,);
+    bgmChangedLabel->move(labelX,300);
+    bgmChangedLabel->setStyleSheet(
+        "QLabel{"
+        "border-image:url(:/img/asset/button.png);"
+        "background-position:center;"
+        "background-repeat:no-repeat;"
+        "}"
+        );
 
     bgmChangedComboBox=new QComboBox(this);
     bgmChangedComboBox->addItem("Jenny of Oldstones");
@@ -91,8 +121,8 @@ SettingsMenu::SettingsMenu(QWidget *parent)
     bgmChangedComboBox->addItem("Light of the Seven");
     bgmChangedComboBox->addItem("the Night King");
     bgmChangedComboBox->addItem("the Rains of Castamere");
-    bgmChangedComboBox->move();
-
+    bgmChangedComboBox->move(barX,300);
+    bgmChangedComboBox->setFixedSize(barW,barH);
 
 
     connect(bgmChangedComboBox,&QComboBox::currentTextChanged,this,
