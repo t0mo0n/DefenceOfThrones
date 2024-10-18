@@ -104,6 +104,7 @@ void GameScene::onEnemyDead(int reward, Enemy* enemyToBeDelete)
     delete enemyToBeDelete;
 }
 
+
 void GameScene::onEnemyArrive(int damage, Enemy* enemyToBeDelete)
 {
     player->loseLife(damage);
@@ -203,18 +204,21 @@ void GameScene::addEnemy()
         break;
     }
     connect(enemies.last(),&Enemy::isDead,this, &GameScene::onEnemyDead);
-    connect(enemies.last(),&Enemy::isArrived,this,)
+    connect(enemies.last(),&Enemy::isArrived,this,&GameScene::onEnemyArrive);
 }
 
 void GameScene::addObstacles()
 {
-    QVector<QVector<int>> obsPos = map->getObsPosType();
+    QVector<QPair<QPoint,int>> obsPos = map->getObsPosType();
     for (int i = 0; i < obsPos.size(); i++)
     {
-        Obstacle *obstacle = new Obstacle(QPoint(i[0], i[1]), i[2]);
+        QPoint toScenePos(obsPos[i].first.x()*CELL_SIZE,obsPos[i].first.y()*CELL_SIZE);
+        //todo加上price和health
+        Obstacle *obstacle = new Obstacle(toScenePos,obsPos[i].second);
         scene->addItem(obstacle);
         obstacle->setZValue(10);
         obstacles.append(obstacle);
+
     }
 }
 
@@ -257,7 +261,7 @@ void GameScene::mousePressEvent(QMouseEvent *event)
         towerSelectMenu->setZValue(95);
         connect(towerSelectMenu, &TowerSelectMenu::selectTowerType, this, &GameScene::onTowerSelectButtonClicked);
         connect(towerSelectMenu, &::TowerSelectMenu::closeTowerSelectMenu, [=]()
-                {
+    {
             scene->removeItem(towerSelectMenu);
             delete towerSelectMenu; });
     }
@@ -273,6 +277,7 @@ void GameScene::loadMap(int level)
 {
     map->loadMap(level);
     addObstacles();
+
     // todo
     // 背景怎么办
 }

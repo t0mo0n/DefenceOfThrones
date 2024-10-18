@@ -13,6 +13,7 @@
 #include <QVector>
 #include <QPoint>
 #include <QPointF>
+#include <QPair>
 #include "Player.h"
 #include "Enemy.h"
 #include "TowerFrame.h" //但文档里好像说是"Tower.h"
@@ -29,6 +30,9 @@
 #include "Mountain.h"
 #include "Vesalion.h"
 #include "Wilder.h"
+#include "TowerCell.h"
+#include "PathCell.h"
+#define CELL_SIZE 80
 
 class GameScene : public QGraphicsView
 {
@@ -55,7 +59,7 @@ public slots:
     void onDeleteTowerButtonClicked(int cost);
     void updatePlayerLives(int lives);
     void onEnemyDead(int reward, Enemy* enemyToBedelete);
-    void onEnemyArrive(int damage);
+    void onEnemyArrive(int damage, Enemy* enemyToBedelete);
     void onObstacleDestroyed(int reward);
 
 private:
@@ -70,7 +74,7 @@ private:
     QGraphicsTextItem *moneyTextItem;
     QList<TowerFrame *> towers;
     QList<Enemy *> enemies;
-  //  QList<Obstacle *> obstacles;
+    QList<Obstacle *> obstacles;
     TowerSelectMenu *towerSelectMenu;
     QGraphicsRectItem *pausedMenu;
     int level;
