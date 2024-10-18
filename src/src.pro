@@ -51,9 +51,6 @@ HEADERS += \
     Archer.h \
     Button.h \
     Dragon.h \
-    DragonBall.h \
-    DragonFlame.h \
-    FireArrow.h \
     GameController.h \
     GameScene.h \
     JohnSnow.h \
@@ -82,8 +79,8 @@ HEADERS += \
     Wilder.h \
     Deadalive.h \
 
-# FORMS += \
-#     mainmenu.ui\
+FORMS += \
+    mainmenu.ui\
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

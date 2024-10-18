@@ -18,8 +18,10 @@ class Enemy : public QGraphicsObject
 
 public:
     int size;
-
 protected:
+    int direct;//1,2,3,4 上下左右
+    int stepCount;
+    int step;
     bool isEnterBase; // 是否进入基地
     int index; // 当前位置
     int health; // 初始生命值和当前生命值
@@ -47,11 +49,14 @@ public:
     void updateHealthDisplay();
     virtual void enemyPause(){moveTimer->stop();};
     virtual void enemyResume(){moveTimer->start();};
+    ~Enemy(){emit destroy();}
 signals:
-    void isArrived(int damage_); // 敌人进入基地的信号
-    void isDead(int reward_); // 敌人被击败的信号
+    void isArrived(int damage_,Enemy* toBeDelete); // 敌人进入基地的信号
+    void isDead(int reward_,Enemy* toBeDelete); // 敌人被击败的信号
+    void destroy();
 public slots:
     void receive(int damage_,int type);
+    void receiveSnow(int damage_);
 };
 
 #endif // ENEMY_H

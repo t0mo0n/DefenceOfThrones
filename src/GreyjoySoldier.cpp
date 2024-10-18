@@ -8,7 +8,8 @@ GreyjoySoldier::GreyjoySoldier(const QVector<QPoint>& routine_, QGraphicsItem *p
     if (!enemyPix.load(path)) {
         qDebug() << "Failed to load enemy image from" << path;
     }
-
+    health=60;
+    speed=7;
+    reward=180;
     enemyType=0;
-    speed=5;
 }

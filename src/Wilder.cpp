@@ -7,6 +7,8 @@ Wilder::Wilder(const QVector<QPoint>& routine_, QGraphicsItem *parent ):Enemy(ro
     if (!enemyPix.load(path)) {
         qDebug() << "Failed to load enemy image from" << path;
     }
-    health=150;//血量较多
+    health=90;//血量较多
+    speed=4;
+    reward=160;
     enemyType=0;
 }
