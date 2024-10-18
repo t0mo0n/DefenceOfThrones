@@ -1,5 +1,5 @@
 #include "TowerFrame.h"
-
+//子弹在发射之后马上把塔删掉，会导致子弹没有归属
 TowerFrame::TowerFrame(QPoint pos_, int type)
 {
     if (type == 0)
@@ -24,9 +24,11 @@ TowerFrame::TowerFrame(QPoint pos_, int type)
     connect(aimTimer, &QTimer::timeout, this, &TowerFrame::FindEnemy);
     aimTimer->start(10);
     connect(attackTimer, &QTimer::timeout, this, &TowerFrame::attack);
+    elapsedTimer= new QElapsedTimer();
+    elapsedTimer->start();
 }
 
-int TowerFrame::towerSize = 100;
+int TowerFrame::towerSize = 80;
 
 void TowerFrame::paint(QPainter *painterconst, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
@@ -94,9 +96,9 @@ void TowerFrame::resetTarget() // 把塔的敌人制空，同时把所有子弹�
     }
 }
 
-
 void TowerFrame::setTarget(Enemy *target_out)
 {
+    update();
     target = target_out;
     if (target_out)
     {
@@ -111,6 +113,7 @@ TowerFrame::~TowerFrame()
     delete aimTimer;
     attackTimer->stop();
     delete attackTimer;
+
 }
 
 QList<QGraphicsItem *> TowerFrame::checkForItemsInBoundingRect()
@@ -127,3 +130,41 @@ QList<QGraphicsItem *> TowerFrame::checkForItemsInBoundingRect()
     return itemsInBoundingRect;
 }
 
+void TowerFrame::towerPause()
+{
+    if (aimTimer->isActive()) {
+        remainingTime1 = aimTimer->interval() - elapsedTimer->elapsed();
+        aimTimer->stop();
+    }
+    if (attackTimer->isActive()) {
+        remainingTime2 = attackTimer->interval() - elapsedTimer->elapsed();
+        attackTimer->stop();
+    }
+    for (auto bullet :projectileList)
+    {
+        if(bullet)
+        {
+            bullet->pause();
+        }
+    }
+}
+
+void TowerFrame::towerResume()
+{
+    if (!aimTimer->isActive()) {
+        aimTimer->start(remainingTime1);
+        elapsedTimer->restart();
+    }
+
+    if (!attackTimer->isActive()) {
+        attackTimer->start(remainingTime2);
+        elapsedTimer->restart();
+    }
+    for (auto bullet :projectileList)
+    {
+        if(bullet)
+        {
+            bullet->resume();
+        }
+    }
+}

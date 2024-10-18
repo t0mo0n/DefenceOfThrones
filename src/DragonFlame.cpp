@@ -6,7 +6,7 @@ DragonFlame::DragonFlame(QPointF pos,QPointF Tower_c,qreal attack_range)
 {
     src=":/img/asset/GOT.jpg";
     type=5;
-    damage=2000;
+    damage=80;
     w_=100;
     h_=400;
     moveTimer->stop();
@@ -16,8 +16,9 @@ DragonFlame::DragonFlame(QPointF pos,QPointF Tower_c,qreal attack_range)
     connect(flameTimer, &QTimer::timeout, this, &DragonFlame::detect);
     flameTimer->start(10);
     connect(die, &QTimer::timeout, this, [this](){emit outrange();});
-    die->start(1000);
+    die->start(300);
     setTarget();//不要接collision，换成detect，并且已经链接，不用移动，不用检测碰撞，敌人是null所以消亡信号不接
+    setTransformOriginPoint(QPointF(0,0));
 
 }
 void DragonFlame:: paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -30,25 +31,17 @@ void DragonFlame:: paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     }
     if(painter)
     {
-        QPointF laserEnd(towerCor.x() + h_ * cos(angle * M_PI / 180.0),
-                         towerCor.y() + h_ * sin(angle * M_PI / 180.0));
-
-        // 计算激光图片的位置和大小
-        QRectF laserRect(laserEnd.x() - w_ / 2,laserEnd.y() -h_/ 2,w_,h_);
-        QRectF recc=mapRectFromScene(laserRect);
-        // 绘制激光图片
-        painter->save(); // 保存当前绘制状态
-        painter->translate(towerCor); // 移动到防御塔中心
-        painter->rotate(angle); // 旋转
-        painter->drawPixmap(recc.toRect(),QPixmap(src)); // 绘制激光
-        painter->restore(); // 恢复绘制状态
+        painter->drawPixmap(QRect(-w_/2,0,w_,h_),QPixmap(src)); // 绘制激光
     }
 
 
 }
 QRectF DragonFlame::boundingRect() const
 {
-    return QRectF(0,0,w_,h_);
+
+    return QRectF(-w_/2, 0, w_, h_);  // 从旋转中心 (w_/2, 0) 计算矩形
+
+
 }
 
 void DragonFlame::detect()
@@ -70,10 +63,35 @@ void DragonFlame::detect()
                 emit collision(damage,type);
             }
         }
-
+        assert(enemys==nullptr);
 }
 void DragonFlame::setDire(qreal angle_)
 {
+    angle=angle_ * 180.0 / M_PI-90;
+    // 设置塔的旋转（如果需要旋转显示）
+    setRotation(angle ); // 将弧度转换为度
+}
+void DragonFlame::pause()
+{
 
-    angle=angle_;
+    if (flameTimer->isActive()) {
+        remainingTime1 = flameTimer->interval() - elapsedTimer->elapsed();
+        flameTimer->stop();
+    }
+    if (die->isActive()) {
+        remainingTime2 = die->interval() - elapsedTimer->elapsed();
+        die->stop();
+    }
+
+}
+void DragonFlame::resume()
+{
+    if (!flameTimer->isActive()) {
+        flameTimer->start(remainingTime1);
+        elapsedTimer->restart();
+    }
+    if (!die->isActive()) {
+        die->start(remainingTime2);
+        elapsedTimer->restart();
+    }
 }

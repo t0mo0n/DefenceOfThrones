@@ -4,8 +4,8 @@ StoneThrower::StoneThrower(QPoint pos_)
     : TowerFrame(pos_, 2)
 {
     projectType = 2;
-    attackRange = 200;
-    attackSpeed = 600;
+    attackRange = 5*towerSize;
+    attackSpeed = 3000;
     buyCost = 1500;
     sellPrice = 900;
     picDir = ":/img/asset/GOT.jpg";
@@ -42,7 +42,7 @@ void StoneThrower::attack()
                 if (bullet)
                 {
                     projectileList.push_back(bullet);
-                    connect(bullet, &Projectile::collision, target, &Enemy::recieve);
+                    connect(bullet, &Projectile::collision, target, &Enemy::receive);
 
                     connect(bullet, &Projectile::outrange, this, [this, bullet]()
                             {
@@ -100,7 +100,7 @@ void StoneThrower::attack()
             {
                 if (enemyNum >= 3)
                 {
-                    connect(bullet, &Projectile::collision, enemyList.front(), &Enemy::recieve);
+                    connect(bullet, &Projectile::collision, enemyList.front(), &Enemy::receive);
                     bullet->setTarget(enemyList.front());
                     enemyList.pop_front();
                 }
@@ -108,19 +108,19 @@ void StoneThrower::attack()
                 {
                     if (count == 0)
                     {
-                        connect(bullet, &Projectile::collision, enemyList.front(), &Enemy::recieve);
+                        connect(bullet, &Projectile::collision, enemyList.front(), &Enemy::receive);
                         bullet->setTarget(enemyList.front());
                         enemyList.pop_front();
                     }
                     else
                     {
-                        connect(bullet, &Projectile::collision, enemyList.front(), &Enemy::recieve);
+                        connect(bullet, &Projectile::collision, enemyList.front(), &Enemy::receive);
                         bullet->setTarget(enemyList.front());
                     }
                 }
                 else if (enemyNum == 1)
                 {
-                    connect(bullet, &Projectile::collision, enemyList.front(), &Enemy::recieve);
+                    connect(bullet, &Projectile::collision, enemyList.front(), &Enemy::receive);
                     bullet->setTarget(enemyList.front());
                 }
 
@@ -150,8 +150,8 @@ void StoneThrower::upgrade()
         return;
     }
     level++;
-    attackRange += 100;
-    attackSpeed += 100;
+    attackRange += 1*towerSize;
+    attackSpeed -= 1000;
     projectType = 1;
     update();
 }
