@@ -141,7 +141,7 @@ void GameController::showSettingMenu()
 {
     settingMenu_ = new SettingsMenu();
     //TODO:different origins
-    settingMenu_->show();
+    settingMenu_->exec();
     connect(settingMenu_,&SettingsMenu::volumeChanged,this,&GameController::changeVolumn);
     connect(settingMenu_,&SettingsMenu::gameBgmChanged,this,&GameController::changeGameBgm);
  }
@@ -150,6 +150,7 @@ void GameController::showLevelSelectMenu()
 {
     // lvMenu_ = new LevelSelectMenu(maxLevel,mainMenu_);
     // lvMenu_->exec();
+
     // connect(lvMenu_,&LevelSelectMenu::selectLevel,this,&GameController::loadLevel);
 }
 
