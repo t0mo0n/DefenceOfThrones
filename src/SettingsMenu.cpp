@@ -29,7 +29,7 @@ SettingsMenu::SettingsMenu(QWidget *parent)
     layout->addWidget(hardModeComboBox);
 
     connect(hardModeComboBox,&QComboBox::currentTextChanged,this,
-            [=](QString text){
+            [=](QString &text){
         if(text=="Easy"){
             emit hardModeChanged(false);
         }else{
@@ -50,7 +50,7 @@ SettingsMenu::SettingsMenu(QWidget *parent)
     layout->addWidget(bgmChangedLabel);
 
     connect(bgmChangedComboBox,&QComboBox::currentTextChanged,this,
-            [=](QString text){
+            [=](QString &text){
         if(text=="Jenny of Oldstones"){
             emit gameBgmChanged(4);
         }else if(text=="Light of Nibel"){
