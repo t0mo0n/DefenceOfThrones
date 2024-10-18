@@ -44,7 +44,7 @@ SOURCES += \
     Wilder.cpp \
     main.cpp \
     mainwindow.cpp \
-     Deadalive.cpp \
+    Deadalive.cpp \
 
 
 HEADERS += \
@@ -80,14 +80,10 @@ HEADERS += \
     Player.h \
     Vesalion.h \
     Wilder.h \
-     Deadalive.h \
+    Deadalive.h \
 
-
-FORMS += \
-    mainmenu.ui\
-
-FORMS += \
-    mainmenu.ui\
+# FORMS += \
+#     mainmenu.ui\
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
