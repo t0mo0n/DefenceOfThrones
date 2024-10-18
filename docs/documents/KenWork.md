@@ -75,7 +75,7 @@
 
 
 
-### 9. **Projectile (投射物基类)**
+### 9. **Projectile (普通子弹类)**
 
 - **功能:** 定义防御塔发射的子弹或魔法攻击。
 - **主要成员变量:**
@@ -87,6 +87,7 @@
     - `QTimer* moveTimer ;`:子弹移动的计时器
     - `QPointF towerCor;`:子弹所属防御塔中心坐标
     - `qreal tattackRange;`:塔的攻击范围
+    - `int getType();`:获得投掷物的类型 0 普通子弹 1 火箭 2 石头
 
 
 

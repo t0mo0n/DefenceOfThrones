@@ -3,12 +3,21 @@
 
 #include <QObject>
 #include <TowerFrame.h>
-
-class StoneThrower :public TowerFrame
+#include <Stone.h>
+#include <Enemy.h>
+class StoneThrower : public TowerFrame
 {
     Q_OBJECT
 public:
-    explicit StoneThrower();
+    explicit StoneThrower(QPoint pos_ = QPoint(0, 0));
+    void attack() override;
+    ~StoneThrower() {};
+    void upgrade() override;
+    void FindEnemy() override;
+
+protected:
+    QList<Enemy *> enemyList;
+    QList<Stone *> smallBullet;
 
 signals:
 };
