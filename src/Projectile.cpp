@@ -11,12 +11,14 @@ Projectile::Projectile(QPointF pos, QPointF Tower_c, qreal attack_range)
     connect(moveTimer2, &QTimer::timeout, this, &Projectile::checkCollision);
     moveTimer->start(70); // 每调用一次move()
     moveTimer2->start(10);
+    elapsedTimer= new QElapsedTimer();
+    elapsedTimer->start();
     towerCor = Tower_c;
     src = ":/img/asset/GOT.jpg";
     speed = 20;
     tattackRange = attack_range;
     type = 0;
-    damage = 300;
+    damage = 10;
 }
 qreal Projectile::pix_size = 10;
 void Projectile::setTarget(Enemy *target)
@@ -27,7 +29,7 @@ void Projectile::setTarget(Enemy *target)
     {
         connect(target, &Enemy::destroy, this, [this]()
                 { emit outrange(); });
-        connect(this, &Projectile::collision, target, &Enemy::recieve);
+        connect(this, &Projectile::collision, target, &Enemy::receive);
     }
 }
 
@@ -115,4 +117,28 @@ Projectile::~Projectile()
     moveTimer2->stop();
     delete moveTimer2;
     delete moveTimer;
+}
+void Projectile:: pause() {
+    if (moveTimer->isActive()) {
+        remainingTime1 = moveTimer->interval() - elapsedTimer->elapsed();
+        moveTimer->stop();
+    }
+
+    if (moveTimer2->isActive()) {
+        remainingTime2 = moveTimer2->interval() - elapsedTimer->elapsed();
+        moveTimer2->stop();
+    }
+}
+
+// 恢复两个计时器
+void Projectile:: resume() {
+    if (!moveTimer->isActive()) {
+        moveTimer->start(remainingTime1);
+        elapsedTimer->restart();
+    }
+
+    if (!moveTimer2->isActive()) {
+        moveTimer2->start(remainingTime2);
+        elapsedTimer->restart();
+    }
 }

@@ -4,14 +4,15 @@ JohnSnow::JohnSnow(QPoint pos_)
     : TowerFrame(pos_, 3)
 {
     projectType = 10; // 没有投掷物
-    attackRange = 100;
-    attackSpeed = 800;
+    attackRange = 3*towerSize;
+    attackSpeed = 1500;
     attackTime = 0;
     buyCost = 1000;
     sellPrice = 900;
     picDir = ":/img/asset/1.png";
     towerType = 3;
-    hurt = 400;
+    hurt = 25;
+    hurt2=35;
     upgradeFee.push_back(1000);
     upgradeFee.push_back(2000);
     upgradeFee.push_back(3000);
@@ -60,7 +61,7 @@ void JohnSnow::FindEnemy()
             {
                 // qDebug()<<"设置新目标";
                 setTarget(min_item);
-                connect(this, &JohnSnow::snowAttack, target, &Enemy::recieveSnow);
+                connect(this, &JohnSnow::snowAttack, target, &Enemy::receiveSnow);
             }
         }
         else
@@ -87,8 +88,15 @@ void JohnSnow::attack()
             Wolf *bullet = nullptr;
 
             assert(1 <= level && level <= 2);
+            if(level==1)
+            {
+                emit snowAttack(hurt);
 
-            emit snowAttack(hurt);
+            }
+            else
+            {
+                emit snowAttack(hurt2);
+            }
             attackTime++;
 
             if (level == 2 && attackTime % 4 == 0)
@@ -123,8 +131,7 @@ void JohnSnow::upgrade()
         return;
     }
     level++;
-    attackRange += 100;
-    attackSpeed += 100;
+    attackSpeed = 800;
     projectType = 3;
     update();
 }

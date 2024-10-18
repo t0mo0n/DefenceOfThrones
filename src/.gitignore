@@ -5,7 +5,7 @@ build/
 Enemy.cpp
 Enemy.h
 main.cpp
-asset.qrc
+assert.qrc
 asset/
 music/
 src.pro

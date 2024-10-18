@@ -35,6 +35,10 @@ protected:
     QTimer *aimTimer;
     QTimer *attackTimer;
     qreal towerAngle;
+    qreal remainingTime1;
+    qreal remainingTime2;
+    QElapsedTimer*elapsedTimer;
+
 
 public:
     explicit TowerFrame(QPoint pos_ = QPoint(0, 0), int type = 0);
@@ -56,14 +60,15 @@ public:
     QPointF TowerCentral; // 相对于场景的坐标
     void removeProjectileList();
     QList<QGraphicsItem *> checkForItemsInBoundingRect();
-
+    void towerPause();
+    void towerResume();
     ~TowerFrame();
 
 signals:
     void destroy();
+    void sell();
 public slots:
     virtual void upgrade() = 0; // 升级植物,界面设计者要根据现有的钱和updatecost比较获得是否可行,别忘了扣钱
-    void sell();                // 出售植物并将植物删除
 };
 
 #endif // TOWER_FRAME_H

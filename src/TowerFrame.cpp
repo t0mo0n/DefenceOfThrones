@@ -24,9 +24,11 @@ TowerFrame::TowerFrame(QPoint pos_, int type)
     connect(aimTimer, &QTimer::timeout, this, &TowerFrame::FindEnemy);
     aimTimer->start(10);
     connect(attackTimer, &QTimer::timeout, this, &TowerFrame::attack);
+    elapsedTimer= new QElapsedTimer();
+    elapsedTimer->start();
 }
 
-int TowerFrame::towerSize = 100;
+int TowerFrame::towerSize = 80;
 
 void TowerFrame::paint(QPainter *painterconst, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
@@ -46,15 +48,6 @@ QRectF TowerFrame::boundingRect() const
     return QRectF(towerSize / 2 - attackRange, towerSize / 2 - attackRange, 2 * attackRange, 2 * attackRange);
 }
 
-void TowerFrame::sell()
-{
-    QGraphicsScene *game_map = this->scene();
-    if (game_map != nullptr)
-    {
-        game_map->removeItem(this);
-        delete this; // 这里可以考虑外部delete
-    }
-}
 
 void TowerFrame::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
@@ -110,7 +103,7 @@ TowerFrame::~TowerFrame()
     delete aimTimer;
     attackTimer->stop();
     delete attackTimer;
-    resetTarget();
+
 }
 
 QList<QGraphicsItem *> TowerFrame::checkForItemsInBoundingRect()
@@ -125,4 +118,43 @@ QList<QGraphicsItem *> TowerFrame::checkForItemsInBoundingRect()
     itemsInBoundingRect.removeOne(this);
 
     return itemsInBoundingRect;
+}
+
+void TowerFrame::towerPause()
+{
+    if (aimTimer->isActive()) {
+        remainingTime1 = aimTimer->interval() - elapsedTimer->elapsed();
+        aimTimer->stop();
+    }
+    if (attackTimer->isActive()) {
+        remainingTime2 = attackTimer->interval() - elapsedTimer->elapsed();
+        attackTimer->stop();
+    }
+    for (auto bullet :projectileList)
+    {
+        if(bullet)
+        {
+            bullet->pause();
+        }
+    }
+}
+
+void TowerFrame::towerResume()
+{
+    if (!aimTimer->isActive()) {
+        aimTimer->start(remainingTime1);
+        elapsedTimer->restart();
+    }
+
+    if (!attackTimer->isActive()) {
+        attackTimer->start(remainingTime2);
+        elapsedTimer->restart();
+    }
+    for (auto bullet :projectileList)
+    {
+        if(bullet)
+        {
+            bullet->resume();
+        }
+    }
 }

@@ -6,5 +6,5 @@ DragonBall::DragonBall(QPointF pos,QPointF Tower_c,qreal attack_range)
 {
     src=":/img/asset/2.png";
     type=4;
-    damage=500;
+    damage=50;
 }

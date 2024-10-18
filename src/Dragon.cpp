@@ -4,8 +4,8 @@ Dragon::Dragon(QPoint pos_)
     : TowerFrame(pos_, 2)
 {
     projectType = 4;
-    attackRange = 200;
-    attackSpeed = 1000;
+    attackRange = 4*towerSize;
+    attackSpeed = 4500;
     buyCost = 1500;
     sellPrice = 900;
     picDir = ":/img/asset/GOT.jpg";
@@ -55,13 +55,13 @@ void Dragon::attack()
             {
                 if (enemyNum >= 2)
                 {
-                    connect(bullet, &Projectile::collision, enemyList.front(), &Enemy::recieve);
+                    connect(bullet, &Projectile::collision, enemyList.front(), &Enemy::receive);
                     bullet->setTarget(enemyList.front());
                     enemyList.pop_front();
                 }
                 else if (enemyNum == 1)
                 {
-                    connect(bullet, &Projectile::collision, enemyList.front(), &Enemy::recieve);
+                    connect(bullet, &Projectile::collision, enemyList.front(), &Enemy::receive);
                     bullet->setTarget(enemyList.front());
                 }
 
@@ -83,6 +83,8 @@ void Dragon::attack()
     }
     else if (level == 2)
     {
+        if(target)
+        {
 
             // 获取塔的位置
             QPointF towerPos = this->pos();
@@ -109,6 +111,13 @@ void Dragon::attack()
                 update();
                 assert(bullet->enemys == nullptr);
             }
+            enemyList.clear();
+        }
+        else
+        {
+            resetTarget();
+        }
+        enemyList.clear();
 
 
     }
@@ -121,8 +130,8 @@ void Dragon::upgrade()
         return;
     }
     level++;
-    attackRange += 100;
-    attackSpeed += 100;
+    attackRange = 6*towerSize;
+    attackSpeed = 2500;
     projectType = 5;
     update();
 }
@@ -131,6 +140,7 @@ void Dragon::FindEnemy()
 {
     if (target != nullptr)
     {
+        qDebug()<<target->pos();
         // 获取塔的位置
         QPointF towerPos = this->pos();
         // 获取目标的位置
@@ -139,6 +149,7 @@ void Dragon::FindEnemy()
         // 计算方向
         qreal angle = std::atan2(targetPos.y() - towerPos.y(), targetPos.x() - towerPos.x());
         towerAngle = angle;
+
         // 设置塔的旋转（如果需要旋转显示）
         setRotation(angle * 180.0 / M_PI); // 将弧度转换为度
     }
@@ -153,6 +164,7 @@ void Dragon::FindEnemy()
             {
                 continue;
             }
+            // qDebug()<<enemy_p->pos();
             qreal distance = QLineF(enemy_p->pos(), this->pos()).length();
             if (distance <= attackRange+25)
             {
