@@ -14,7 +14,7 @@ public:
     QVector<QPoint> getSpawnPoints() const;
     QVector<QPoint> getPath() const;
     int getEnemySpawnInterval() const;
-    QVector<int> getEnemyTypes() const;
+    int getEnemyTypes() const;
 
 private:
 

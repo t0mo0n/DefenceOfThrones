@@ -66,7 +66,7 @@ void DragonFlame::detect()
                 {
                     continue;
                 }
-                connect(this,&DragonFlame::collision,enemy_p,&Enemy::recieve);
+                connect(this,&DragonFlame::collision,enemy_p,&Enemy::receive);
                 emit collision(damage,type);
             }
         }

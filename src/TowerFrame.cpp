@@ -52,6 +52,7 @@ void TowerFrame::sell()
     if (game_map != nullptr)
     {
         game_map->removeItem(this);
+
         delete this; // 这里可以考虑外部delete
     }
 }

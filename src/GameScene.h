@@ -13,13 +13,22 @@
 #include <QVector>
 #include <QPoint>
 #include <QPointF>
-//#include "Player.h"
+#include "Player.h"
 #include "Enemy.h"
 #include "TowerFrame.h" //但文档里好像说是"Tower.h"
 #include "Map.h"
-//#include "Obstacle.h"
+#include "Obstacle.h"
 #include "TowerSelectMenu.h"
 #include "Button.h"
+#include "Deadalive.h"
+#include "GreyjoySoldier.h"
+#include "KingSlayer.h"
+#include "LannisterSoldier.h"
+#include "Melisandre.h"
+#include "NightKing.h"
+#include "Mountain.h"
+#include "Vesalion.h"
+#include "Wilder.h"
 
 class GameScene : public QGraphicsView
 {
@@ -45,12 +54,12 @@ public slots:
     void onTowerUpdated(int cost);
     void onDeleteTowerButtonClicked(int cost);
     void updatePlayerLives(int lives);
-    void onEnemyDead(int reward);
+    void onEnemyDead(int reward, Enemy* enemyToBedelete);
     void onEnemyArrive(int damage);
     void onObstacleDestroyed(int reward);
 
 private:
- //   Player *player;
+    Player *player;
     Map *map;
     Button *pauseGameButton;
     Button *resumeGameButton;

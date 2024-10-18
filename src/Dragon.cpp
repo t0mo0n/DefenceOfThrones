@@ -54,13 +54,13 @@ void Dragon::attack()
             {
                 if (enemyNum >= 2)
                 {
-                    connect(bullet, &Projectile::collision, enemyList.front(), &Enemy::recieve);
+                    connect(bullet, &Projectile::collision, enemyList.front(), &Enemy::receive);
                     bullet->setTarget(enemyList.front());
                     enemyList.pop_front();
                 }
                 else if (enemyNum == 1)
                 {
-                    connect(bullet, &Projectile::collision, enemyList.front(), &Enemy::recieve);
+                    connect(bullet, &Projectile::collision, enemyList.front(), &Enemy::receive);
                     bullet->setTarget(enemyList.front());
                 }
 

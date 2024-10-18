@@ -12,7 +12,7 @@ class Button : public QGraphicsObject
     Q_OBJECT
 public:
 
-    Button(QString UnHoverImagePath, QString HoverImagePath, int posX=0, int posY=0, QGraphicsItem *parent = nullptr); // 未悬停时和悬停时的图片路径
+    Button(QString UnHoverImagePath, QString HoverImagePath, int posX=0, int posY=0, QGraphicsObject *parent = nullptr); // 未悬停时和悬停时的图片路径
     ~Button() override = default;
 protected:
     QString UnHoverImagePath;
