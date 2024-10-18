@@ -13,7 +13,7 @@ public:
     void enemyPause(){moveTimer->stop();timer->stop();}
     void enemyResume(){moveTimer->start();timer->start();};
 signals:
-         // void generateDeadalive(QPoint pos_);
+    void generateDeadalive(QPoint pos_);
 };
 
 #endif // NIGHTKING_H

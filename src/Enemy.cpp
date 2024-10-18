@@ -1,16 +1,15 @@
 #include "Enemy.h"
 
-//点燃效果有问题
 
 Enemy::Enemy(const QVector<QPoint>& routine_, QGraphicsItem *parent)
-    : QGraphicsObject(parent), isEnterBase(false), index(0),
-    health(100), speed(1), damage(1), reward(50),routine(routine_)
+    : QGraphicsObject(parent), isEnterBase(false), index(1),
+    health(50), speed(4), damage(1), reward(100),routine(routine_)
 {
     // 加载图片
     isFire=true;
     fireCount=0;
 
-    size=80;
+    size=60;
     path = ":/colored.png"; // 假设图片路径
     if (!enemyPix.load(path)) {
         qDebug() << "Failed to load enemy image from" << path;
@@ -19,6 +18,23 @@ Enemy::Enemy(const QVector<QPoint>& routine_, QGraphicsItem *parent)
     // 起点
     if (!routine.isEmpty()) {
         pos0 = routine.at(0);
+    }
+    //行走的方向和次数
+    stepCount=0;
+    if(routine[0].x()==routine[1].x()){
+        if(routine[0].y()>routine[1].y()){
+            direct=3;//左
+        }else{
+            direct=4;//右
+        }
+        step=(routine[1].y()-routine[0].y())/80;
+    }else{
+        if(routine[0].x()>routine[1].x()){
+            direct=1;//上
+        }else{
+            direct=2;//下
+        }
+        step=(routine[1].x()-routine[0].x())/80;
     }
 
     moveTimer = new QTimer(this);
@@ -61,21 +77,57 @@ void Enemy::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
 
 void Enemy::move()
 {
-    if (isEnterBase || index >= routine.size() - 1) {
+    if (isEnterBase || (index >= routine.size() - 1&&stepCount>step-1)) {
         if (!isEnterBase) {
-            emit isArrived(damage);
+            emit isArrived(damage,this);
         }
         return;
     }
 
-    index++;
-    pos0 = routine.at(index);
+    stepCount++;
 
-    if (index >= routine.size()-1 ) {
+    if(stepCount==step){
+        index++;
+        stepCount=0;
+        if(routine[index-1].x()==routine[index].x()){
+            if(routine[index-1].y()>routine[index].y()){
+                direct=3;//左
+            }else{
+                direct=4;//右
+            }
+            step=(routine[index].y()-routine[index-1].y())/80;
+        }else{
+            if(routine[index-1].x()>routine[index].x()){
+                direct=1;//上
+            }else{
+                direct=2;//下
+            }
+            step=(routine[index].x()-routine[index-1].x())/80;
+        }
+    }
+
+    switch (direct){
+    case 1:
+        pos0.setY(pos0.y()-10);
+        break;
+    case 2:
+        pos0.setY(pos0.y()+10);
+        break;
+    case 3:
+        pos0.setX(pos0.x()-10);
+        break;
+    case 4:
+        pos0.setX(pos0.x()+10);
+        break;
+    default:
+        break;
+    }
+
+    if (index >= routine.size()-1&&stepCount>step-1 ) {
         isEnterBase = true;
-        emit isArrived(damage); // 发出进入基地的信号
+        emit isArrived(damage,this); // 发出进入基地的信号
         qDebug()<<"2";
-        delete this;
+
     }else{
         // 更新图形项的位置
         healthDisplay->setPos(pos0.x() + (size / 2) -(healthDisplay->boundingRect().width() / 2),
@@ -90,11 +142,12 @@ void Enemy::move()
 
 void Enemy::takeDamage(int damage_)
 {
+    if(enemyType==1)damage+=5;
     health -= damage_;
     if (health <= 0) {
         health = 0;
-        emit isDead(reward); // 发出死亡信号
-        delete this;
+        emit isDead(reward,this); // 发出死亡信号
+
         moveTimer->stop();
     }
 }
@@ -125,4 +178,8 @@ void Enemy::receive(int damage_,int type){
 
 void Enemy::updateHealthDisplay() {
     healthDisplay->setPlainText(QString::number(health));
+}
+
+void Enemy::receiveSnow(int damage_){
+    takeDamage(damage_);
 }

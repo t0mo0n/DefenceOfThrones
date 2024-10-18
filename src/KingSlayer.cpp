@@ -8,9 +8,10 @@ KingSlayer::KingSlayer(const QVector<QPoint>& routine_, QGraphicsItem *parent):E
         qDebug() << "Failed to load enemy image from" << path;
     }
 
-    health=150;
+    health=550;
+    reward=2000;
     enemyType=0;
-    speed=5;
+    speed=10;
     damage=3;
 
 }

@@ -9,16 +9,40 @@ NightKing::NightKing(const QVector<QPoint>& routine_, QGraphicsItem *parent ):En
         qDebug() << "Failed to load enemy image from" << path;
     }
 
-    health=150;
+    health=500;
+    speed=4;
+    reward=2000;
     damage=3;
     enemyType=1;
     timer=new QTimer;
     timer = new QTimer(this);
     // connect(timer, &QTimer::timeout, this, &NightKing::generateDeadalive);
-    timer->start(15000);
+    timer->start(8000);
 }
 
-// void NightKing::generate()
-// {
+void NightKing::generate()
+{
+    QPoint p;
+    switch (direct){
+    case 1:
+        p.setY(pos0.y()+80);
+        p.setX(pos0.x());
+        break;
+    case 2:
+        p.setY(pos0.y()-80);
+        p.setX(pos0.x());
+        break;
+    case 3:
+        p.setX(pos0.x()+80);
+        p.setY(pos0.y());
+        break;
+    case 4:
+        p.setX(pos0.x()-80);
+        p.setY(pos0.y());
+        break;
+    default:
+        break;
+    }
 
-// }
+    emit generateDeadalive(p);
+}
