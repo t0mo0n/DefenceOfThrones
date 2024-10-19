@@ -9,8 +9,10 @@ src/music/
 src/Obstacle.cpp
 src/Obstacle.h
 src/Scene.cpp
-src/Sence.h
+src/Scene.h
 src/src.pro
+src/assert.qrc
+src/asset.qrc
 
 *~
 *.autosave
