@@ -53,8 +53,9 @@ void Projectile::moveToEneny()
         // 更新子弹的位置
         this->setPos(ProjectilePos.x() + dx, ProjectilePos.y() + dy);
     }
-    else
+    if(enemys==nullptr)
     {
+
         qDebug() << "攻击的目标无效" << this->pos();
         // moveTimer->stop();
         emit outrange();

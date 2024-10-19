@@ -12,6 +12,7 @@
 #include <Projectile.h>
 #include <QVector>
 #include <Enemy.h>
+#include <Obstacle.h>
 
 class TowerFrame : public QObject, public QGraphicsItem
 {
@@ -38,6 +39,7 @@ protected:
     qreal remainingTime1;
     qreal remainingTime2;
     QElapsedTimer*elapsedTimer;
+    QRectF attackRect;
 
 
 public:

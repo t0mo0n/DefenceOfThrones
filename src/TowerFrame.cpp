@@ -57,7 +57,9 @@ void TowerFrame::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
         QAction *action1 = menu.addAction("upgrade");
         QAction *action2 = menu.addAction("sell");
         connect(action1, SIGNAL(triggered()), this, SLOT(upgrade()));
-        connect(action2, SIGNAL(triggered()), this, SLOT(sell()));
+        connect(action2,&QAction:: triggered, this, [this](){
+            emit sell();
+        });
         menu.exec(event->screenPos()); // 在按下鼠标左键的地方弹出菜单
         QGraphicsItem::contextMenuEvent(event);
     }
@@ -108,6 +110,7 @@ TowerFrame::~TowerFrame()
 
 QList<QGraphicsItem *> TowerFrame::checkForItemsInBoundingRect()
 {
+
     // 获取当前项的 boundingRect，并将其转换为场景坐标
     QRectF sceneBoundingRect = mapRectToScene(boundingRect());
 
@@ -158,3 +161,4 @@ void TowerFrame::towerResume()
         }
     }
 }
+
