@@ -1,16 +1,16 @@
 # This file is used to ignore files which are generated
 # ----------------------------------------------------------------------------
 
-build/
-Enemy.cpp
-Enemy.h
-main.cpp
-music/
-Obstacle.cpp
-Obstacle.h
-Scene.cpp
-Sence.h
-
+src/build/
+src/Enemy.cpp
+src/Enemy.h
+src/main.cpp
+src/music/
+src/Obstacle.cpp
+src/Obstacle.h
+src/Scene.cpp
+src/Sence.h
+src/src.pro
 
 *~
 *.autosave

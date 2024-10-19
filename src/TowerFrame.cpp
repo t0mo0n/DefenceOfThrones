@@ -63,6 +63,11 @@ void TowerFrame::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
         menu.exec(event->screenPos()); // 在按下鼠标左键的地方弹出菜单
         QGraphicsItem::contextMenuEvent(event);
     }
+    else
+    {
+        event->ignore();
+        QGraphicsItem::contextMenuEvent(event);
+    }
 }
 
 void TowerFrame::mousePressEvent(QGraphicsSceneMouseEvent *event)
