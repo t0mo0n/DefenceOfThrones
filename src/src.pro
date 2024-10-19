@@ -19,7 +19,6 @@ SOURCES += \
     LevelSelectMenu.cpp \
     MainMenu.cpp \
     Map.cpp \
-    Projectile.cpp \
     SettingsMenu.cpp \
     Stone.cpp \
     StoneThrower.cpp \
@@ -40,7 +39,6 @@ HEADERS += \
     LevelSelectMenu.h \
     MainMenu.h \
     Map.h \
-    Projectile.h \
     SettingsMenu.h \
     Stone.h \
     StoneThrower.h \
