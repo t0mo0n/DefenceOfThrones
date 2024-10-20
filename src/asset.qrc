@@ -16,6 +16,9 @@
         <file>asset/badge.png</file>
         <file>asset/button3.png</file>
         <file>font/Game of Thrones.ttf</file>
+        <file>asset/chap1-wall.jpg</file>
+        <file>asset/chap2-winterfell.jpg</file>
+        <file>asset/chap3-kingslanding.jpg</file>
     </qresource>
     <qresource prefix="/sound">
         <file>music/The_Rains_of_Castamere.mp3</file>

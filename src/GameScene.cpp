@@ -57,6 +57,21 @@ GameScene::GameScene(int level, bool isHardMode, QGraphicsView *parent)
         addEnemy();
     });
 
+
+    if(level ==1)
+    {
+        background = new BackGround(":/img/asset/chap1-wall.jpg");
+    }
+    else if(level ==2)
+    {
+        background = new BackGround(":/img/asset/chap2-winterfell.jpg");
+    }
+    else
+    {
+        background = new BackGround(":/img/asset/chap3-kingslanding.jpg");
+    }
+    scene->addItem(background);
+    background->setZValue(0);
 }
 void GameScene::onGameEndButtonClicked()
 {
@@ -330,6 +345,7 @@ void GameScene::addEnemy()
     default:
         // todo
         //-1时敌人传输完成
+        win_signal1 = true;
         break;
     }
     connect(enemies.last(), &Enemy::isDead, this, &GameScene::onEnemyDead);
@@ -472,6 +488,8 @@ void GameScene::loadMap(int level)
     endPlayer->setZValue(5);
     // todo
     // 背景怎么办
+
+
 }
 
 // void GameScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
