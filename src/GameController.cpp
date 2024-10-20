@@ -110,7 +110,6 @@ GameController::~GameController() {
 
 void GameController::startGame()
 {
-    //TrroJay：调试时没有gamescene，故加上注释
     // gameScene_ = new GameScene(currentLevel,hardMode);
     // mainMenu_->hide();
     // connect(gameScene_,&GameScene::gameEnd,this,&GameController::endGame);
