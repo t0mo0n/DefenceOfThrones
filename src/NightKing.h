@@ -1,7 +1,6 @@
 #ifndef NIGHTKING_H
 #define NIGHTKING_H
 #include"Enemy.h"
-#include"Deadalive.h"
 class NightKing:public Enemy
 {
 public:
