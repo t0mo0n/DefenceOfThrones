@@ -11,19 +11,19 @@ void Map::load(int level,bool isHardMode) {
     refresh();
     QFile file("");
     if(level==1){
-        if(isHardMode){
+        if(!isHardMode){
             file.setFileName(":/img/levelData/levelOne.json");
         }else{
             file.setFileName(":/img/levelData/levelOneHard.json");
         }
     }else if(level==2){
-        if(isHardMode){
+        if(!isHardMode){
             file.setFileName(":/img/levelData/levelTwo.json");
         }else{
             file.setFileName(":/img/levelData/levelTwoHard.json");
         }
     }else if(level==3){
-        if(isHardMode){
+        if(!isHardMode){
             file.setFileName(":/img/levelData/levelThree.json");
         }else{
             file.setFileName(":/img/levelData/levelThreeHard.json");
@@ -51,7 +51,6 @@ void Map::load(int level,bool isHardMode) {
 
         //read map
         QJsonArray mapArray =jsonObj["map"].toArray();
-        qDebug()<<"Map Success";
         for (int i = 0; i < mapArray.size(); ++i) {
             QJsonArray rowArray = mapArray[i].toArray();
             for (int j = 0; j < rowArray.size(); ++j) {
@@ -65,8 +64,9 @@ void Map::load(int level,bool isHardMode) {
         QJsonArray playerPosition_ =playerObj["position"].toArray();
         playerPosition.setX(playerPosition_[0].toInt());
         playerPosition.setY(playerPosition_[1].toInt());
-        playerHealth=playerObj["Health"].toInt();
+        playerHealth=playerObj["health"].toInt();
         playerMoney=playerObj["money"].toInt();
+
 
         //read enemy
         QJsonObject enemyObj =jsonObj["enemies"].toObject();
@@ -86,7 +86,6 @@ void Map::load(int level,bool isHardMode) {
 
         //read obstacles
         QJsonArray obstacleArray =jsonObj["obstacles"].toArray();
-        qDebug()<<"Obstacles Success";
         for(const auto& obstacle:obstacleArray){
             QJsonObject obstacleObject =obstacle.toObject();
             QString type =obstacleObject["type"].toString();

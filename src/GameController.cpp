@@ -64,8 +64,6 @@ GameController::GameController(QObject *parent)
     currentLevel = maxLevel;
 
     gameScene_ = nullptr;
-    lvMenu_ = nullptr;
-    settingMenu_ = nullptr;
     mainMenu_ = new MainMenu();
     mainMenu_->show();
 
@@ -107,8 +105,6 @@ GameController::~GameController() {
     delete bgmPlayer;
 
     delete gameScene_;
-    delete lvMenu_;
-    delete settingMenu_;
     delete mainMenu_;
 }
 
@@ -130,8 +126,6 @@ void GameController::endGame()
 void GameController::exitGame()
 {
     delete gameScene_;
-    delete lvMenu_;
-    delete settingMenu_;
     delete mainMenu_;
 
     QCoreApplication::quit();
@@ -139,19 +133,15 @@ void GameController::exitGame()
 
 void GameController::showSettingMenu()
 {
-    settingMenu_ = new SettingsMenu();
-    //TODO:different origins
-    settingMenu_->exec();
-    connect(settingMenu_,&SettingsMenu::volumeChanged,this,&GameController::changeVolumn);
-    connect(settingMenu_,&SettingsMenu::gameBgmChanged,this,&GameController::changeGameBgm);
- }
+    connect(mainMenu_,&MainMenu::volumeChanged,this,&GameController::changeVolumn);
+    connect(mainMenu_,&MainMenu::gameBgmChanged,this,&GameController::changeGameBgm);
+}
 
 void GameController::showLevelSelectMenu()
 {
-    // lvMenu_ = new LevelSelectMenu(maxLevel,mainMenu_);
-    // lvMenu_->exec();
-
-    // connect(lvMenu_,&LevelSelectMenu::selectLevel,this,&GameController::loadLevel);
+    connect(this,&GameController::emitMaxLevel,mainMenu_,&MainMenu::recieveMaxLevel);
+    emit emitMaxLevel(maxLevel);
+    connect(mainMenu_,&MainMenu::selectLevel,this,&GameController::loadLevel);
 }
 
 void GameController::loadLevel(int level)

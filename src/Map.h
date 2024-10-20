@@ -21,6 +21,7 @@ public:
     void refresh();
 
     bool isPlaceAble(QPoint pos_){
+        //TODO:
         if(map[pos_.x()][pos_.y()]=='1'){
             return true;
         }
@@ -42,11 +43,18 @@ public:
         }
         return enemyTypes[enemyNum];
     }
-
+    int getPlayerHealth(){
+        return playerHealth;
+    }
+    int getPlayerMoney(){
+        return playerMoney;
+    }
+    const QPoint& getPlayerPosition(){
+        return playerPosition;
+    }
     const QVector<QPair<QPoint,int>>& getObsPosType(){
         return obsPos;
     }
-    //TODO: obstacles
 
 private:
 

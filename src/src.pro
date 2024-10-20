@@ -79,8 +79,8 @@ HEADERS += \
     Wilder.h \
     Deadalive.h \
 
-# FORMS += \
-#     mainmenu.ui\
+FORMS += \
+    mainmenu.ui\
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
