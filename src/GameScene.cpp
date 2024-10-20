@@ -280,6 +280,19 @@ void GameScene::addEnemy()
         scene->addItem(nightKing);
         nightKing->setZValue(10);
         enemies.append(nightKing);
+/////////
+
+        connect(nightKing,&NightKing::generateDeadalive,[=](QVector<QPoint> newPath){
+            DeadAlive *deadAlive = new DeadAlive(newPath);
+            scene->addItem(deadAlive);
+            deadAlive->setZValue(10);
+            enemies.append(deadAlive);
+            connect(deadAlive,&DeadAlive::isDead,this,&GameScene::onEnemyDead);
+            connect(deadAlive,&DeadAlive::isArrived,this,&GameScene::onEnemyArrive);
+
+        });
+
+/////////
         break;
     }
     case 6:
