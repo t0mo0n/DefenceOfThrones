@@ -6,14 +6,13 @@ Archer::Archer(QPoint pos_)
     projectType = 0;
     attackRange = 3*towerSize;
     attackSpeed = 1500;
-    buyCost = 1000;
-    sellPrice = 900;
+    buyCost = 200;
+    sellPrice .push_back( 100);
+    sellPrice.push_back(250);
     picDir = ":/img/asset/1.png";
     towerType = 1;
 
-    upgradeFee.push_back(1000);
-    upgradeFee.push_back(2000);
-    upgradeFee.push_back(3000);
+    upgradeFee=250;
 
     attackTimer->start(attackSpeed); // 根据攻击速度设置定时器间隔
 }
@@ -92,7 +91,7 @@ void Archer::FindEnemy()
         // 设置塔的旋转（如果需要旋转显示）
         setRotation(angle * 180.0 / M_PI); // 将弧度转换为度
     }
-    if (target == nullptr)
+    if (target == nullptr||target->isEnemy()==false)
     {
         // qDebug()<<"tower攻击的目标无效";
         QList<QGraphicsItem *> itemsInBoundingRect = checkForItemsInBoundingRect();
@@ -100,24 +99,36 @@ void Archer::FindEnemy()
         if (!itemsInBoundingRect.isEmpty())
         {
             Enemy *min_item = nullptr;
+            Enemy *obstacle_p=nullptr;
             qreal min_distance = attackRange;
             for (auto *item : itemsInBoundingRect)
             {
                 Enemy *enemy_p = dynamic_cast<Enemy *>(item);
-                if (enemy_p == nullptr)
+                if(enemy_p!=nullptr)
                 {
-                    continue;
+                    if(enemy_p->isEnemy()==true)
+                    {
+                        qreal distance = QLineF(QPointF(enemy_p->pos().x() + enemy_p->size / 2, enemy_p->pos().y() + enemy_p->size / 2), this->TowerCentral).length() - 10;
+                        if (distance <= min_distance)
+                        {
+                            min_item = enemy_p;
+                        }
+                    }
+                    else
+                    {
+                        obstacle_p=enemy_p;
+                    }
+
                 }
-                qreal distance = QLineF(QPointF(enemy_p->pos().x() + enemy_p->size / 2, enemy_p->pos().y() + enemy_p->size / 2), this->TowerCentral).length() - 10;
-                if (distance <= min_distance)
-                {
-                    min_item = enemy_p;
-                }
+
             }
             if (min_item)
             {
-                // qDebug()<<"设置新目标";
                 setTarget(min_item);
+            }
+            if(min_item==nullptr&&obstacle_p!=nullptr)
+            {
+                setTarget(obstacle_p);
             }
         }
         else

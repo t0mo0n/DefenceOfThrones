@@ -110,10 +110,10 @@ GameController::~GameController() {
 
 void GameController::startGame()
 {
-    // gameScene_ = new GameScene(currentLevel,hardMode);
-    // mainMenu_->hide();
-    // connect(gameScene_,&GameScene::gameEnd,this,&GameController::endGame);
-    // gameScene_->show();
+    gameScene_ = new GameScene(currentLevel,hardMode);
+    mainMenu_->hide();
+    connect(gameScene_,&GameScene::gameEnd,this,&GameController::endGame);
+    gameScene_->show();
 }
 
 void GameController::endGame()

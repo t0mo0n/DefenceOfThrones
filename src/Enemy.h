@@ -49,6 +49,7 @@ public:
     void updateHealthDisplay();
     virtual void enemyPause(){moveTimer->stop();};
     virtual void enemyResume(){moveTimer->start();};
+    virtual bool isEnemy(){return true;};
     ~Enemy(){emit destroy();}
 signals:
     void isArrived(int damage_,Enemy* toBeDelete); // 敌人进入基地的信号

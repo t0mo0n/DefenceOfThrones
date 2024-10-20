@@ -37,7 +37,6 @@ void Projectile::moveToEneny()
 {
     if (enemys != nullptr)
     {
-
         // 获取 projectile 的当前位置
         QPointF ProjectilePos = this->pos();
         // 获取目标 enemy 的位置
@@ -53,15 +52,10 @@ void Projectile::moveToEneny()
         // 更新子弹的位置
         this->setPos(ProjectilePos.x() + dx, ProjectilePos.y() + dy);
     }
-    else
+    if(enemys==nullptr)
     {
         qDebug() << "攻击的目标无效" << this->pos();
-        // moveTimer->stop();
         emit outrange();
-        // scene()->removeItem(this);
-        // delete this;  // 删除子弹对象
-        // return;
-        // this->setPos(this->pos().x()+delta.x(),this->pos().y()+delta.y());
     }
 }
 

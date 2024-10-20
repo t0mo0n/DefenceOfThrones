@@ -6,14 +6,13 @@ Dragon::Dragon(QPoint pos_)
     projectType = 4;
     attackRange = 4*towerSize;
     attackSpeed = 4500;
-    buyCost = 1500;
-    sellPrice = 900;
+    buyCost = 500;
+    sellPrice .push_back( 250);
+    sellPrice .push_back( 600);
     picDir = ":/img/asset/GOT.jpg";
     towerType = 4;
 
-    upgradeFee.push_back(2000);
-    upgradeFee.push_back(3000);
-    upgradeFee.push_back(4000);
+    upgradeFee=800;
 
     attackTimer->start(attackSpeed); // 根据攻击速度设置定时器间隔
 }
@@ -49,29 +48,48 @@ void Dragon::attack()
             }
 
             int enemyNum = enemyList.length();
-            assert(enemyNum > 0);
+            if(target->isEnemy())
+            {
+                assert(enemyNum > 0);
+
+            }
 
             for (auto bullet : smallBullet)
             {
-                if (enemyNum >= 2)
+                if(target)
                 {
-                    connect(bullet, &Projectile::collision, enemyList.front(), &Enemy::receive);
-                    bullet->setTarget(enemyList.front());
-                    enemyList.pop_front();
-                }
-                else if (enemyNum == 1)
-                {
-                    connect(bullet, &Projectile::collision, enemyList.front(), &Enemy::receive);
-                    bullet->setTarget(enemyList.front());
-                }
-
-                connect(bullet, &Projectile::outrange, this, [this, bullet]()
+                    if(target->isEnemy())
+                    {
+                        if (enemyNum >= 2)
                         {
-                    projectileList.removeOne(bullet);  // 从列表中移除该子弹
-                    scene()->removeItem(bullet);
-                    delete bullet; });
+                            connect(bullet, &Projectile::collision, enemyList.front(), &Enemy::receive);
+                            bullet->setTarget(enemyList.front());
+                            enemyList.pop_front();
+                        }
+                        else if (enemyNum == 1)
+                        {
+                            connect(bullet, &Projectile::collision, enemyList.front(), &Enemy::receive);
+                            bullet->setTarget(enemyList.front());
+                        }
+                    }
+                    else if(!target->isEnemy())
+                    {
+                        connect(bullet, &Projectile::collision, target, &Enemy::receive);
+                        bullet->setTarget(target);
+                        // qDebug()<<"set target"<<target->pos();
+                    }
+                    connect(bullet, &Projectile::outrange, this, [this, bullet]()
+                            {
+                                projectileList.removeOne(bullet);  // 从列表中移除该子弹
+                                scene()->removeItem(bullet);
+                                delete bullet; });
 
-                scene()->addItem(bullet);
+                    scene()->addItem(bullet);
+                }
+
+
+
+
             }
             smallBullet.clear(); // 会不会把投掷物也一起析构了？
             enemyList.clear();
@@ -140,7 +158,7 @@ void Dragon::FindEnemy()
 {
     if (target != nullptr)
     {
-        qDebug()<<target->pos();
+        // qDebug()<<target->pos();
         // 获取塔的位置
         QPointF towerPos = this->pos();
         // 获取目标的位置
@@ -154,33 +172,48 @@ void Dragon::FindEnemy()
         setRotation(angle * 180.0 / M_PI); // 将弧度转换为度
     }
     QList<QGraphicsItem *> itemsInBoundingRect = checkForItemsInBoundingRect();
+    Enemy*ob=nullptr;
 
     if (!itemsInBoundingRect.isEmpty())
     {
         for (auto *item : itemsInBoundingRect)
         {
             Enemy *enemy_p = dynamic_cast<Enemy *>(item);
-            if (enemy_p == nullptr)
+            if (enemy_p != nullptr)
             {
-                continue;
+                if(enemy_p->isEnemy()==true)
+                {
+                    qreal distance = QLineF(enemy_p->pos(), this->pos()).length();
+                    if (distance <= attackRange+25)
+                    {
+                        connect(enemy_p, &Enemy::destroy, this, [this, enemy_p]()
+                                {
+                                    enemyList.removeOne(enemy_p);/*敌人类中是否会自己调用removescene？？*/ });
+                        enemyList.push_back(enemy_p);
+                    }
+                }
+                else
+                {
+                    ob=enemy_p;
+
+                }
             }
-            // qDebug()<<enemy_p->pos();
-            qreal distance = QLineF(enemy_p->pos(), this->pos()).length();
-            if (distance <= attackRange+25)
-            {
-                connect(enemy_p, &Enemy::destroy, this, [this, enemy_p]()
-                        {
-                    enemyList.removeOne(enemy_p);/*敌人类中是否会自己调用removescene？？*/ });
-                enemyList.push_back(enemy_p);
-            }
+
         }
     }
     if (!enemyList.isEmpty())
     {
         setTarget(enemyList.front());
     }
-    else if (enemyList.isEmpty())
+    else if (enemyList.isEmpty()&&ob!=nullptr)
+    {
+
+    setTarget(ob);
+
+    }
+    else
     {
         resetTarget();
+
     }
 }
