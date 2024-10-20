@@ -49,6 +49,9 @@ HEADERS += \
     BackGround.h \
     Button.h \
     Dragon.h \
+    DragonBall.h \
+    DragonFlame.h \
+    FireArrow.h \
     GameController.h \
     GameScene.h \
     JohnSnow.h \

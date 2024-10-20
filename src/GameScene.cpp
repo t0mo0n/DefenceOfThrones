@@ -30,7 +30,7 @@ GameScene::GameScene(int level, bool isHardMode, QGraphicsView *parent)
     this->map = new Map();
     scene = new QGraphicsScene(0,0,1200,800,this);
     this->setScene(scene);
-    this->fitInView(scene->sceneRect(),Qt::KeepAspectRatio);
+    // this->fitInView(scene->sceneRect(),Qt::KeepAspectRatio);
     this->setGeometry(0,0,1200,800);
     loadMap(level);
     player = new Player(map->getPlayerMoney(),map->getPlayerHealth());
@@ -369,7 +369,7 @@ void GameScene::addEnemy()
         win_signal1 = true;
         break;
     }
-    if(enemyType!=0&&enemyType!=-1&&enemyType!=1)
+    if(enemyType!=0&&enemyType!=-1)
     {
         connect(enemies.last(), &Enemy::isDead, this, &GameScene::onEnemyDead);
         connect(enemies.last(), &Enemy::isArrived, this, &GameScene::onEnemyArrive);
@@ -382,7 +382,7 @@ void GameScene::addObstacles()
     QVector<QPair<QPoint, int>> obsPos = map->getObsPosType();
     for (int i = 0; i < obsPos.size(); i++)
     {
-        QPoint toScenePos(obsPos[i].first.x() * CELL_SIZE, obsPos[i].first.y() * CELL_SIZE);
+        QPoint toScenePos((obsPos[i].first.x()-1) * CELL_SIZE, (obsPos[i].first.y()-1) * CELL_SIZE);
         // todo加上price和health
         Obstacle *obstacle = new Obstacle(obsPos[i].second, toScenePos);
         scene->addItem(obstacle);
@@ -462,7 +462,7 @@ void GameScene::closeEvent(QCloseEvent *event)
     event->accept();
 }
 
-void GameScene::loadMap(int level)
+    void GameScene::loadMap(int level)
 {
     map->load(level, isHardMode);
     addObstacles();

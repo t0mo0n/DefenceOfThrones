@@ -5,8 +5,8 @@ Enemy::Enemy(const QVector<QPoint>& routine_, QGraphicsItem *parent)
     : QGraphicsObject(parent), isEnterBase(false), index(1),
     health(50), speed(3), damage(1), reward(100)
 {
-    for (int i=0;i<routine_.size();i++){
-        routine<<QPoint(routine_[i].x()*80,routine_[i].y()*80);
+    for (int var = 0; var < routine_.size(); ++var) {
+        routine<<QPoint(routine_[var].x()*80,routine_[var].y()*80);
     }
     // 加载图片
     isFire=false;
@@ -20,33 +20,33 @@ Enemy::Enemy(const QVector<QPoint>& routine_, QGraphicsItem *parent)
 
     // 起点
     if (!routine.isEmpty()) {
-        pos0 = routine.at(0);
+        pos0 = routine[0];
+        qDebug()<<pos0;
+        qDebug()<<"1";
     }
     //行走的方向和次数
     stepCount=0;
     if(routine.size()>1){
         if(routine[0].x()==routine[1].x()){
             if(routine[0].y()>routine[1].y()){
-                direct=1;//左
+                direct=1;//上
             }else{
-                direct=2;//右
+                direct=2;//下
             }
-            step=(routine[1].y()-routine[0].y())/8;
-        }else{
+            step=(routine[1].y()-routine[0].y())/10;
+
+        }else if(routine[0].y()==routine[1].y()){
             if(routine[0].x()>routine[1].x()){
-                direct=3;//上
+                direct=3;//左
             }else{
-                direct=4;//下
+                direct=4;//右
             }
-            step=(routine[1].x()-routine[0].x())/8;
+            step=(routine[1].x()-routine[0].x())/10;
         }
         moveTimer = new QTimer(this);
         connect(moveTimer, &QTimer::timeout, this, &Enemy::move);
         moveTimer->start(1000 / speed);
     }
-
-
-
 
     healthDisplay = new QGraphicsTextItem(this);
     healthDisplay->setParentItem(this);
@@ -65,7 +65,6 @@ void Enemy::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
 {
     Q_UNUSED(option);
     Q_UNUSED(widget);
-
     if(isFire){
         if(fireCount<10){
             fireCount++;
@@ -80,39 +79,14 @@ void Enemy::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
 }
 
 
-
-
 void Enemy::move()
 {
-    if (isEnterBase || (index >= routine.size() - 1&&stepCount>step-1)) {
-        if (!isEnterBase) {
-            emit isArrived(damage,this);
-        }
+    if (isEnterBase) {
+        emit isArrived(damage,this);
         return;
     }
 
     stepCount++;
-
-    if(stepCount==step){
-        index++;
-        stepCount=0;
-        if(routine[index-1].x()==routine[index].x()){
-            if(routine[index-1].y()>routine[index].y()){
-                direct=1;//左
-            }else{
-                direct=2;//右
-            }
-            step=(routine[index].y()-routine[index-1].y())/80;
-        }else{
-            if(routine[index-1].x()>routine[index].x()){
-                direct=3;//上
-            }else{
-                direct=4;//下
-            }
-            step=(routine[index].x()-routine[index-1].x())/80;
-        }
-    }
-
     switch (direct){
     case 1:
         pos0.setY(pos0.y()-10);
@@ -130,7 +104,32 @@ void Enemy::move()
         break;
     }
 
-    if (index >= routine.size()-1&&stepCount>step-1 ) {
+    if(stepCount>=step){
+        index++;
+        if(index>routine.size()){
+            isEnterBase=true;
+            emit isArrived(damage,this);
+            return;
+        }
+        stepCount=0;
+        if(routine[index-1].x()==routine[index].x()){
+            if(routine[index-1].y()>routine[index].y()){
+                direct=1;//上
+            }else{
+                direct=2;//下
+            }
+            step=(routine[index].y()-routine[index-1].y())/10;
+        }else{
+            if(routine[index-1].x()>routine[index].x()){
+                direct=3;//左
+            }else{
+                direct=4;//右
+            }
+            step=(routine[index].x()-routine[index-1].x())/10;
+        }
+    }
+
+    if (index >= routine.size()&&stepCount>step-1 ) {
         isEnterBase = true;
         emit isArrived(damage,this); // 发出进入基地的信号
 
@@ -142,7 +141,7 @@ void Enemy::move()
         this->setPos(pos0); // 更新 QGraphicsItem 的位置
     }
 
-    qDebug()<<pos0.x()<<","<<pos0.y();
+    qDebug()<<pos0;
 }
 
 void Enemy::takeDamage(int damage_)

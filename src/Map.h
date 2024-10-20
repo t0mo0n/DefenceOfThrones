@@ -62,7 +62,7 @@ private:
 
 
     //map info
-    char map[15][10]={0};
+    char map[16][16]={0};
     QPoint spawnPoints;
 
     //enermy info
