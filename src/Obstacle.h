@@ -6,30 +6,30 @@
 #include<QPixmap>
 #include<QPoint>
 #include<QPainter>
-class Obstacle : public QWidget,public QGraphicsItem
+#include"Enemy.h"
+class Obstacle : public Enemy
 {
     Q_OBJECT
 private:
-
-    QString path;//图片路径
-    int price;//被击碎后给予玩家的金币
-    int health;//生命值
     int type;
     QPoint pos;
-    QPixmap obstaclePix;
-public:
-    explicit Obstacle(int price_,int health_,int type_,QPoint pos_,QWidget *parent = nullptr);
 
-    void checkIfDead(int damage);//击碎发出信号
-    QRectF boundingRect() const override;  // 定义边界矩形
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;  // 绘制障碍物
+public:
+    explicit Obstacle(int type_,QVector<QPoint> routine_, QGraphicsItem *parent = nullptr);
+    void takeDamage  (int damage_) override;//击碎发出信号
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
+    // 绘制障碍物
+    bool isEnemy() override {return false;}
     ~Obstacle(){emit destory();}
+
 signals:
-    void isDamaged(int price);
+    void isDamaged(int price,Obstacle *toBeDelete);
     void destory();
 public slots:
-    void receive(int damage_,int type);
-    void receiveSnow(int damage_);
+    void receive(int damage_,int type);//可能有bug
 };
 
 #endif // OBSTACLE_H
+
+
+

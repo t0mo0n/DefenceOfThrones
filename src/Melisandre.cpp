@@ -12,6 +12,7 @@ Melisandre::Melisandre(const QVector<QPoint>& routine_, QGraphicsItem *parent ):
     speed=7;
     reward=270;
     enemyType=0;
+    damage=1;
     use=0;
     reviveHealth=health;
 }
@@ -26,8 +27,7 @@ void Melisandre::takeDamage(int damage_)
             return ;
         }
         health = 0;
-        emit isDead(reward); // 发出死亡信号
-        delete this;
+        emit isDead(reward,this); // 发出死亡信号
         moveTimer->stop();
     }
 }

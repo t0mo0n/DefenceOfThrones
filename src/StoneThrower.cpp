@@ -6,20 +6,22 @@ StoneThrower::StoneThrower(QPoint pos_)
     projectType = 2;
     attackRange = 5*towerSize;
     attackSpeed = 3000;
-    buyCost = 1500;
-    sellPrice = 900;
+    buyCost = 350;
+    sellPrice .push_back( 220);
+    sellPrice .push_back( 450);
+
     picDir = ":/img/asset/GOT.jpg";
     towerType = 2;
 
-    upgradeFee.push_back(2000);
-    upgradeFee.push_back(3000);
-    upgradeFee.push_back(4000);
+    upgradeFee=420;
+
 
     attackTimer->start(attackSpeed); // 根据攻击速度设置定时器间隔
 }
 
 void StoneThrower::attack()
 {
+
     if (level == 1)
     {
         if (target)
@@ -94,34 +96,45 @@ void StoneThrower::attack()
                 projectileList.push_back(bullet2);
             }
             int enemyNum = enemyList.length();
-            assert(enemyNum > 0);
+            if(target->isEnemy()==true)
+            {
+                assert(enemyNum > 0);
+            }
             int count = 0;
             for (auto bullet : smallBullet)
             {
-                if (enemyNum >= 3)
+                if(target->isEnemy()==true)
                 {
-                    connect(bullet, &Projectile::collision, enemyList.front(), &Enemy::receive);
-                    bullet->setTarget(enemyList.front());
-                    enemyList.pop_front();
-                }
-                else if (enemyNum == 2)
-                {
-                    if (count == 0)
+                    if (enemyNum >= 3)
                     {
                         connect(bullet, &Projectile::collision, enemyList.front(), &Enemy::receive);
                         bullet->setTarget(enemyList.front());
                         enemyList.pop_front();
                     }
-                    else
+                    else if (enemyNum == 2)
+                    {
+                        if (count == 0)
+                        {
+                            connect(bullet, &Projectile::collision, enemyList.front(), &Enemy::receive);
+                            bullet->setTarget(enemyList.front());
+                            enemyList.pop_front();
+                        }
+                        else
+                        {
+                            connect(bullet, &Projectile::collision, enemyList.front(), &Enemy::receive);
+                            bullet->setTarget(enemyList.front());
+                        }
+                    }
+                    else if (enemyNum == 1)
                     {
                         connect(bullet, &Projectile::collision, enemyList.front(), &Enemy::receive);
                         bullet->setTarget(enemyList.front());
                     }
                 }
-                else if (enemyNum == 1)
+                else
                 {
-                    connect(bullet, &Projectile::collision, enemyList.front(), &Enemy::receive);
-                    bullet->setTarget(enemyList.front());
+                    connect(bullet, &Projectile::collision, target, &Enemy::receive);
+                    bullet->setTarget(target);
                 }
 
                 connect(bullet, &Projectile::outrange, this, [this, bullet]()
@@ -177,6 +190,7 @@ void StoneThrower::FindEnemy()
     {
         if (!itemsInBoundingRect.isEmpty())
         {
+            Enemy *ob=nullptr;
             Enemy *min_item = nullptr;
             qreal min_distance = attackRange;
             for (auto *item : itemsInBoundingRect)
@@ -186,19 +200,35 @@ void StoneThrower::FindEnemy()
                 {
                     continue;
                 }
-                qreal distance = QLineF(enemy_p->pos(), this->pos()).length();
-                if (distance < min_distance)
+                if(enemy_p!=nullptr)
                 {
-                    min_item = enemy_p;
+                    if(enemy_p->isEnemy()==true)
+                    {
+                        qreal distance = QLineF(enemy_p->pos(), this->pos()).length();
+                        if (distance < min_distance)
+                        {
+                            min_item = enemy_p;
+                        }
+                    }
+                    else
+                    {
+                        ob=enemy_p;
+                    }
                 }
+
             }
             if (min_item)
             {
-                // if(target==nullptr)
-                // {
-                // qDebug()<<"设置新目标";
                 setTarget(min_item);
-                // }
+            }
+
+            else if(min_item==nullptr&&ob!=nullptr)
+            {
+                setTarget(ob);
+            }
+            else
+            {
+                resetTarget();
             }
         }
         else
@@ -208,22 +238,32 @@ void StoneThrower::FindEnemy()
     }
     else
     {
+        enemyList.clear();
+        assert(enemyList.isEmpty());
+        Enemy* ob=nullptr;
         if (!itemsInBoundingRect.isEmpty())
         {
             for (auto *item : itemsInBoundingRect)
             {
                 Enemy *enemy_p = dynamic_cast<Enemy *>(item);
-                if (enemy_p == nullptr)
+                if (enemy_p != nullptr)
                 {
-                    continue;
-                }
-                qreal distance = QLineF(enemy_p->pos(), this->pos()).length();
-                if (distance <= attackRange + 25)
-                {
-                    connect(enemy_p, &Enemy::destroy, this, [this, enemy_p]()
-                            {
-                        enemyList.removeOne(enemy_p);/*敌人类中是否会自己调用removescene？？*/ });
-                    enemyList.push_back(enemy_p);
+                    if(enemy_p->isEnemy()==true)
+                    {
+                        qreal distance = QLineF(enemy_p->pos(), this->pos()).length();
+                        if (distance <= attackRange + 25)
+                        {
+                            connect(enemy_p, &Enemy::destroy, this, [this, enemy_p]()
+                                    {
+                                        enemyList.removeOne(enemy_p);/*敌人类中是否会自己调用removescene？？*/ });
+                            enemyList.push_back(enemy_p);
+                        }
+                    }
+                    else
+                    {
+                        ob=enemy_p;
+                    }
+
                 }
             }
         }
@@ -234,6 +274,8 @@ void StoneThrower::FindEnemy()
         else if (enemyList.isEmpty())
         {
             resetTarget();
+            if(ob)
+                setTarget(ob);
         }
     }
 }
