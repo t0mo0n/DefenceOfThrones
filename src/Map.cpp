@@ -51,7 +51,6 @@ void Map::load(int level,bool isHardMode) {
 
         //read map
         QJsonArray mapArray =jsonObj["map"].toArray();
-        qDebug()<<"Map Success";
         for (int i = 0; i < mapArray.size(); ++i) {
             QJsonArray rowArray = mapArray[i].toArray();
             for (int j = 0; j < rowArray.size(); ++j) {
@@ -65,7 +64,6 @@ void Map::load(int level,bool isHardMode) {
         QJsonArray playerPosition_ =playerObj["position"].toArray();
         playerPosition.setX(playerPosition_[0].toInt());
         playerPosition.setY(playerPosition_[1].toInt());
-        qDebug()<<playerPosition_[0].toInt()<<playerPosition_[1].toInt();
         playerHealth=playerObj["health"].toInt();
         playerMoney=playerObj["money"].toInt();
 
@@ -73,7 +71,6 @@ void Map::load(int level,bool isHardMode) {
         //read enemy
         QJsonObject enemyObj =jsonObj["enemies"].toObject();
         QJsonArray spawnPoints_ =enemyObj["spawnPoints"].toArray();
-        qDebug()<<spawnPoints_[0].toInt()<<spawnPoints_[1].toInt();
         spawnPoints.setX(spawnPoints_[0].toInt());
         spawnPoints.setY(spawnPoints_[1].toInt());
         QJsonArray types_=enemyObj["types"].toArray();
@@ -85,12 +82,10 @@ void Map::load(int level,bool isHardMode) {
             QJsonArray rowArray_ =row.toArray();
             QPoint temp(rowArray_[0].toInt(),rowArray_[1].toInt());
             enemyPath.push_back(temp);
-            qDebug()<<temp;
         }
 
         //read obstacles
         QJsonArray obstacleArray =jsonObj["obstacles"].toArray();
-        qDebug()<<"Obstacles Success";
         for(const auto& obstacle:obstacleArray){
             QJsonObject obstacleObject =obstacle.toObject();
             QString type =obstacleObject["type"].toString();

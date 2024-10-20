@@ -10,20 +10,16 @@ CONFIG += c++17
 
 SOURCES += \
     GameScene.cpp \
-    LevelSelectMenu.cpp \
     MainMenu.cpp \
     Map.cpp \
-    SettingsMenu.cpp \
     main.cpp \
     GameController.cpp \
 
 HEADERS += \
     GameController.h \
     GameScene.h \
-    LevelSelectMenu.h \
     MainMenu.h \
-    Map.h \
-    SettingsMenu.h
+    Map.h
 
 FORMS += \
     mainmenu.ui\

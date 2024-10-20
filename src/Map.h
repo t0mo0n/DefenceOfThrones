@@ -43,6 +43,15 @@ public:
         }
         return enemyTypes[enemyNum];
     }
+    int getPlayerHealth(){
+        return playerHealth;
+    }
+    int getPlayerMoney(){
+        return playerMoney;
+    }
+    const QPoint& getPlayerPosition(){
+        return playerPosition;
+    }
     const QVector<QPair<QPoint,int>>& getObsPosType(){
         return obsPos;
     }

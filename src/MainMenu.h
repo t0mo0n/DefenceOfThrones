@@ -17,8 +17,10 @@
 #define WIDTH 1200
 #define HIGTH 800
 
-#define BTNW 175
-#define BTNH 108
+#define BTNW 165
+#define BTNH 93
+
+#define OriginSize 14
 
 namespace Ui {
 class MainMenu;

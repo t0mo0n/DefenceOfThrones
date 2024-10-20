@@ -64,8 +64,6 @@ GameController::GameController(QObject *parent)
     currentLevel = maxLevel;
 
     gameScene_ = nullptr;
-    lvMenu_ = nullptr;
-    settingMenu_ = nullptr;
     mainMenu_ = new MainMenu();
     mainMenu_->show();
 
@@ -107,13 +105,12 @@ GameController::~GameController() {
     delete bgmPlayer;
 
     delete gameScene_;
-    delete lvMenu_;
-    delete settingMenu_;
     delete mainMenu_;
 }
 
 void GameController::startGame()
 {
+    //TrroJay：调试时没有gamescene，故加上注释
     // gameScene_ = new GameScene(currentLevel,hardMode);
     // mainMenu_->hide();
     // connect(gameScene_,&GameScene::gameEnd,this,&GameController::endGame);
@@ -130,8 +127,6 @@ void GameController::endGame()
 void GameController::exitGame()
 {
     delete gameScene_;
-    delete lvMenu_;
-    delete settingMenu_;
     delete mainMenu_;
 
     QCoreApplication::quit();

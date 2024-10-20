@@ -3,8 +3,7 @@
 
 #include <QObject>
 #include "GameScene.h"
-#include "LevelSelectMenu.h"
-#include "SettingsMenu.h"
+
 #include "MainMenu.h"
 #include <QFile>
 #include <QMediaPlayer>
@@ -25,8 +24,6 @@ private:
     float volumnLevel; // range:0.0~1.0, equal to 0% to 100% in settingMenu.
     int gameBgm;
     GameScene *gameScene_;
-    LevelSelectMenu *lvMenu_;
-    SettingsMenu *settingMenu_;
     MainMenu *mainMenu_;
 
     QString archiveFileRoute;

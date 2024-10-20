@@ -2,7 +2,6 @@
 #include "qpainter.h"
 #include "ui_mainmenu.h"
 
-
 MainMenu::MainMenu(QWidget *parent)
     : QWidget{parent}
     , ui(new Ui::MainMenu)
@@ -26,15 +25,21 @@ MainMenu::MainMenu(QWidget *parent)
 
 
     //init font
-    // int fontId = QFontDatabase::addApplicationFont(":/font/font/Argor Got Scaqh.ttf");
-    // QString fontFamily =QFontDatabase::applicationFontFamilies(fontId).at(0);
-    // QFont font(fontFamily);
-    // font.setPointSize(12);
+    int fontId = QFontDatabase::addApplicationFont(":/font/font/Mason Regular.ttf");
+    QString fontFamily =QFontDatabase::applicationFontFamilies(fontId).at(0);
+    QFont btnFont(fontFamily);
+    QFont labelFont(fontFamily);
+    QFont comboFont(fontFamily);
+    btnFont.setPointSize(OriginSize);
+    btnFont.setWeight(QFont::Bold);
+    labelFont.setPointSize(OriginSize+4);
+    labelFont.setWeight(QFont::Bold);
+    comboFont.setPointSize(OriginSize-4);
 
     //init original buttons
     for(int i=0;i<4;i++){
-        buttons[i]->setGeometry(510+i*5,260+i*75,BTNW-10-i*10,BTNH-15-i*5);
-        //buttons[i]->setFont(font);
+        buttons[i]->setGeometry(510+i*5,260+i*75,BTNW-i*10,BTNH-i*5);
+        buttons[i]->setFont(btnFont);
         QString styleSheet =QString(
             "QPushButton{"
             "color: black;"
@@ -53,28 +58,36 @@ MainMenu::MainMenu(QWidget *parent)
 
 
     //init setting btns
-    QFont font("Arial",24);
-    int labelX=50;
-    int barX=300;
-    int barW=200;
-    int barH=30;
+    int labelX=520;
+    int barX=520;
+    int barW=150;
+    int barH=18;
 
         //return btn
     backMainMenu1=new QPushButton("BACK",this);
+    backMainMenu1->setGeometry(510+3*5,260+3*75,BTNW-3*10,BTNH-3*5);
+    backMainMenu1->setFont(btnFont);
+    backMainMenu1->setStyleSheet(
+        "QPushButton{"
+        "color: black;"
+        "border-image:url(:/img/asset/button3.png);"
+        "width: 280px;"
+        "height: 100px;"
+        "}"
+        );
     backMainMenu1->hide();
 
         //set volume
-    volumeLabel =new QLabel("Volume:50",this);
-    volumeLabel->setFont(font);
-    volumeLabel->move(labelX,100);
+    volumeLabel =new QLabel("VOLUME:50",this);
+    volumeLabel->setFont(labelFont);
+    volumeLabel->move(labelX,250);
     volumeLabel->setFixedSize(150,60);
     volumeLabel->hide();
     volumeLabel->setStyleSheet(
         "QLabel{"
-        "border-image:url(:/img/asset/button.png);"
         "background-position:center;"
         "background-repeat:no-repeat;"
-        "color:DEDEDE;"
+        "color:#DEDEDE;"
         "}"
         );
 
@@ -83,14 +96,14 @@ MainMenu::MainMenu(QWidget *parent)
     volumeSlider->setRange(0,100);
     volumeSlider->setValue(50);
     volumeSlider->setFixedWidth(barW);
-    volumeSlider->move(barX,100);
+    volumeSlider->move(barX,300);
     volumeSlider->hide();
     volumeSlider->setStyleSheet(
         "QSlider::groove:horizontal {"
-        "    border: 1px solid #4c4c4c;"
-        "    height: 200px;"
-        "    background: #4c4c4c;"
-        "    margin: 2px 0;"
+        "    border: 1px solid #918376;"
+        "    height: 160px;"
+        "    background: #918376;"
+        "    margin: 0px 0;"
         "}"
         "QSlider::handle:horizontal {"
         "    background: #742b2b;"
@@ -103,28 +116,29 @@ MainMenu::MainMenu(QWidget *parent)
 
 
     connect(volumeSlider,&QSlider::valueChanged,this,[=](int value){
-        volumeLabel->setText(QString("Volume:%1").arg(value));
+        volumeLabel->setText(QString("VOLUME:%1").arg(value));
         emit volumeChanged(value/100.0);
     });
 
 
         //set hard mode
 
-    hardModeLabel =new QLabel("Mode:",this);
-    hardModeLabel->move(labelX,200);
+    hardModeLabel =new QLabel("MODE:",this);
+    hardModeLabel->move(labelX,330);
+    hardModeLabel->setFont(labelFont);
     hardModeLabel->hide();
     hardModeLabel->setStyleSheet(
         "QLabel{"
-        "border-image:url(:/img/asset/button.png);"
         "background-position:center;"
         "background-repeat:no-repeat;"
         "}"
         );
 
     hardModeComboBox=new QComboBox(this);
-    hardModeComboBox->move(barX,200);
-    hardModeComboBox->addItem("Easy");
-    hardModeComboBox->addItem("Hard");
+    hardModeComboBox->move(barX,365);
+    hardModeComboBox->setFont(comboFont);
+    hardModeComboBox->addItem("EASY");
+    hardModeComboBox->addItem("HARD");
     hardModeComboBox->setFixedSize(barW,barH);
     hardModeComboBox->hide();
     hardModeComboBox->setStyleSheet(
@@ -132,17 +146,22 @@ MainMenu::MainMenu(QWidget *parent)
         "    border: 0px solid gray;"
         "    border-radius: 0px;"
         "    padding: 1px 18px 1px 3px;"
-        "    color: #4c4c4c;"
+        "    background-color: #918376;"
+        "    color: black;"
         "}"
         "QComboBox::drop-down {"
         "    subcontrol-origin: padding;"
         "    subcontrol-position: top right;"
-        "    width: 20px;"
-        "    border-left-width: 1px;"
-        "    border-left-color: darkgray;"
+        "    width: 18px;"
+        "    border-left-width: 0px;"
+        "    border-left-color: #918376;"
         "    border-left-style: solid;"
         "    border-top-right-radius: 3px;"
         "    border-bottom-right-radius: 3px;"
+        "}"
+        "QComboBox QAbstractItemView {"
+        "    background-color: #918376;"
+        "    selection-background-color: #918376;"
         "}"
         );
 
@@ -158,26 +177,60 @@ MainMenu::MainMenu(QWidget *parent)
         //set bgm
 
 
-    bgmChangedLabel =new QLabel("BGM:");
-    bgmChangedLabel->move(labelX,300);
+    bgmChangedLabel =new QLabel("BGM:",this);
+    bgmChangedLabel->move(labelX,400);
+    bgmChangedLabel->setFont(labelFont);
     bgmChangedLabel->hide();
     bgmChangedLabel->setStyleSheet(
         "QLabel{"
-        "border-image:url(:/img/asset/button.png);"
         "background-position:center;"
         "background-repeat:no-repeat;"
         "}"
         );
 
     bgmChangedComboBox=new QComboBox(this);
+    bgmChangedComboBox->setFont(comboFont);
     bgmChangedComboBox->addItem("Jenny of Oldstones");
     bgmChangedComboBox->addItem("Light of Nibel");
     bgmChangedComboBox->addItem("Light of the Seven");
     bgmChangedComboBox->addItem("the Night King");
     bgmChangedComboBox->addItem("the Rains of Castamere");
-    bgmChangedComboBox->move(barX,300);
+    bgmChangedComboBox->move(barX,435);
     bgmChangedComboBox->setFixedSize(barW,barH);
     bgmChangedComboBox->hide();
+    bgmChangedComboBox->setStyleSheet(
+        "QComboBox {"
+        "    border: 0px solid gray;"
+        "    border-radius: 0px;"
+        "    padding: 1px 18px 1px 3px;"
+        "    background-color: #918376;"
+        "    color: black;"
+        "}"
+        "QComboBox::drop-down {"
+        "    subcontrol-origin: padding;"
+        "    subcontrol-position: top right;"
+        "    width: 18px;"
+        "    border-left-width: 1px;"
+        "    border-left-color: #918376;"
+        "    border-left-style: solid;"
+        "    border-top-right-radius: 3px;"
+        "    border-bottom-right-radius: 3px;"
+        "}"
+        "QComboBox QAbstractItemView {"
+        "    background-color: #918376;"
+        "    selection-background-color: #918376;"
+        "}"
+        );
+
+    connect(hardModeComboBox,&QComboBox::currentTextChanged,this,
+            [=](QString text){
+                if(text=="Easy"){
+                    emit hardModeChanged(false);
+                }else{
+                    emit hardModeChanged(true);
+                }
+            });
+
 
 
     connect(bgmChangedComboBox,&QComboBox::currentTextChanged,this,
@@ -195,20 +248,34 @@ MainMenu::MainMenu(QWidget *parent)
                 }
             });
 
+
+
     //set levelselectmenu
 
     backMainMenu2=new QPushButton("BACK",this);
+    backMainMenu2->setGeometry(510+3*5,260+3*75,BTNW-3*10,BTNH-3*5);
+    backMainMenu2->setFont(btnFont);
+    backMainMenu2->setStyleSheet(
+        "QPushButton{"
+        "color: black;"
+        "border-image:url(:/img/asset/button3.png);"
+        "width: 280px;"
+        "height: 100px;"
+        "}"
+        );
     backMainMenu2->hide();
-    for (int var = 0; var < 3; ++var) {
-        levelButtons[var]->setGeometry(50+var*100,50,100,80);
-        levelButtons[var]->hide();
-        levelButtons[var]->setStyleSheet(
-            "QPushButton{"
-            "border-image:url(:/img/asset/1.png);"
-            "}"
-            "QPushButton:pressed{"
-            "border-image:url(:/img/asset/1.png);"
-            "}");
+    for(int i=0;i<3;i++){
+        levelButtons[i]->setGeometry(510+i*5,260+i*75,BTNW-i*10,BTNH-i*5);
+        levelButtons[i]->setFont(btnFont);
+        levelButtons[i]->hide();
+        levelButtons[i]->setStyleSheet(
+             "QPushButton{"
+             "color: black;"
+             "border-image:url(:/img/asset/button3.png);"
+             "width: 280px;"
+             "height: 100px;"
+             "}"
+            );
     }
 
     connect(levelButtons[0],&QPushButton::clicked,this,[=](){
