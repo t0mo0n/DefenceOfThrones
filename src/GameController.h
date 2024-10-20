@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include "GameScene.h"
-
 #include "MainMenu.h"
 #include <QFile>
 #include <QMediaPlayer>
@@ -25,7 +24,6 @@ private:
     int gameBgm;
     GameScene *gameScene_;
     MainMenu *mainMenu_;
-
     QString archiveFileRoute;
     QMediaPlayer *bgmPlayer;
     QAudioOutput *bgmOutput;

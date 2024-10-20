@@ -56,8 +56,6 @@ public:
         return obsPos;
     }
 
-
-
 private:
 
     //player info
