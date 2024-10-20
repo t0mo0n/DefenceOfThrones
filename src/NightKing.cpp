@@ -16,7 +16,7 @@ NightKing::NightKing(const QVector<QPoint>& routine_, QGraphicsItem *parent ):En
     enemyType=1;
     timer=new QTimer;
     timer = new QTimer(this);
-    // connect(timer, &QTimer::timeout, this, &NightKing::generateDeadalive);
+    connect(timer, &QTimer::timeout, this, &NightKing::generateDeadalive);
     timer->start(8000);
 }
 
@@ -25,19 +25,19 @@ void NightKing::generate()
     QPoint p;
     switch (direct){
     case 1:
-        p.setY(pos0.y()+80);
+        p.setY(pos0.y()+60);
         p.setX(pos0.x());
         break;
     case 2:
-        p.setY(pos0.y()-80);
+        p.setY(pos0.y()-60);
         p.setX(pos0.x());
         break;
     case 3:
-        p.setX(pos0.x()+80);
+        p.setX(pos0.x()+60);
         p.setY(pos0.y());
         break;
     case 4:
-        p.setX(pos0.x()-80);
+        p.setX(pos0.x()-60);
         p.setY(pos0.y());
         break;
     default:
