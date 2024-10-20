@@ -48,6 +48,16 @@ QRectF TowerFrame::boundingRect() const
     return QRectF(towerSize / 2 - attackRange, towerSize / 2 - attackRange, 2 * attackRange, 2 * attackRange);
 }
 
+void TowerFrame::sell()
+{
+    QGraphicsScene *game_map = this->scene();
+    if (game_map != nullptr)
+    {
+        game_map->removeItem(this);
+
+        delete this; // 这里可以考虑外部delete
+    }
+}
 
 void TowerFrame::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
