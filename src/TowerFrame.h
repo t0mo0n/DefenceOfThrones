@@ -69,10 +69,9 @@ public:
 signals:
     void destroy();
     void sell();
-    void towerUpdate(int cost);
+    void towerUpdate(int cost,TowerFrame* it);
 public slots:
     virtual void upgrade() = 0; // 升级植物,界面设计者要根据现有的钱和updatecost比较获得是否可行,别忘了扣钱
-    void isEnough(bool state);
 };
 
 #endif // TOWER_FRAME_H
