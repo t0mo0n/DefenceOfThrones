@@ -1,22 +1,45 @@
 #include <QGraphicsBlurEffect>
 #include "GameScene.h"
+#include "Deadalive.h"
+#include "GreyjoySoldier.h"
+#include "KingSlayer.h"
+#include "LannisterSoldier.h"
+#include "Melisandre.h"
+#include "NightKing.h"
+#include "Mountain.h"
+#include "Vesalion.h"
+#include "Wilder.h"
+#include "TowerCell.h"
+#include "PathCell.h"
+#include "Archer.h"
+#include "StoneThrower.h"
+#include "JohnSnow.h"
+#include "Dragon.h"
 #define SHILLING 100
 #define HEALTH 20
 GameScene::GameScene(int level, bool isHardMode, QGraphicsView *parent)
     : QGraphicsView(parent)
 {
+    this->setWindowIcon(QIcon(":/img/asset/GOT.jpg"));
+    this->setFixedSize(1200,800);
+    this->setWindowTitle("Let's Play!");
+    this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->level = level;
     this->isHardMode = isHardMode;
     this->map = new Map();
+    scene = new QGraphicsScene(0,0,1200,800,this);
+    this->setScene(scene);
+    this->fitInView(scene->sceneRect(),Qt::KeepAspectRatio);
+    this->setGeometry(0,0,1200,800);
     loadMap(level);
-    player = new Player(map->getPlayerMoney,map->getPlayerHealth());
-    pauseGameButton = new Button("路径1", "路径2", 1000, 700);//暂停按钮图片1为正常时，2为鼠标点击时
-    scene = new QGraphicsScene(this);
+    player = new Player(map->getPlayerMoney(),map->getPlayerHealth());
+    pauseGameButton = new Button(":/img/asset/button.png", ":/img/asset/button2.png", 1000, 700);//暂停按钮图片1为正常时，2为鼠标点击时
     scene->addItem(pauseGameButton);
     pauseGameButton->setZValue(90);
     connect(pauseGameButton,&Button::clicked,this,&GameScene::onPauseButtonClicked);
 
-    gameEndButton = new Button("路径1", "路径2", 1100, 700);//结束按钮图片
+    gameEndButton = new Button(":/img/asset/button1.png", ":/img/asset/button2.png", 1100, 700);//结束按钮图片
     scene->addItem(gameEndButton);
     gameEndButton->setZValue(90);
     connect(gameEndButton,&Button::clicked,this,&GameScene::onGameEndButtonClicked);
@@ -53,7 +76,10 @@ GameScene::GameScene(int level, bool isHardMode, QGraphicsView *parent)
         enemyTimer->start(2000);
     }
 
-    connect(enemyTimer, &QTimer::timeout, [=](){
+    ecount = 0;
+    connect(enemyTimer, &QTimer::timeout, this,[=](){
+        ecount++;
+        qDebug() << ecount;
         addEnemy();
     });
 
@@ -130,7 +156,7 @@ void GameScene::onTowerSelectButtonClicked(QPoint cellPos, int type)
         archer->setZValue(20);
         //扣钱
         player->spendMoney(archer->getBuyCost());
-        connect(archer,&Archer::towerUpdate,[=](int cost,Archer* toBeUpgrade){
+        connect(archer,&Archer::towerUpdate,this,[=](int cost,TowerFrame* toBeUpgrade){
             if(cost <= player->curMoney())
             {
                 toBeUpgrade->upgrade();
@@ -153,7 +179,7 @@ void GameScene::onTowerSelectButtonClicked(QPoint cellPos, int type)
         towers.append(stoneThrower);
         stoneThrower->setZValue(20);
         player->spendMoney(stoneThrower->getBuyCost());
-        connect(stoneThrower,&StoneThrower::towerUpdate,[=](int cost,StoneThrower* toBeUpgrade){
+        connect(stoneThrower,&StoneThrower::towerUpdate,[=](int cost,TowerFrame* toBeUpgrade){
             if(cost <= player->curMoney())
             {
                 toBeUpgrade->upgrade();
@@ -177,7 +203,7 @@ void GameScene::onTowerSelectButtonClicked(QPoint cellPos, int type)
         towers.append(johnSnow);
         johnSnow->setZValue(20);
         player->spendMoney(johnSnow->getBuyCost());
-        connect(johnSnow ,&JohnSnow::towerUpdate,[=](int cost,JohnSnow* toBeUpgrade){
+        connect(johnSnow ,&JohnSnow::towerUpdate,this,[=](int cost,TowerFrame* toBeUpgrade){
             if(cost <= player->curMoney())
             {
                 toBeUpgrade->upgrade();
@@ -199,7 +225,7 @@ void GameScene::onTowerSelectButtonClicked(QPoint cellPos, int type)
         towers.append(dragon);
         dragon->setZValue(20);
         player->spendMoney(dragon->getBuyCost());
-        connect(dragon,&Dragon::towerUpdate,[=](int cost,Dragon *toBeUpgrade){
+        connect(dragon,&Dragon::towerUpdate,[=](int cost,TowerFrame* toBeUpgrade){
             if(cost <= player->curMoney())
             {
                 toBeUpgrade->upgrade();
@@ -245,8 +271,8 @@ void GameScene::addEnemy()
     case 1:
     {
         DeadAlive *deadAlive = new DeadAlive(map->getPath());
-        scene->addItem(deadAlive);
         deadAlive->setZValue(10);
+        scene->addItem(deadAlive);
         enemies.append(deadAlive);
         break;
     }
@@ -280,6 +306,14 @@ void GameScene::addEnemy()
         scene->addItem(nightKing);
         nightKing->setZValue(10);
         enemies.append(nightKing);
+        connect(nightKing,&NightKing::generateDeadalive,[=](QVector<QPoint> newPath){
+            DeadAlive *deadAlive = new DeadAlive(newPath);
+            scene->addItem(deadAlive);
+            deadAlive->setZValue(10);
+            enemies.append(deadAlive);
+            connect(deadAlive,&DeadAlive::isDead,this,&GameScene::onEnemyDead);
+            connect(deadAlive,&DeadAlive::isArrived,this,&GameScene::onEnemyArrive);
+        });
         break;
     }
     case 6:
@@ -319,8 +353,12 @@ void GameScene::addEnemy()
         //-1时敌人传输完成
         break;
     }
-    connect(enemies.last(), &Enemy::isDead, this, &GameScene::onEnemyDead);
-    connect(enemies.last(), &Enemy::isArrived, this, &GameScene::onEnemyArrive);
+    if(enemyType!=0&&enemyType!=-1&&enemyType!=1)
+    {
+        connect(enemies.last(), &Enemy::isDead, this, &GameScene::onEnemyDead);
+        connect(enemies.last(), &Enemy::isArrived, this, &GameScene::onEnemyArrive);
+    }
+
 }
 
 void GameScene::addObstacles()
@@ -330,7 +368,7 @@ void GameScene::addObstacles()
     {
         QPoint toScenePos(obsPos[i].first.x() * CELL_SIZE, obsPos[i].first.y() * CELL_SIZE);
         // todo加上price和health
-        Obstacle *obstacle = new Obstacle(toScenePos, obsPos[i].second);
+        Obstacle *obstacle = new Obstacle(obsPos[i].second, toScenePos);
         scene->addItem(obstacle);
         obstacle->setZValue(10);
         obstacles.append(obstacle);
@@ -392,6 +430,8 @@ void GameScene::onTowerCellClicked(QPoint clickPos)
     towerSelectMenu = new TowerSelectMenu(clickPos, player->curMoney());
     scene->addItem(towerSelectMenu);
     towerSelectMenu->setZValue(95);
+    towerSelectMenu->setVisible(true); // 确保可见
+    scene->update(); // 确保场景更新
     connect(towerSelectMenu, &TowerSelectMenu::selectTowerType, this, &GameScene::onTowerSelectButtonClicked);
     connect(towerSelectMenu, &TowerSelectMenu::closeTowerSelectMenu, [=]()
             {

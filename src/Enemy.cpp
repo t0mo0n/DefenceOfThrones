@@ -3,14 +3,17 @@
 
 Enemy::Enemy(const QVector<QPoint>& routine_, QGraphicsItem *parent)
     : QGraphicsObject(parent), isEnterBase(false), index(1),
-    health(50), speed(3), damage(1), reward(100),routine(routine_)
+    health(50), speed(3), damage(1), reward(100)
 {
+    for (int i=0;i<routine_.size();i++){
+        routine<<QPoint(routine_[i].x()*80,routine_[i].y()*80);
+    }
     // 加载图片
     isFire=false;
     fireCount=0;
 
     size=60;
-    path = ":/colored.png"; // 假设图片路径
+    path = ":/img/asset/GOT.jpg"; // 假设图片路径
     if (!enemyPix.load(path)) {
         qDebug() << "Failed to load enemy image from" << path;
     }
@@ -130,13 +133,11 @@ void Enemy::move()
     if (index >= routine.size()-1&&stepCount>step-1 ) {
         isEnterBase = true;
         emit isArrived(damage,this); // 发出进入基地的信号
-        qDebug()<<"2";
 
     }else{
         // 更新图形项的位置
         healthDisplay->setPos(pos0.x() + (size / 2) -(healthDisplay->boundingRect().width() / 2),
                               pos0.y() - healthDisplay->boundingRect().height());
-        qDebug() <<"1";
         updateHealthDisplay();
         this->setPos(pos0); // 更新 QGraphicsItem 的位置
     }

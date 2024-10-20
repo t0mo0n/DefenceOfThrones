@@ -48,16 +48,16 @@ QRectF TowerFrame::boundingRect() const
     return QRectF(towerSize / 2 - attackRange, towerSize / 2 - attackRange, 2 * attackRange, 2 * attackRange);
 }
 
-void TowerFrame::sell()
-{
-    QGraphicsScene *game_map = this->scene();
-    if (game_map != nullptr)
-    {
-        game_map->removeItem(this);
+// void TowerFrame::sell(TowerFrame *it)
+// {
+//     QGraphicsScene *game_map = this->scene();
+//     if (game_map != nullptr)
+//     {
+//         game_map->removeItem(this);
 
-        delete this; // 这里可以考虑外部delete
-    }
-}
+//         delete this; // 这里可以考虑外部delete
+//     }
+// }
 
 void TowerFrame::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
@@ -71,7 +71,7 @@ void TowerFrame::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 
         });
         connect(action2,&QAction:: triggered, this, [this](){
-            emit sell();
+            emit sell(this);
         });
         menu.exec(event->screenPos()); // 在按下鼠标左键的地方弹出菜单
         QGraphicsItem::contextMenuEvent(event);

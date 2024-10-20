@@ -3,7 +3,7 @@
 TowerCell::TowerCell(QPoint cellPos, QGraphicsObject* parent )
     :QGraphicsObject(parent)
 {
-    cellPixmap.load("路径");
+    cellPixmap.load(":/img/asset/GOT.jpg");
     this->cellPos = cellPos;
 }
 
@@ -14,7 +14,7 @@ QRectF TowerCell::boundingRect() const
 
 void TowerCell::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
-    painter->drawPixmap(0,0,cellPixmap);
+    painter->drawPixmap(boundingRect(),cellPixmap,cellPixmap.rect());
 }
 
 void TowerCell::mousePressEvent(QGraphicsSceneMouseEvent *event)

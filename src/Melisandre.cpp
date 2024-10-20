@@ -4,7 +4,7 @@ Melisandre::Melisandre(const QVector<QPoint>& routine_, QGraphicsItem *parent ):
 {
     //人类单位, 移速较快, 可复活自己一次, 给目标带来一点伤害.出现在全部三关中.
 
-    path = ":/colored.png"; // 假设图片路径
+    path = ":/img/asset/GOT.jpg"; // 假设图片路径
     if (!enemyPix.load(path)) {
         qDebug() << "Failed to load enemy image from" << path;
     }

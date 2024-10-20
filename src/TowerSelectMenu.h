@@ -14,10 +14,6 @@
 #include <QBrush>
 #include "TowerFrame.h"
 #include "Button.h"
-#include "Archer.h"
-#include "StoneThrower.h"
-#include "JohnSnow.h"
-#include "Dragon.h"
 
 class TowerSelectMenu : public QGraphicsObject
 {

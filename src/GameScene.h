@@ -21,21 +21,7 @@
 #include "Obstacle.h"
 #include "TowerSelectMenu.h"
 #include "Button.h"
-#include "Deadalive.h"
-#include "GreyjoySoldier.h"
-#include "KingSlayer.h"
-#include "LannisterSoldier.h"
-#include "Melisandre.h"
-#include "NightKing.h"
-#include "Mountain.h"
-#include "Vesalion.h"
-#include "Wilder.h"
-#include "TowerCell.h"
-#include "PathCell.h"
-#include "Archer.h"
-#include "StoneThrower.h"
-#include "JohnSnow.h"
-#include "Dragon.h"
+
 #define CELL_SIZE 80
 //关于Z值的描述 对于背景以及装饰品 0~ 9
 //敌人以及障碍物 10~19
@@ -53,7 +39,7 @@ public:
     void updateScene();
     void pauseScene();
     void resumeScene();
-    void mousePressEvent(QMouseEvent *event) override;
+    // void mousePressEvent(QMouseEvent *event) override;
     void closeEvent(QCloseEvent *event) override;
     void loadMap(int level);
     void onTowerUpdated(int cost);
@@ -87,6 +73,8 @@ private:
     QGraphicsRectItem *pausedMenu;
     int level;
     bool isHardMode;
+
+    int ecount = 0;
 
 signals:
     void gameEnd();

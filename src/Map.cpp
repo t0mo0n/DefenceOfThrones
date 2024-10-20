@@ -3,7 +3,7 @@
 
 Map::Map(QObject *parent)
     : QObject(parent),
-    playerHealth(0),playerMoney(0), enemySpawnInterval(1000) {
+    playerHealth(0),playerMoney(0) {
 }
 
 void Map::load(int level,bool isHardMode) {
@@ -83,6 +83,7 @@ void Map::load(int level,bool isHardMode) {
             QPoint temp(rowArray_[0].toInt(),rowArray_[1].toInt());
             enemyPath.push_back(temp);
         }
+        enemyTotalNum = enemyTypes.size();
 
         //read obstacles
         QJsonArray obstacleArray =jsonObj["obstacles"].toArray();
