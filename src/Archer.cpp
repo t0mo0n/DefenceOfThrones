@@ -4,11 +4,11 @@ Archer::Archer(QPoint pos_)
     : TowerFrame(pos_, 1)
 {
     projectType = 0;
-    attackRange = 150;
-    attackSpeed = 800;
+    attackRange = 3*towerSize;
+    attackSpeed = 1500;
     buyCost = 1000;
     sellPrice = 900;
-    picDir = ":/img/asset/3.png";
+    picDir = ":/img/asset/1.png";
     towerType = 1;
 
     upgradeFee.push_back(1000);
@@ -71,8 +71,8 @@ void Archer::upgrade()
         return;
     }
     level++;
-    attackRange += 100;
-    attackSpeed += 100;
+    attackRange += 2*towerSize;
+    attackSpeed -= 500;
     projectType = 1;
     update();
 }

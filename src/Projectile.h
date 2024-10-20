@@ -10,6 +10,7 @@
 #include <QTimer>
 #include <QLine>
 #include <Enemy.h>
+#include <QElapsedTimer>
 
 class Projectile : public QObject, public QGraphicsItem
 {
@@ -28,6 +29,9 @@ public:
     void checkCollision();
     ~Projectile();
     Enemy *enemys;
+    virtual void pause();
+    virtual void resume();
+    QElapsedTimer*elapsedTimer;
 
 protected:
     int type;
@@ -39,6 +43,8 @@ protected:
     QPointF towerCor;
     qreal tattackRange;
     QTimer *moveTimer2;
+    qreal remainingTime1;
+    qreal remainingTime2;
 
 signals:
     void destroy();

@@ -10,6 +10,7 @@ class JohnSnow : public TowerFrame
     Q_OBJECT
 protected:
     int hurt;
+    int hurt2;
 
 public:
     explicit JohnSnow(QPoint pos_ = QPoint(0, 0));
