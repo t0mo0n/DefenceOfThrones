@@ -12,7 +12,9 @@ TowerSelectMenu::TowerSelectMenu(QPoint pressPos, int currentMoney, QGraphicsObj
     if (enough == 1)
     {
         connect(selectArcher, &Button::clicked, [=]()
-                { emit selectTowerType(pressPos, 1); });
+                { emit selectTowerType(pressPos, 1);
+            emit closeTowerSelectMenu();
+        });
     }
 
     StoneThrower stoneThrowerExample;
@@ -24,7 +26,7 @@ TowerSelectMenu::TowerSelectMenu(QPoint pressPos, int currentMoney, QGraphicsObj
     if (enough == 1)
     {
         connect(selectStoneThrower, &Button::clicked, [=]()
-                { emit selectTowerType(pressPos, 2); });
+                { emit selectTowerType(pressPos, 2);  emit closeTowerSelectMenu();});
     }
 
     JohnSnow johnSnowExample;
@@ -36,7 +38,7 @@ TowerSelectMenu::TowerSelectMenu(QPoint pressPos, int currentMoney, QGraphicsObj
     if (enough == 1)
     {
         connect(selectJohnSnow, &Button::clicked, [=]()
-                { emit selectTowerType(pressPos, 3); });
+                { emit selectTowerType(pressPos, 3);  emit closeTowerSelectMenu();});
     }
 
     Dragon dragonExample;
@@ -48,7 +50,7 @@ TowerSelectMenu::TowerSelectMenu(QPoint pressPos, int currentMoney, QGraphicsObj
     if (enough == 1)
     {
         connect(selectDragon, &Button::clicked, [=]()
-                { emit selectTowerType(pressPos, 4); });
+                { emit selectTowerType(pressPos, 4); emit closeTowerSelectMenu(); });
     }
     Button *deleteMenu = new Button("路径1", "路径2", 0, 0, 0, this);
     deleteMenu->setParentItem(this);

@@ -67,7 +67,7 @@ public slots:
     void updatePlayerLives(int lives);
     void onEnemyDead(int reward, Enemy* enemyToBedelete);
     void onEnemyArrive(int damage, Enemy* enemyToBedelete);
-    void onObstacleDestroyed(int reward);
+    void onObstacleDestroyed(int reward, Obstacle* toBeDelete);
     void onTowerCellClicked(QPoint clickPos );
 
 private:

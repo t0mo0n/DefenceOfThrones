@@ -7,28 +7,30 @@ GameScene::GameScene(int level, bool isHardMode, QGraphicsView *parent)
 {
     this->level = level;
     this->isHardMode = isHardMode;
-    // this->player = new Player(SHILLING, HEALTH);
     this->map = new Map();
-    pauseGameButton = new Button("路径1", "路径2", 1000, 700);
+    loadMap(level);
+    player = new Player(map->getPlayerMoney,map->getPlayerHealth());
+    pauseGameButton = new Button("路径1", "路径2", 1000, 700);//暂停按钮图片1为正常时，2为鼠标点击时
     scene = new QGraphicsScene(this);
     scene->addItem(pauseGameButton);
     pauseGameButton->setZValue(90);
+    connect(pauseGameButton,&Button::clicked,this,&GameScene::onPauseButtonClicked);
 
-    gameEndButton = new Button("路径1", "路径2", 1100, 700);
+    gameEndButton = new Button("路径1", "路径2", 1100, 700);//结束按钮图片
     scene->addItem(gameEndButton);
     gameEndButton->setZValue(90);
-
+    connect(gameEndButton,&Button::clicked,this,&GameScene::onGameEndButtonClicked);
     resumeGameButton = nullptr;
     pausedMenu = nullptr;
 
-    healthTextItem = new QGraphicsTextItem(QString("HEALTH: %1").arg(HEALTH));
+    healthTextItem = new QGraphicsTextItem(QString("HEALTH: %1").arg(map->getPlayerHealth()));
     scene->addItem(healthTextItem);
     healthTextItem->setPos(1000, 0);
     healthTextItem->setDefaultTextColor(Qt::red);
     healthTextItem->setZValue(90);
     connect(player, &Player::lifeChanged, this, &GameScene::updatePlayerLives);
 
-    moneyTextItem = new QGraphicsTextItem(QString("SHILLING: %1").arg(SHILLING));
+    moneyTextItem = new QGraphicsTextItem(QString("SHILLING: %1").arg(map->getPlayerMoney()));
     moneyTextItem->setPos(1000, 100);
     moneyTextItem->setDefaultTextColor(Qt::yellow);
     healthTextItem->setZValue(90);
@@ -51,11 +53,16 @@ GameScene::GameScene(int level, bool isHardMode, QGraphicsView *parent)
         enemyTimer->start(2000);
     }
 
-    connect(enemyTimer, &QTimer::timeout, [=]()
-            { addEnemy(); });
-    loadMap(level);
-}
+    connect(enemyTimer, &QTimer::timeout, [=](){
+        addEnemy();
+    });
 
+}
+void GameScene::onGameEndButtonClicked()
+{
+    emit gameEnd();
+    close();
+}
 void GameScene::onPauseButtonClicked()
 {
     pauseScene();
@@ -73,6 +80,7 @@ void GameScene::onPauseButtonClicked()
         resumeGameButton->setParentItem(pausedMenu);
         resumeGameButton->setZValue(101);
         scene->addItem(resumeGameButton);
+        connect(resumeGameButton,&Button::clicked,this,&GameScene::onResumeButtonClicked);
     }
 }
 
@@ -342,12 +350,16 @@ void GameScene::addObstacles()
         scene->addItem(obstacle);
         obstacle->setZValue(10);
         obstacles.append(obstacle);
-        connect(obstacle,&Obstacle::isDamaged,[=](int price){
-
-        });
+        connect(obstacle,&Obstacle::isDamaged,this,&GameScene::onObstacleDestroyed);
     }
 }
-
+void GameScene::onObstacleDestroyed(int reward,Obstacle* toBeDelete)
+{
+    player->earnMoney(reward);
+    scene->removeItem(toBeDelete);
+    obstacles.removeOne(toBeDelete);
+    delete toBeDelete;
+}
 void GameScene::updateScene()
 {
     scene->update();
@@ -442,7 +454,7 @@ void GameScene::loadMap(int level)
         {
             for (int j = 0; j < nx; j++)
             {
-                PathCell *pathCell = new PathCell(QPoint((startPoint.x() + j) * CELL_SIZE, startPoint.y() * CELL_SIZE));
+                PathCell *pathCell = new PathCell("普通道路方块",QPoint((startPoint.x() + j) * CELL_SIZE, startPoint.y() * CELL_SIZE));
                 scene->addItem(pathCell);
                 pathCell->setZValue(1);
             }
@@ -451,13 +463,16 @@ void GameScene::loadMap(int level)
         {
             for (int j = 0; j < ny; j++)
             {
-                PathCell *pathCell = new PathCell(QPoint(startPoint.x() * CELL_SIZE, (startPoint.y() + j) * CELL_SIZE));
+                PathCell *pathCell = new PathCell("普通道路方块",QPoint(startPoint.x() * CELL_SIZE, (startPoint.y() + j) * CELL_SIZE));
                 scene->addItem(pathCell);
                 pathCell->setZValue(1);
             }
         }
     }
-
+    QPoint playerPos = map->getPlayerPosition();
+    PathCell *endPlayer = new PathCell("终点玩家方块",QPoint(playerPos.x()*CELL_SIZE,playerPos.y()*CELL_SIZE));
+    scene->addItem(endPlayer);
+    endPlayer->setZValue(5);
     // todo
     // 背景怎么办
 }
