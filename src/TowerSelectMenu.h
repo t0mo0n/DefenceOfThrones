@@ -14,14 +14,19 @@
 #include <QBrush>
 #include "TowerFrame.h"
 #include "Button.h"
+#include "Archer.h"
+#include "StoneThrower.h"
+#include "JohnSnow.h"
+#include "Dragon.h"
 
 class TowerSelectMenu : public QGraphicsObject
 {
     Q_OBJECT
 public:
-    TowerSelectMenu(QPoint pressPos, QGraphicsObject *parent = nullptr);
+    TowerSelectMenu(QPoint pressPos, int currentMoney, QGraphicsObject *parent = nullptr);
     ~TowerSelectMenu() override;
 private:
+    int currentMoney;
     QPoint pressPos;
     Button *selectArcher;
     Button *selectStoneThrower;
@@ -33,7 +38,7 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 signals:
     void closeTowerSelectMenu();
-    void selectTowerType(int type);
+    void selectTowerType(QPoint cellPos,int type);
 };
 
 #endif // TOWERSELECTMENU_H

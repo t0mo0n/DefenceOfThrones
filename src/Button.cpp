@@ -2,8 +2,8 @@
 #include <QGraphicsSceneMouseEvent>
 #include "Button.h"
 
-Button::Button(QString UnHoverImagePath, QString HoverImagePath,int posX,int posY, QGraphicsObject *parent)
-    : QGraphicsObject(parent)
+Button::Button(QString UnHoverImagePath, QString HoverImagePath,int posX,int posY, int inTowerSelect,QGraphicsObject *parent)
+    : QGraphicsObject(parent), inTowerSelect(inTowerSelect)
 {
     this->UnHoverImagePath = UnHoverImagePath;
     this->HoverImagePath = HoverImagePath;
@@ -21,14 +21,26 @@ QRectF Button::boundingRect() const
 
 void Button::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    if(option->state & QStyle::State_MouseOver)
+    if(inTowerSelect ==0)
     {
-        painter->drawPixmap(0,0,HoverImage);
+        if(option->state & QStyle::State_MouseOver)
+        {
+            painter->drawPixmap(0,0,HoverImage);
+        }
+        else
+        {
+            painter->drawPixmap(0,0,UnHoverImage);
+        }
     }
-    else
+    else if(inTowerSelect == -1)
     {
         painter->drawPixmap(0,0,UnHoverImage);
     }
+    else if(inTowerSelect == 1)
+    {
+        painter->drawPixmap(0,0,HoverImage);
+    }
+
 }
 
 void Button::hoverEnterEvent(QGraphicsSceneHoverEvent *event)

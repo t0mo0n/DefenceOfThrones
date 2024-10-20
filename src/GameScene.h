@@ -32,8 +32,15 @@
 #include "Wilder.h"
 #include "TowerCell.h"
 #include "PathCell.h"
+#include "Archer.h"
+#include "StoneThrower.h"
+#include "JohnSnow.h"
+#include "Dragon.h"
 #define CELL_SIZE 80
-
+//关于Z值的描述 对于背景以及装饰品 0~ 9
+//敌人以及障碍物 10~19
+//塔 20~29
+//控制按钮以及页面 90~100
 class GameScene : public QGraphicsView
 {
     Q_OBJECT
@@ -49,18 +56,19 @@ public:
     void mousePressEvent(QMouseEvent *event) override;
     void closeEvent(QCloseEvent *event) override;
     void loadMap(int level);
-
+    void onTowerUpdated(int cost);
+    void onDeleteTowerButtonClicked(int cost);
+    //void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
 public slots:
     void onPauseButtonClicked();
     void onResumeButtonClicked();
     void onGameEndButtonClicked();
-    void onTowerSelectButtonClicked(int type);
-    void onTowerUpdated(int cost);
-    void onDeleteTowerButtonClicked(int cost);
+    void onTowerSelectButtonClicked(QPoint cellPos,int type);
     void updatePlayerLives(int lives);
     void onEnemyDead(int reward, Enemy* enemyToBedelete);
     void onEnemyArrive(int damage, Enemy* enemyToBedelete);
     void onObstacleDestroyed(int reward);
+    void onTowerCellClicked(QPoint clickPos );
 
 private:
     Player *player;
@@ -82,6 +90,7 @@ private:
 
 signals:
     void gameEnd();
+    void isEnough(bool state);
 };
 
 #endif // GAMESCENE_H
