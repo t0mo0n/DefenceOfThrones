@@ -23,7 +23,7 @@ public:
     ~Obstacle(){emit destory();}
 
 signals:
-    void isDamaged(int price);
+    void isDamaged(int price,Obstacle *toBeDelete);
     void destory();
 public slots:
     void receive(int damage_,int type);//可能有bug

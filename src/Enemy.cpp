@@ -6,7 +6,7 @@ Enemy::Enemy(const QVector<QPoint>& routine_, QGraphicsItem *parent)
     health(50), speed(3), damage(1), reward(100),routine(routine_)
 {
     // 加载图片
-    isFire=true;
+    isFire=false;
     fireCount=0;
 
     size=60;

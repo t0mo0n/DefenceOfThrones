@@ -68,7 +68,7 @@ void Obstacle::takeDamage(int damage_)
     if(health>0){
         health-=damage_;
         if(health<=0){
-            emit isDamaged(reward);
+            emit isDamaged(reward,this);
         }
     }
 }
