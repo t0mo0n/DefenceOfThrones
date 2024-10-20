@@ -18,12 +18,10 @@ SOURCES += \
     DragonFlame.cpp \
     FireArrow.cpp \
     JohnSnow.cpp \
-    LevelSelectMenu.cpp \
     MainMenu.cpp \
     Map.cpp \
     PathCell.cpp \
     Projectile.cpp \
-    SettingsMenu.cpp \
     Stone.cpp \
     StoneThrower.cpp \
     TowerCell.cpp \
@@ -43,8 +41,6 @@ SOURCES += \
     Player.cpp \
     Vesalion.cpp \
     Wilder.cpp \
-    main.cpp \
-    mainwindow.cpp \
     Deadalive.cpp \
 
 
@@ -56,12 +52,10 @@ HEADERS += \
     GameController.h \
     GameScene.h \
     JohnSnow.h \
-    LevelSelectMenu.h \
     MainMenu.h \
     Map.h \
     PathCell.h \
     Projectile.h \
-    SettingsMenu.h \
     Stone.h \
     StoneThrower.h \
     TowerCell.h \
