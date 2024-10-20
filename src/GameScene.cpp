@@ -131,13 +131,9 @@ void GameScene::onTowerSelectButtonClicked(QPoint cellPos, int type)
         //扣钱
         player->spendMoney(archer->getBuyCost());
         connect(archer,&Archer::towerUpdate,[=](int cost,Archer* toBeUpgrade){
-            if(cost > player->curMoney())
+            if(cost <= player->curMoney())
             {
-                toBeUpgrade->upgrade(false);
-            }
-            else
-            {
-                toBeUpgrade->upgrade(true);
+                toBeUpgrade->upgrade();
                 onTowerUpdated(cost);
             }
         });
@@ -158,13 +154,9 @@ void GameScene::onTowerSelectButtonClicked(QPoint cellPos, int type)
         stoneThrower->setZValue(20);
         player->spendMoney(stoneThrower->getBuyCost());
         connect(stoneThrower,&StoneThrower::towerUpdate,[=](int cost,StoneThrower* toBeUpgrade){
-            if(cost > player->curMoney())
+            if(cost <= player->curMoney())
             {
-                toBeUpgrade->upgrade(false);
-            }
-            else
-            {
-                toBeUpgrade->upgrade(true);
+                toBeUpgrade->upgrade();
                 onTowerUpdated(cost);
             }
         });
@@ -186,13 +178,9 @@ void GameScene::onTowerSelectButtonClicked(QPoint cellPos, int type)
         johnSnow->setZValue(20);
         player->spendMoney(johnSnow->getBuyCost());
         connect(johnSnow ,&JohnSnow::towerUpdate,[=](int cost,JohnSnow* toBeUpgrade){
-            if(cost > player->curMoney())
+            if(cost <= player->curMoney())
             {
-                toBeUpgrade->upgrade(false);
-            }
-            else
-            {
-                toBeUpgrade->upgrade(true);
+                toBeUpgrade->upgrade();
                 onTowerUpdated(cost);
             }
         });
@@ -212,13 +200,9 @@ void GameScene::onTowerSelectButtonClicked(QPoint cellPos, int type)
         dragon->setZValue(20);
         player->spendMoney(dragon->getBuyCost());
         connect(dragon,&Dragon::towerUpdate,[=](int cost,Dragon *toBeUpgrade){
-            if(cost > player->curMoney())
+            if(cost <= player->curMoney())
             {
-                toBeUpgrade->upgrade(false);
-            }
-            else
-            {
-                toBeUpgrade->upgrade(true);
+                toBeUpgrade->upgrade();
                 onTowerUpdated(cost);
             }
         });
