@@ -20,7 +20,8 @@ public:
     void load(int level,bool isHardMode);
     void refresh();
 
-    bool isPlacaAble(QPoint pos_){
+    bool isPlaceAble(QPoint pos_){
+        //TODO:
         if(map[pos_.x()][pos_.y()]=='1'){
             return true;
         }
@@ -42,9 +43,18 @@ public:
         }
         return enemyTypes[enemyNum];
     }
-
-
-    //TODO: obstacles
+    int getPlayerHealth(){
+        return playerHealth;
+    }
+    int getPlayerMoney(){
+        return playerMoney;
+    }
+    const QPoint& getPlayerPosition(){
+        return playerPosition;
+    }
+    const QVector<QPair<QPoint,int>>& getObsPosType(){
+        return obsPos;
+    }
 
 private:
 

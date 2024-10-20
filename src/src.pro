@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     Archer.cpp \
+    Button.cpp \
     Dragon.cpp \
     GameScene.cpp \
     DragonBall.cpp \
@@ -19,11 +20,15 @@ SOURCES += \
     LevelSelectMenu.cpp \
     MainMenu.cpp \
     Map.cpp \
+    PathCell.cpp \
     Projectile.cpp \
     SettingsMenu.cpp \
     Stone.cpp \
     StoneThrower.cpp \
+    TowerCell.cpp \
     TowerFrame.cpp \
+    TowerSelectMenu.cpp \
+    Wolf.cpp \
     main.cpp \
     GameController.cpp \
     Enemy.cpp \
@@ -44,6 +49,7 @@ SOURCES += \
 
 HEADERS += \
     Archer.h \
+    Button.h \
     Dragon.h \
     GameController.h \
     GameScene.h \
@@ -51,11 +57,15 @@ HEADERS += \
     LevelSelectMenu.h \
     MainMenu.h \
     Map.h \
+    PathCell.h \
     Projectile.h \
     SettingsMenu.h \
     Stone.h \
     StoneThrower.h \
+    TowerCell.h \
     TowerFrame.h \
+    TowerSelectMenu.h \
+    Wolf.h \
     Enemy.h \
     GreyjoySoldier.h \
     KingSlayer.h \

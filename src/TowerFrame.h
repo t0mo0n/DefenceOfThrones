@@ -13,7 +13,6 @@
 #include <QVector>
 #include <Enemy.h>
 
-
 class TowerFrame : public QObject, public QGraphicsItem
 {
 
