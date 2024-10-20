@@ -27,11 +27,11 @@ protected:
     int attackRange;
     int attackSpeed;
     int buyCost;
-    int sellPrice;
+    QVector<int> sellPrice;
     Enemy *target;
+    int upgradeFee;
 
     QString picDir;
-    QVector<int> upgradeFee;
     QVector<Projectile *> projectileList;
     QTimer *aimTimer;
     QTimer *attackTimer;
@@ -49,8 +49,8 @@ public:
     virtual void FindEnemy() = 0; // 跟踪并且瞄准敌人
 
     int getBuyCost() { return buyCost; };
-    int getSellPrice() { return sellPrice; };
-    int getUpdateCost() { return upgradeFee[level]; }; // 这里可能出问题，升级的坐标不能超过界限！！1-3级
+    int getSellPrice() { assert(1<=level&&level<=2&&!sellPrice.empty()); return sellPrice[level-1]; };
+    int getUpdateCost() { return upgradeFee; }; // 这里可能出问题，升级的坐标不能超过界限！！1-2级
     void setTarget(Enemy *target_out = nullptr);       // 仍有仅作测试的内容！！！！！！？？？？？
     void resetTarget();                                // 如果敌人死了，调用这个方法把这个防御塔的敌人置空；
 
@@ -69,8 +69,10 @@ public:
 signals:
     void destroy();
     void sell();
+    void towerUpdate(int cost);
 public slots:
     virtual void upgrade() = 0; // 升级植物,界面设计者要根据现有的钱和updatecost比较获得是否可行,别忘了扣钱
+    void isEnough(bool state);
 };
 
 #endif // TOWER_FRAME_H

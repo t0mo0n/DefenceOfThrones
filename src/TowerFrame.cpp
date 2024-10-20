@@ -56,7 +56,10 @@ void TowerFrame::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
         QMenu menu;
         QAction *action1 = menu.addAction("upgrade");
         QAction *action2 = menu.addAction("sell");
-        connect(action1, SIGNAL(triggered()), this, SLOT(upgrade()));
+        connect(action1, &QAction::triggered, this, [this](){
+            emit towerUpdate(getUpdateCost());
+
+        });
         connect(action2,&QAction:: triggered, this, [this](){
             emit sell();
         });
@@ -167,3 +170,14 @@ void TowerFrame::towerResume()
     }
 }
 
+void TowerFrame::isEnough(bool state)
+{
+    if(state)
+    {
+        upgrade();
+    }
+    else
+    {
+        qDebug()<<"lack of money";
+    }
+}

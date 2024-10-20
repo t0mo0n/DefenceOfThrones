@@ -6,14 +6,15 @@ StoneThrower::StoneThrower(QPoint pos_)
     projectType = 2;
     attackRange = 5*towerSize;
     attackSpeed = 3000;
-    buyCost = 1500;
-    sellPrice = 900;
+    buyCost = 350;
+    sellPrice .push_back( 220);
+    sellPrice .push_back( 450);
+
     picDir = ":/img/asset/GOT.jpg";
     towerType = 2;
 
-    upgradeFee.push_back(2000);
-    upgradeFee.push_back(3000);
-    upgradeFee.push_back(4000);
+    upgradeFee=420;
+
 
     attackTimer->start(attackSpeed); // 根据攻击速度设置定时器间隔
 }
