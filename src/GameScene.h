@@ -45,6 +45,11 @@ public:
     void onTowerUpdated(int cost);
     void onDeleteTowerButtonClicked(int cost);
     //void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
+    void drawBackground(QPainter *painter,const QRectF &rect) override{
+        QPixmap bgPix;
+        bgPix.load(":/img/asset/Wall.jpg");
+        painter->drawPixmap(0,0,this->width(),this->height(),bgPix);
+    };
 public slots:
     void onPauseButtonClicked();
     void onResumeButtonClicked();
