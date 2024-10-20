@@ -14,7 +14,7 @@ Dragon::Dragon(QPoint pos_)
 
     upgradeFee=800;
 
-    attackTimer->start(300); // 根据攻击速度设置定时器间隔
+    attackTimer->start(attackSpeed); // 根据攻击速度设置定时器间隔
 }
 
 void Dragon::attack()

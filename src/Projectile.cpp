@@ -27,7 +27,6 @@ void Projectile::setTarget(Enemy *target)
 
     if (target)
     {
-        qDebug()<<"目标是存在的";
         connect(target, &Enemy::destroy, this, [this]()
                 { emit outrange(); });
         connect(this, &Projectile::collision, target, &Enemy::receive);
