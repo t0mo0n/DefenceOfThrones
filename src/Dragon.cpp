@@ -76,7 +76,7 @@ void Dragon::attack()
                     {
                         connect(bullet, &Projectile::collision, target, &Enemy::receive);
                         bullet->setTarget(target);
-                        qDebug()<<"set target"<<target->pos();
+                        // qDebug()<<"set target"<<target->pos();
                     }
                     connect(bullet, &Projectile::outrange, this, [this, bullet]()
                             {
@@ -205,12 +205,15 @@ void Dragon::FindEnemy()
     {
         setTarget(enemyList.front());
     }
-    else if (enemyList.isEmpty())
+    else if (enemyList.isEmpty()&&ob!=nullptr)
+    {
+
+    setTarget(ob);
+
+    }
+    else
     {
         resetTarget();
-        if(ob)
-        {
-            setTarget(ob);
-        }
+
     }
 }
