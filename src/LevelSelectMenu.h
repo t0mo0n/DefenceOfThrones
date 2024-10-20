@@ -15,9 +15,9 @@ public:
     explicit LevelSelectMenu(int maxLevel_,QWidget *parent = nullptr);
     void paintEvent(QPaintEvent* event);
 signals:
-
+    void selectLevel();
 private:
-    QList<QPushButton*> buttons={new QPushButton{"LEVEL 1",this},
+    QList<QPushButton*> levelButtons={new QPushButton{"LEVEL 1",this},
                                 new QPushButton{"LEVEL 2",this},
                                 new QPushButton{"LEVEL 3",this}};
     int maxLevel=1;

@@ -7,8 +7,8 @@ LevelSelectMenu::LevelSelectMenu(int maxLevel_,QWidget *parent)
     this->setWindowTitle("Defense of Thrones");
 
     for (int var = 0; var < 3; ++var) {
-        buttons[var]->setGeometry(50+var*100,50,100,80);
-        buttons[var]->setStyleSheet(
+        levelButtons[var]->setGeometry(50+var*100,50,100,80);
+        levelButtons[var]->setStyleSheet(
             "QPushButton{"
             "border-image:url(:/img/asset/1.png);"
             "}"

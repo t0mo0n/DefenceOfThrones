@@ -11,19 +11,19 @@ void Map::load(int level,bool isHardMode) {
     refresh();
     QFile file("");
     if(level==1){
-        if(isHardMode){
+        if(!isHardMode){
             file.setFileName(":/img/levelData/levelOne.json");
         }else{
             file.setFileName(":/img/levelData/levelOneHard.json");
         }
     }else if(level==2){
-        if(isHardMode){
+        if(!isHardMode){
             file.setFileName(":/img/levelData/levelTwo.json");
         }else{
             file.setFileName(":/img/levelData/levelTwoHard.json");
         }
     }else if(level==3){
-        if(isHardMode){
+        if(!isHardMode){
             file.setFileName(":/img/levelData/levelThree.json");
         }else{
             file.setFileName(":/img/levelData/levelThreeHard.json");
@@ -65,12 +65,15 @@ void Map::load(int level,bool isHardMode) {
         QJsonArray playerPosition_ =playerObj["position"].toArray();
         playerPosition.setX(playerPosition_[0].toInt());
         playerPosition.setY(playerPosition_[1].toInt());
-        playerHealth=playerObj["Health"].toInt();
+        qDebug()<<playerPosition_[0].toInt()<<playerPosition_[1].toInt();
+        playerHealth=playerObj["health"].toInt();
         playerMoney=playerObj["money"].toInt();
+
 
         //read enemy
         QJsonObject enemyObj =jsonObj["enemies"].toObject();
         QJsonArray spawnPoints_ =enemyObj["spawnPoints"].toArray();
+        qDebug()<<spawnPoints_[0].toInt()<<spawnPoints_[1].toInt();
         spawnPoints.setX(spawnPoints_[0].toInt());
         spawnPoints.setY(spawnPoints_[1].toInt());
         QJsonArray types_=enemyObj["types"].toArray();
@@ -82,6 +85,7 @@ void Map::load(int level,bool isHardMode) {
             QJsonArray rowArray_ =row.toArray();
             QPoint temp(rowArray_[0].toInt(),rowArray_[1].toInt());
             enemyPath.push_back(temp);
+            qDebug()<<temp;
         }
 
         //read obstacles

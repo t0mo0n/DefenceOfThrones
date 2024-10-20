@@ -10,6 +10,11 @@
         <file>asset/mainMenuBackground.png</file>
         <file>asset/otherMenu.jpg</file>
         <file>levelData/levelOne.json</file>
+        <file>asset/mainMenuBackground.jpg</file>
+        <file>asset/shield.png</file>
+        <file>asset/sword.png</file>
+        <file>asset/badge.png</file>
+        <file>asset/button3.png</file>
     </qresource>
     <qresource prefix="/sound">
         <file>music/The_Rains_of_Castamere.mp3</file>

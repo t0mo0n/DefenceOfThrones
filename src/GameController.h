@@ -44,6 +44,8 @@ private slots:
     void startHardMode(bool hardmode);
     void changeGameBgm(int bgm);
 
+signals://By TrroJay
+    void emitMaxLevel(int maxLevel_);
 
 };
 #endif // GAMECONTROLLER_H
