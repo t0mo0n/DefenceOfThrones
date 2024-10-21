@@ -20,6 +20,20 @@
         <file>asset/chap2-winterfell.jpg</file>
         <file>asset/chap3-kingslanding.jpg</file>
         <file>asset/Wall.jpg</file>
+        <file>asset/ArcherButton_1.png</file>
+        <file>asset/ArcherButton_2.png</file>
+        <file>asset/close_1.png</file>
+        <file>asset/close_2.png</file>
+        <file>asset/dragonButton.png</file>
+        <file>asset/dragonButton_2.png</file>
+        <file>asset/JohnSnowButton.png</file>
+        <file>asset/JohnSnowButton_2.png</file>
+        <file>asset/resume_1.png</file>
+        <file>asset/resume_2.png</file>
+        <file>asset/stoneButton.png</file>
+        <file>asset/stoneButton_2.png</file>
+        <file>asset/stop_1.png</file>
+        <file>asset/stop_2.png</file>
     </qresource>
     <qresource prefix="/sound">
         <file>music/The_Rains_of_Castamere.mp3</file>

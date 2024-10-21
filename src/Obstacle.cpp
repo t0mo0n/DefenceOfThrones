@@ -59,8 +59,8 @@ Obstacle::Obstacle(int type_,QPoint init_pos, QGraphicsItem *parent ):Enemy(QVec
         qDebug() << "Failed to load enemy image from" << path;
     }
 
-    reward=10;
-    health=10;
+    // reward=10;
+    // health=10;
 }
 
 void Obstacle::takeDamage(int damage_)

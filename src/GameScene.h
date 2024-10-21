@@ -34,17 +34,6 @@ class GameScene : public QGraphicsView
 
 public:
     GameScene(int level, bool isHardMode, QGraphicsView *parent = nullptr);
-    ~GameScene()
-    {
-        delete player;
-        delete map;
-        delete pauseGameButton;
-        delete gameEndButton;
-        delete background;
-        delete scene;
-        delete updateTimer;
-        delete enemyTimer;
-    };
     void addTower(TowerFrame * tower);
     void addEnemy();
     void addObstacles();
