@@ -55,7 +55,8 @@ GameScene::GameScene(int level, bool isHardMode, QGraphicsView *parent)
     connect(player, &Player::lifeChanged, this, &GameScene::updatePlayerLives);
 
     moneyTextItem = new QGraphicsTextItem(QString("SHILLING: %1").arg(map->getPlayerMoney()));
-    moneyTextItem->setPos(1000, 100);
+    scene->addItem(moneyTextItem);
+    moneyTextItem->setPos(500, 0);
     moneyTextItem->setDefaultTextColor(Qt::yellow);
     healthTextItem->setZValue(90);
     connect(player, &Player::moneyChanged, this, [=](int newAmount)
@@ -84,10 +85,24 @@ GameScene::GameScene(int level, bool isHardMode, QGraphicsView *parent)
         addEnemy();
     });
 
+
+    // if(level ==1)
+    // {
+    //     background = new BackGround(":/img/asset/chap1-wall.jpg");
+    // }
+    // else if(level ==2)
+    // {
+    //     background = new BackGround(":/img/asset/chap2-winterfell.jpg");
+    // }
+    // else
+    // {
+    //     background = new BackGround(":/img/asset/chap3-kingslanding.jpg");
+    // }
+    // scene->addItem(background);
+    // background->setZValue(0);
 }
 void GameScene::onGameEndButtonClicked()
 {
-    emit gameEnd();
     close();
 }
 void GameScene::onPauseButtonClicked()
@@ -98,7 +113,7 @@ void GameScene::onPauseButtonClicked()
         pausedMenu = new QGraphicsRectItem(QRectF(scene->sceneRect()));
         pausedMenu->setBrush(QBrush(QColor(255, 255, 255, 128)));
         pausedMenu->setZValue(100);
-
+        pausedMenu->setFlag(QGraphicsItem::ItemIsSelectable,true);
         // bug code:
         // QGraphicsBlurEffect *pauseMenuEffect = new QGraphicsBlurEffect();
         // pauseMenuEffect->setBlurRadius(100);
@@ -156,6 +171,7 @@ void GameScene::onTowerSelectButtonClicked(QPoint cellPos, int type)
     {
         Archer *archer = new Archer(cellPos);
         scene->addItem(archer);
+        archer->setFlag(QGraphicsItem::ItemIsSelectable,true);
         towers.append(archer);
         archer->setZValue(20);
         //扣钱
@@ -180,6 +196,7 @@ void GameScene::onTowerSelectButtonClicked(QPoint cellPos, int type)
     {
         StoneThrower *stoneThrower = new StoneThrower(cellPos);
         scene->addItem(stoneThrower);
+        stoneThrower->setFlag(QGraphicsItem::ItemIsSelectable,true);
         towers.append(stoneThrower);
         stoneThrower->setZValue(20);
         player->spendMoney(stoneThrower->getBuyCost());
@@ -204,6 +221,7 @@ void GameScene::onTowerSelectButtonClicked(QPoint cellPos, int type)
     {
         JohnSnow *johnSnow = new JohnSnow(cellPos);
         scene->addItem(johnSnow);
+        johnSnow->setFlag(QGraphicsItem::ItemIsSelectable,true);
         towers.append(johnSnow);
         johnSnow->setZValue(20);
         player->spendMoney(johnSnow->getBuyCost());
@@ -226,6 +244,7 @@ void GameScene::onTowerSelectButtonClicked(QPoint cellPos, int type)
     {
         Dragon *dragon = new Dragon(cellPos);
         scene->addItem(dragon);
+        dragon->setFlag(QGraphicsItem::ItemIsSelectable,true);
         towers.append(dragon);
         dragon->setZValue(20);
         player->spendMoney(dragon->getBuyCost());
@@ -435,17 +454,22 @@ void GameScene::resumeScene()
 void GameScene::onTowerCellClicked(QPoint clickPos)
 {
     pauseScene();
-    towerSelectMenu = new TowerSelectMenu(clickPos, player->curMoney());
-    scene->addItem(towerSelectMenu);
-    towerSelectMenu->setZValue(95);
-    towerSelectMenu->setVisible(true); // 确保可见
-    scene->update(); // 确保场景更新
-    connect(towerSelectMenu, &TowerSelectMenu::selectTowerType, this, &GameScene::onTowerSelectButtonClicked);
-    connect(towerSelectMenu, &TowerSelectMenu::closeTowerSelectMenu, [=]()
-            {
-                resumeScene();
-                scene->removeItem(towerSelectMenu);
-                delete towerSelectMenu; });
+    if(!towerSelectMenu)
+    {
+        towerSelectMenu = new TowerSelectMenu(clickPos, player->curMoney());
+        scene->addItem(towerSelectMenu);
+        towerSelectMenu->setZValue(95);
+        towerSelectMenu->setVisible(true); // 确保可见
+        scene->update(); // 确保场景更新
+        connect(towerSelectMenu, &TowerSelectMenu::selectTowerType, this, &GameScene::onTowerSelectButtonClicked);
+        connect(towerSelectMenu, &TowerSelectMenu::closeTowerSelectMenu, [=]()
+                {
+                    resumeScene();
+                    scene->removeItem(towerSelectMenu);
+                    delete towerSelectMenu;
+                    towerSelectMenu=nullptr;        });
+    }
+
 }
 
 void GameScene::closeEvent(QCloseEvent *event)
@@ -507,6 +531,8 @@ void GameScene::closeEvent(QCloseEvent *event)
     endPlayer->setZValue(5);
     // todo
     // 背景怎么办
+
+
 }
 
 // void GameScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)

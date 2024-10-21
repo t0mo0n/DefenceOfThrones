@@ -19,6 +19,7 @@
 #include "TowerFrame.h" //但文档里好像说是"Tower.h"
 #include "Map.h"
 #include "Obstacle.h"
+#include "BackGround.h"
 #include "TowerSelectMenu.h"
 #include "Button.h"
 
@@ -90,6 +91,8 @@ private:
     QGraphicsRectItem *pausedMenu;
     int level;
     bool isHardMode;
+    bool win_signal1 = false;
+    bool win_signal2 = false;
 
     int ecount = 0;
 

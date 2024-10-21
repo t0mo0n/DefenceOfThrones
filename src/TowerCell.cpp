@@ -19,7 +19,11 @@ void TowerCell::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
 
 void TowerCell::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    emit clicked(cellPos);
-    event->accept();
+    if(event->button()==Qt::LeftButton)
+    {
+        emit clicked(cellPos);
+        event->accept();
+    }
+
 }
 
