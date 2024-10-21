@@ -20,9 +20,9 @@
 GameScene::GameScene(int level, bool isHardMode, QGraphicsView *parent)
     : QGraphicsView(parent)
 {
-    this->setWindowIcon(QIcon(":/img/asset/GOT.jpg"));
+    this->setWindowIcon(QIcon(":/img/asset/btnPause.jpeg"));
     this->setFixedSize(1200,800);
-    this->setWindowTitle("Let's Play!");
+    this->setWindowTitle("Let's Play");
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->level = level;
@@ -30,17 +30,16 @@ GameScene::GameScene(int level, bool isHardMode, QGraphicsView *parent)
     this->map = new Map();
     scene = new QGraphicsScene(0,0,1200,800,this);
     this->setScene(scene);
-    // this->fitInView(scene->sceneRect(),Qt::KeepAspectRatio);
     this->setGeometry(0,0,1200,800);
     loadMap(level);
     player = new Player(map->getPlayerMoney(),map->getPlayerHealth());
     connect(player,&Player::gameOver,this,&GameScene::gameEnd);
-    pauseGameButton = new Button(":/img/asset/button.png", ":/img/asset/button2.png", 1000, 700);//暂停按钮图片1为正常时，2为鼠标点击时
+    pauseGameButton = new Button(":/img/asset/stop_1.png", ":/img/asset/stop_2.png", 1000, 700);//暂停按钮图片1为正常时，2为鼠标点击时
     scene->addItem(pauseGameButton);
     pauseGameButton->setZValue(90);
     connect(pauseGameButton,&Button::clicked,this,&GameScene::onPauseButtonClicked);
 
-    gameEndButton = new Button(":/img/asset/button1.png", ":/img/asset/button2.png", 1100, 700);//结束按钮图片
+    gameEndButton = new Button(":/img/asset/btnEnd.jpeg", ":/img/asset/btnEndLight.jpeg", 1100, 700);//结束按钮图片
     scene->addItem(gameEndButton);
     gameEndButton->setZValue(90);
     connect(gameEndButton,&Button::clicked,this,&GameScene::onGameEndButtonClicked);
@@ -120,7 +119,7 @@ void GameScene::onPauseButtonClicked()
         // pausedMenu->setGraphicsEffect(pauseMenuEffect);
 
         scene->addItem(pausedMenu);
-        resumeGameButton = new Button(":/img/asset/1.png", ":/img/asset/1.png", 550, 350);
+        resumeGameButton = new Button(":/img/asset/resume_1.png", ":/img/asset/resume_2.png", 550, 350);
         resumeGameButton->setParentItem(pausedMenu);
         resumeGameButton->setZValue(101);
         scene->addItem(resumeGameButton);
@@ -153,14 +152,21 @@ void GameScene::onEnemyDead(int reward, Enemy *enemyToBeDelete)
     scene->removeItem(enemyToBeDelete);
     enemies.removeOne(enemyToBeDelete);
     delete enemyToBeDelete;
+    if (win_signal && enemies.isEmpty()) {
+        emit gameWin(level);
+    }
 }
 
 void GameScene::onEnemyArrive(int damage, Enemy *enemyToBeDelete)
 {
-    player->loseLife(damage);
     scene->removeItem(enemyToBeDelete);
     enemies.removeOne(enemyToBeDelete);
     delete enemyToBeDelete;
+    if(win_signal && enemies.isEmpty()){
+        emit gameWin(level);
+    } else{
+        player->loseLife(damage);
+    }
 }
 
 void GameScene::onTowerSelectButtonClicked(QPoint cellPos, int type)
@@ -179,8 +185,11 @@ void GameScene::onTowerSelectButtonClicked(QPoint cellPos, int type)
         connect(archer,&Archer::towerUpdate,this,[=](int cost,TowerFrame* toBeUpgrade){
             if(cost <= player->curMoney())
             {
-                toBeUpgrade->upgrade();
-                onTowerUpdated(cost);
+                if(toBeUpgrade->level<2)
+                {
+                    toBeUpgrade->upgrade();
+                    onTowerUpdated(cost);
+                }
             }
         });
         connect(archer, &Archer::sell,[=](TowerFrame* towerToBeDelete){
@@ -203,8 +212,11 @@ void GameScene::onTowerSelectButtonClicked(QPoint cellPos, int type)
         connect(stoneThrower,&StoneThrower::towerUpdate,[=](int cost,TowerFrame* toBeUpgrade){
             if(cost <= player->curMoney())
             {
-                toBeUpgrade->upgrade();
-                onTowerUpdated(cost);
+                if(toBeUpgrade->level<2)
+                {
+                    toBeUpgrade->upgrade();
+                    onTowerUpdated(cost);
+                }
             }
         });
 
@@ -228,8 +240,11 @@ void GameScene::onTowerSelectButtonClicked(QPoint cellPos, int type)
         connect(johnSnow ,&JohnSnow::towerUpdate,this,[=](int cost,TowerFrame* toBeUpgrade){
             if(cost <= player->curMoney())
             {
-                toBeUpgrade->upgrade();
-                onTowerUpdated(cost);
+                if(toBeUpgrade->level<2)
+                {
+                    toBeUpgrade->upgrade();
+                    onTowerUpdated(cost);
+                }
             }
         });
         connect(johnSnow, &JohnSnow::sell,[=](TowerFrame* towerToBeDelete){
@@ -251,8 +266,12 @@ void GameScene::onTowerSelectButtonClicked(QPoint cellPos, int type)
         connect(dragon,&Dragon::towerUpdate,[=](int cost,TowerFrame* toBeUpgrade){
             if(cost <= player->curMoney())
             {
-                toBeUpgrade->upgrade();
-                onTowerUpdated(cost);
+                if(toBeUpgrade->level<2)
+                {
+                    toBeUpgrade->upgrade();
+                    onTowerUpdated(cost);
+                }
+
             }
         });
         connect(dragon, &Dragon::sell,[=](TowerFrame* towerToBeDelete){
@@ -276,6 +295,24 @@ void GameScene::onTowerSelectButtonClicked(QPoint cellPos, int type)
 void GameScene::onTowerUpdated(int cost)
 {
     player->spendMoney(cost);
+}
+
+void GameScene::drawBackground(QPainter *painter, const QRectF &rect)
+{
+    QPixmap bgPix;
+    switch (level){
+    case 1:
+        bgPix.load(":/img/asset/chap1-wall.jpg");
+        break;
+    case 2:
+        bgPix.load(":/img/asset/chap2-winterfell.jpg");
+        break;
+    case 3:
+        bgPix.load(":/img/asset/chap3-kingslanding.jpg");
+        break;
+    }
+
+    painter->drawPixmap(0,0,this->width(),this->height(),bgPix);
 }
 void GameScene::addTower(TowerFrame *tower)
 {
@@ -375,6 +412,7 @@ void GameScene::addEnemy()
         // todo
         //-1时敌人传输完成
         enemyTimer->stop();
+        win_signal = true;
         break;
     }
     if(enemyType!=0&&enemyType!=-1)
@@ -393,6 +431,7 @@ void GameScene::addObstacles()
         QPoint toScenePos((obsPos[i].first.x()-1) * CELL_SIZE, (obsPos[i].first.y()-1) * CELL_SIZE);
         // todo加上price和health
         Obstacle *obstacle = new Obstacle(obsPos[i].second, toScenePos);
+        obstacle->setFlag(QGraphicsItem::ItemIsSelectable,true);
         scene->addItem(obstacle);
         obstacle->setZValue(10);
         obstacles.append(obstacle);
@@ -504,13 +543,15 @@ void GameScene::closeEvent(QCloseEvent *event)
         QPoint endPoint = pathPos[i + 1];
         int dx = endPoint.x() - startPoint.x();
         int dy = endPoint.y() - startPoint.y();
+        qDebug()<<startPoint<<" "<<endPoint;
+        qDebug()<<dx<<" "<<dy;
         int nx = (dx > 0) ? dx : (-dx);
         int ny = (dy > 0) ? dy : (-dy);
         if (dx != 0)
         {
             for (int j = 0; j < nx; j++)
             {
-                PathCell *pathCell = new PathCell("普通道路方块",QPoint((startPoint.x() + j) * CELL_SIZE, startPoint.y() * CELL_SIZE));
+                PathCell *pathCell = new PathCell(":/img/asset/road.jpg",QPoint((startPoint.x() + j*(nx/dx)-1) * CELL_SIZE, (startPoint.y()-1) * CELL_SIZE));
                 scene->addItem(pathCell);
                 pathCell->setZValue(1);
             }
@@ -519,7 +560,7 @@ void GameScene::closeEvent(QCloseEvent *event)
         {
             for (int j = 0; j < ny; j++)
             {
-                PathCell *pathCell = new PathCell("普通道路方块",QPoint(startPoint.x() * CELL_SIZE, (startPoint.y() + j) * CELL_SIZE));
+                PathCell *pathCell = new PathCell(":/img/asset/road.jpg",QPoint((startPoint.x()-1) * CELL_SIZE, (startPoint.y() + j*(dy/ny)-1) * CELL_SIZE));
                 scene->addItem(pathCell);
                 pathCell->setZValue(1);
             }
@@ -529,8 +570,6 @@ void GameScene::closeEvent(QCloseEvent *event)
     PathCell *endPlayer = new PathCell("终点玩家方块",QPoint(playerPos.x()*CELL_SIZE,playerPos.y()*CELL_SIZE));
     scene->addItem(endPlayer);
     endPlayer->setZValue(5);
-    // todo
-    // 背景怎么办
 
 
 }

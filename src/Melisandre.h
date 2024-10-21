@@ -9,6 +9,7 @@ private:
 public:
     Melisandre(const QVector<QPoint>& routine_, QGraphicsItem *parent = nullptr);
     void takeDamage(int damage_) override;
+    void move() override;
 };
 
 #endif // MELISANDRE_H

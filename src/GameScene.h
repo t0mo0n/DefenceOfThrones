@@ -19,7 +19,6 @@
 #include "TowerFrame.h" //但文档里好像说是"Tower.h"
 #include "Map.h"
 #include "Obstacle.h"
-#include "BackGround.h"
 #include "TowerSelectMenu.h"
 #include "Button.h"
 
@@ -46,11 +45,7 @@ public:
     void onTowerUpdated(int cost);
     void onDeleteTowerButtonClicked(int cost);
     //void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
-    void drawBackground(QPainter *painter,const QRectF &rect) override{
-        QPixmap bgPix;
-        bgPix.load(":/img/asset/Wall.jpg");
-        painter->drawPixmap(0,0,this->width(),this->height(),bgPix);
-    };
+    void drawBackground(QPainter *painter,const QRectF &rect) override;
     ~GameScene()
     {
         delete player;
@@ -91,14 +86,14 @@ private:
     QGraphicsRectItem *pausedMenu;
     int level;
     bool isHardMode;
-    bool win_signal1 = false;
-    bool win_signal2 = false;
+    bool win_signal = false;
 
     int ecount = 0;
 
 signals:
     void gameEnd();
     void isEnough(bool state);
+    void gameWin(int thisLevel);
 };
 
 #endif // GAMESCENE_H

@@ -4,7 +4,7 @@
 DragonFlame::DragonFlame(QPointF pos,QPointF Tower_c,qreal attack_range)
     :Projectile(pos,Tower_c,attack_range)
 {
-    src=":/img/asset/GOT.jpg";
+    src=":/img/asset/Flame.png";
     type=5;
     damage=80;
     w_=100;
@@ -16,7 +16,7 @@ DragonFlame::DragonFlame(QPointF pos,QPointF Tower_c,qreal attack_range)
     connect(flameTimer, &QTimer::timeout, this, &DragonFlame::detect);
     flameTimer->start(10);
     connect(die, &QTimer::timeout, this, [this](){emit outrange();});
-    die->start(300);
+    die->start(500);
     setTarget();//不要接collision，换成detect，并且已经链接，不用移动，不用检测碰撞，敌人是null所以消亡信号不接
     setTransformOriginPoint(QPointF(0,0));
 
@@ -32,6 +32,7 @@ void DragonFlame:: paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     if(painter)
     {
         painter->drawPixmap(QRect(-w_/2,0,w_,h_),QPixmap(src)); // 绘制激光
+
     }
 
 

@@ -10,7 +10,6 @@ CONFIG += c++17
 
 SOURCES += \
     Archer.cpp \
-    BackGround.cpp \
     Button.cpp \
     Dragon.cpp \
     GameScene.cpp \
@@ -46,7 +45,6 @@ SOURCES += \
 
 HEADERS += \
     Archer.h \
-    BackGround.h \
     Button.h \
     Dragon.h \
     DragonBall.h \

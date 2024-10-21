@@ -30,7 +30,8 @@ GameController::GameController(QObject *parent)
 
             maxLevel = jsonObj["maxLevel"].toInt();
             hardMode = jsonObj["hardMode"].toBool();
-            volumnLevel = jsonObj["volumnLevel"].toInt();
+            volumnLevel = jsonObj["volumnLevel"].toDouble();
+            qDebug()<<volumnLevel;
             gameBgm = jsonObj["gameBgm"].toInt();
 
             archiveFile.close();
@@ -44,7 +45,7 @@ GameController::GameController(QObject *parent)
 
             jsonObj["maxLevel"] = 1;
             jsonObj["hardMode"] = false;
-            jsonObj["volumnLevel"] = 50;
+            jsonObj["volumnLevel"] = 0.5;
             jsonObj["gameBgm"] = 1;
 
             QJsonDocument jsonDoc(jsonObj);
@@ -54,7 +55,7 @@ GameController::GameController(QObject *parent)
 
             maxLevel = 1;
             hardMode = false;
-            volumnLevel = 50;
+            volumnLevel = 0.5;
             gameBgm = 1;
         } else {
             qWarning() << "无法创建文件";
@@ -69,7 +70,8 @@ GameController::GameController(QObject *parent)
 
     connect(mainMenu_,&MainMenu::startNewGame,this,&GameController::startGame);
     connect(mainMenu_,&MainMenu::exitGame,this,&GameController::exitGame);
-    connect(mainMenu_,&MainMenu::openSettingMenu,this,&GameController::showSettingMenu);
+    connect(mainMenu_,&MainMenu::volumeChanged,this,&GameController::changeVolumn);
+    connect(mainMenu_,&MainMenu::gameBgmChanged,this,&GameController::changeGameBgm);
     connect(mainMenu_,&MainMenu::openLevelMenu,this,&GameController::showLevelSelectMenu);
 
     // 根据gameBgm的数值来生成对应的游戏背景音乐
@@ -131,11 +133,7 @@ void GameController::exitGame()
     QCoreApplication::quit();
 }
 
-void GameController::showSettingMenu()
-{
-    connect(mainMenu_,&MainMenu::volumeChanged,this,&GameController::changeVolumn);
-    connect(mainMenu_,&MainMenu::gameBgmChanged,this,&GameController::changeGameBgm);
-}
+
 
 void GameController::showLevelSelectMenu()
 {
@@ -186,7 +184,24 @@ void GameController::changeGameBgm(int bgm)
         break;
     }
     bgmPlayer->setLoops(-1);
+
+    if(bgmPlayer==nullptr){
+        qDebug()<<"not play";
+    }
     bgmPlayer->play();
+}
+
+void GameController::nextChap(int prevLevel)
+{
+    if (prevLevel == 3){
+        endGame();
+    } else{
+        delete gameScene_;
+        gameScene_ = nullptr;
+        currentLevel = prevLevel+1;
+        maxLevel = currentLevel;
+        startGame();
+    }
 }
 
 

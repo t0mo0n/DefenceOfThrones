@@ -3,7 +3,7 @@
 TowerCell::TowerCell(QPoint cellPos, QGraphicsObject* parent )
     :QGraphicsObject(parent)
 {
-    cellPixmap.load(":/img/asset/badge.png");
+    cellPixmap.load(":/img/asset/setTower.png");
     this->cellPos = cellPos;
 }
 

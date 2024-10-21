@@ -3,18 +3,28 @@
 
 Enemy::Enemy(const QVector<QPoint>& routine_, QGraphicsItem *parent)
     : QGraphicsObject(parent), isEnterBase(false), index(1),
-    health(50), speed(200), damage(1), reward(100)
+    health(50), speed(100), damage(1), reward(100)
 {
+    //斩击效果
+    isSlash=false;
+    slashTimer=new QTimer(this);
+    connect(slashTimer, &QTimer::timeout, this, &Enemy::onSlashTimeout);
+
+    slashPath=":/img/asset/shield.png";
+    if (!slashPix.load(slashPath)) {
+        qDebug() << "Failed to load slash image from" << slashPath;
+    }
+    //others
     for (int var = 0; var < routine_.size(); ++var) {
         routine<<QPoint((routine_[var].x()-1)*80+10,(routine_[var].y()-1)*80+10);
     }
-
+    // routine=routine_;
     // 加载图片
     isFire=false;
     fireCount=0;
 
     size=60;
-    path =":/img/asset/GOT.jpg"; // 假设图片路径
+    path =":/img/asset/Deadalive.png"; // default图片路径
     if (!enemyPix.load(path)) {
         qDebug() << "Failed to load enemy image from" << path;
     }
@@ -65,21 +75,17 @@ void Enemy::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
 {
     Q_UNUSED(option);
     Q_UNUSED(widget);
-    if(isFire){
 
-        // qDebug()<<fireCount;
-        if(fireCount<500){
-            fireCount++;
-            if(fireCount%50==0){
-                health--;
-            }
-        }else{
-            isFire=false;
-            fireCount=0;
-        }
-    }
+    // qDebug()<<boundingRect();
 
     painter->drawPixmap(boundingRect(), enemyPix,enemyPix.rect()); // 绘制敌人图像
+
+    if (isSlash) {
+        // painter->drawPixmap(boundingRect(), slashPix, slashPix.rect()); // 绘制斜线图像
+
+        painter->drawPixmap(20,20,20,20,slashPix);
+
+    }
 }
 
 
@@ -133,10 +139,28 @@ void Enemy::move()
         }
     }
 
+    if(isFire){
+        if(fireCount<500){
+            fireCount++;
+            if(fireCount%50==0){
+                health--;
+                if (health <= 0) {
+                    health = 0;
+                    moveTimer->stop();
+                    emit isDead(reward,this); // 发出死亡信号
+                    return;
+                }
+            }
+        }else{
+            isFire=false;
+            fireCount=0;
+        }
+    }
+
     if (index >= routine.size()&&stepCount>step-1 ) {
         isEnterBase = true;
         emit isArrived(damage,this); // 发出进入基地的信号
-
+        return ;
     }else{
         this->setPos(pos0); // 更新 QGraphicsItem 的位置
         // 更新图形项的位置
@@ -149,12 +173,12 @@ void Enemy::move()
 
 void Enemy::takeDamage(int damage_)
 {
-    if(enemyType==1)damage+=5;
+    if(enemyType==1)damage_+=5;
     health -= damage_;
     if (health <= 0) {
         health = 0;
-        emit isDead(reward,this); // 发出死亡信号
         moveTimer->stop();
+        emit isDead(reward,this); // 发出死亡信号
     }
 }
 
@@ -189,6 +213,14 @@ void Enemy::updateHealthDisplay() {
 }
 
 void Enemy::receiveSnow(int damage_){
+    if (!isSlash) {
+        isSlash = true;
+        slashTimer->start(1000); // 启动定时器，1秒后触发超时
+    }
     takeDamage(damage_);
     qDebug()<<"jinijin"<<pos0;
+}
+
+void Enemy::onSlashTimeout() {
+    isSlash = false;
 }

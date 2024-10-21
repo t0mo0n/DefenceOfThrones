@@ -17,11 +17,11 @@ Obstacle::Obstacle(int type_,QPoint init_pos, QGraphicsItem *parent ):Enemy(QVec
     if(type==0){
         health=50;
         reward=180;
-        path = ":/img/asset/GOT.jpg"; // 假设图片路径
+        path = ":/img/asset/obstacleStone.png"; // 假设图片路径
     }else if(type==1){
         health=80;
         reward=300;
-        path = ":/img/asset/GOT.jpg"; // 假设图片路径
+        path = ":/img/asset/obstacleTree.png"; // 假设图片路径
     }else if(type==2){
         health=160;
         reward=420;

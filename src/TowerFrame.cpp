@@ -88,7 +88,6 @@ void TowerFrame::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 void TowerFrame::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     // 处理鼠标按下事件
-    qDebug() << "Item clicked!";
     if (QRectF(0, 0, towerSize, towerSize).contains(event->pos()))
     {
         QGraphicsItem::mousePressEvent(event); // 确保调用基类实现
@@ -151,7 +150,6 @@ QList<QGraphicsItem *> TowerFrame::checkForItemsInBoundingRect()
 
 void TowerFrame::towerPause()
 {
-    qDebug()<<"hh111";
     if (aimTimer->isActive()) {
         aimTimer->stop();
     }
@@ -169,7 +167,6 @@ void TowerFrame::towerPause()
 
 void TowerFrame::towerResume()
 {
-    qDebug()<<"hhhhhhh";
     if (!aimTimer->isActive()) {
         aimTimer->start(10);
     }

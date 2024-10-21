@@ -2,7 +2,7 @@
 
 DeadAlive::DeadAlive(const QVector<QPoint>& routine_, QGraphicsItem *parent ):Enemy(routine_,parent)
 {
-    path = ":/img/asset/GOT.jpg"; // 假设图片路径
+    path = ":/img/asset/Deadalive.png"; // 假设图片路径
     if (!enemyPix.load(path)) {
         qDebug() << "Failed to load enemy image from" << path;
     }

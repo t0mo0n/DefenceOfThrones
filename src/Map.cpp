@@ -12,21 +12,21 @@ void Map::load(int level,bool isHardMode) {
     QFile file("");
     if(level==1){
         if(!isHardMode){
-            file.setFileName(":/img/levelData/levelOne.json");
+            file.setFileName(":/data/levelData/levelOne.json");
         }else{
-            file.setFileName(":/img/levelData/levelOneHard.json");
+            file.setFileName(":/data/levelData/levelOneHard.json");
         }
     }else if(level==2){
         if(!isHardMode){
-            file.setFileName(":/img/levelData/levelTwo.json");
+            file.setFileName(":/data/levelData/levelTwo.json");
         }else{
-            file.setFileName(":/img/levelData/levelTwoHard.json");
+            file.setFileName(":/data/levelData/levelTwoHard.json");
         }
     }else if(level==3){
         if(!isHardMode){
-            file.setFileName(":/img/levelData/levelThree.json");
+            file.setFileName(":/data/levelData/levelThree.json");
         }else{
-            file.setFileName(":/img/levelData/levelThreeHard.json");
+            file.setFileName(":/data/levelData/levelThreeHard.json");
         }
     }
 

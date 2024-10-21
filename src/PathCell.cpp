@@ -7,7 +7,6 @@ PathCell::PathCell(QString pixMapPath,QPoint cellPos, QGraphicsObject* parent )
     this->cellPixmap = pixMapPath;
     cellPixmap.load(pixMapPath);
 
-
 }
 
 QRectF PathCell::boundingRect() const
@@ -17,5 +16,5 @@ QRectF PathCell::boundingRect() const
 
 void PathCell::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
-    painter->drawPixmap(0,0,cellPixmap);
+    painter->drawPixmap(boundingRect(),cellPixmap,cellPixmap.rect());
 }

@@ -10,7 +10,7 @@ JohnSnow::JohnSnow(QPoint pos_)
     buyCost = 280;
     sellPrice .push_back( 200);
     sellPrice .push_back( 420);
-    picDir = ":/img/asset/1.png";
+    picDir = ":/img/asset/JohnSnow.png";
     towerType = 3;
     hurt = 25;
     hurt2=35;
@@ -131,6 +131,8 @@ void JohnSnow::attack()
                 if (bullet)
                 {
                     projectileList.push_back(bullet);
+
+                        bullet->setDire0();
 
                     connect(bullet, &Projectile::outrange, this, [this, bullet]()
                             {
