@@ -45,16 +45,15 @@ Enemy::Enemy(const QVector<QPoint>& routine_, QGraphicsItem *parent)
         moveTimer = new QTimer(this);
         connect(moveTimer, &QTimer::timeout, this, &Enemy::move);
         moveTimer->start(1000 / speed);
+        healthDisplay = new QGraphicsTextItem(this);
+        healthDisplay->setParentItem(this);
+        healthDisplay->setPlainText(QString::number(health));
+        healthDisplay->setDefaultTextColor(Qt::red);
+        healthDisplay->setFont(QFont("Arial", 12));
+        healthDisplay->setPos(size/2-healthDisplay->boundingRect().width()/2,-50+healthDisplay->boundingRect().height());  // 设置在敌人图片上方居中显示
     }
 
     this->setPos(pos0);
-
-    healthDisplay = new QGraphicsTextItem(this);
-    healthDisplay->setParentItem(this);
-    healthDisplay->setPlainText(QString::number(health));
-    healthDisplay->setDefaultTextColor(Qt::red);
-    healthDisplay->setFont(QFont("Arial", 12));
-    healthDisplay->setPos(size/2-healthDisplay->boundingRect().width()/2,-50+healthDisplay->boundingRect().height());  // 设置在敌人图片上方居中显示
 }
 
 QRectF Enemy::boundingRect() const
