@@ -34,6 +34,7 @@ GameScene::GameScene(int level, bool isHardMode, QGraphicsView *parent)
     this->setGeometry(0,0,1200,800);
     loadMap(level);
     player = new Player(map->getPlayerMoney(),map->getPlayerHealth());
+    connect(player,&Player::gameOver,this,&GameScene::gameEnd);
     pauseGameButton = new Button(":/img/asset/button.png", ":/img/asset/button2.png", 1000, 700);//暂停按钮图片1为正常时，2为鼠标点击时
     scene->addItem(pauseGameButton);
     pauseGameButton->setZValue(90);
@@ -62,11 +63,11 @@ GameScene::GameScene(int level, bool isHardMode, QGraphicsView *parent)
 
     towerSelectMenu = nullptr;
 
-    QTimer *updateTimer = new QTimer(this);
+    updateTimer = new QTimer(this);
     updateTimer->start(50);
     connect(updateTimer, &QTimer::timeout, this, &GameScene::updateScene);
 
-    QTimer *enemyTimer = new QTimer(this);
+    enemyTimer = new QTimer(this);
     if (isHardMode)
     {
         enemyTimer->start(1500);
@@ -98,11 +99,13 @@ void GameScene::onPauseButtonClicked()
         pausedMenu->setBrush(QBrush(QColor(255, 255, 255, 128)));
         pausedMenu->setZValue(100);
 
-        QGraphicsBlurEffect *pauseMenuEffect = new QGraphicsBlurEffect();
-        pauseMenuEffect->setBlurRadius(100);
-        pausedMenu->setGraphicsEffect(pauseMenuEffect);
+        // bug code:
+        // QGraphicsBlurEffect *pauseMenuEffect = new QGraphicsBlurEffect();
+        // pauseMenuEffect->setBlurRadius(100);
+        // pausedMenu->setGraphicsEffect(pauseMenuEffect);
+
         scene->addItem(pausedMenu);
-        resumeGameButton = new Button("路径1", "路径2", 550, 350);
+        resumeGameButton = new Button(":/img/asset/1.png", ":/img/asset/1.png", 550, 350);
         resumeGameButton->setParentItem(pausedMenu);
         resumeGameButton->setZValue(101);
         scene->addItem(resumeGameButton);
@@ -117,8 +120,9 @@ void GameScene::onResumeButtonClicked()
     {
         scene->removeItem(pausedMenu);
         scene->removeItem(resumeGameButton);
-        delete pausedMenu;
+
         delete resumeGameButton;
+        delete pausedMenu;
         pausedMenu = nullptr;
         resumeGameButton = nullptr;
     }
@@ -351,6 +355,7 @@ void GameScene::addEnemy()
     default:
         // todo
         //-1时敌人传输完成
+        enemyTimer->stop();
         break;
     }
     if(enemyType!=0&&enemyType!=-1)
@@ -389,6 +394,8 @@ void GameScene::updateScene()
 
 void GameScene::pauseScene()
 {
+
+    enemyTimer->stop();
     for (Enemy *i : enemies)
     {
         i->enemyPause();
@@ -400,6 +407,7 @@ void GameScene::pauseScene()
 }
 void GameScene::resumeScene()
 {
+    enemyTimer->start();
     for (Enemy *i : enemies)
     {
         i->enemyResume();

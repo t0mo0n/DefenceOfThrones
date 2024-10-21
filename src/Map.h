@@ -37,6 +37,7 @@ public:
         enemyNum++;
         if(enemyNum>=enemyTotalNum){
             qDebug()<<"get too much enemy";
+
         }
         return enemyTypes[enemyNum];
     }

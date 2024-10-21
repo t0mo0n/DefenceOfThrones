@@ -50,6 +50,17 @@ public:
         bgPix.load(":/img/asset/Wall.jpg");
         painter->drawPixmap(0,0,this->width(),this->height(),bgPix);
     };
+    ~GameScene()
+    {
+        delete player;
+        delete map;
+        delete pauseGameButton;
+        delete gameEndButton;
+        // delete background;
+        delete scene;
+        delete updateTimer;
+        delete enemyTimer;
+    };
 public slots:
     void onPauseButtonClicked();
     void onResumeButtonClicked();
@@ -67,7 +78,8 @@ private:
     Button *pauseGameButton;
     Button *resumeGameButton;
     Button *gameEndButton;
-
+    QTimer *updateTimer;
+    QTimer *enemyTimer;
     QGraphicsScene *scene;
     QGraphicsTextItem *healthTextItem;
     QGraphicsTextItem *moneyTextItem;

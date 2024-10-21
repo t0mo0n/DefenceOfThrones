@@ -19,6 +19,7 @@ Projectile::Projectile(QPointF pos, QPointF Tower_c, qreal attack_range)
     tattackRange = attack_range;
     type = 0;
     damage = 10;
+    setZValue(10);
 }
 qreal Projectile::pix_size = 10;
 void Projectile::setTarget(Enemy *target)
@@ -114,12 +115,10 @@ Projectile::~Projectile()
 }
 void Projectile:: pause() {
     if (moveTimer->isActive()) {
-        remainingTime1 = moveTimer->interval() - elapsedTimer->elapsed();
         moveTimer->stop();
     }
 
     if (moveTimer2->isActive()) {
-        remainingTime2 = moveTimer2->interval() - elapsedTimer->elapsed();
         moveTimer2->stop();
     }
 }
@@ -127,12 +126,10 @@ void Projectile:: pause() {
 // 恢复两个计时器
 void Projectile:: resume() {
     if (!moveTimer->isActive()) {
-        moveTimer->start(remainingTime1);
-        elapsedTimer->restart();
+        moveTimer->start(70); // 每调用一次move()
+
     }
 
     if (!moveTimer2->isActive()) {
-        moveTimer2->start(remainingTime2);
-        elapsedTimer->restart();
-    }
+        moveTimer2->start(10);    }
 }

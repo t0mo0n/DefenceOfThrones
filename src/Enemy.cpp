@@ -3,17 +3,18 @@
 
 Enemy::Enemy(const QVector<QPoint>& routine_, QGraphicsItem *parent)
     : QGraphicsObject(parent), isEnterBase(false), index(1),
-    health(50), speed(3), damage(1), reward(100)
+    health(50), speed(200), damage(1), reward(100)
 {
     for (int var = 0; var < routine_.size(); ++var) {
-        routine<<QPoint(routine_[var].x()*80,routine_[var].y()*80);
+        routine<<QPoint((routine_[var].x()-1)*80+10,(routine_[var].y()-1)*80+10);
     }
+
     // 加载图片
     isFire=false;
     fireCount=0;
 
     size=60;
-    path = ":/img/asset/GOT.jpg"; // 假设图片路径
+    path =":/img/asset/GOT.jpg"; // 假设图片路径
     if (!enemyPix.load(path)) {
         qDebug() << "Failed to load enemy image from" << path;
     }
@@ -21,8 +22,6 @@ Enemy::Enemy(const QVector<QPoint>& routine_, QGraphicsItem *parent)
     // 起点
     if (!routine.isEmpty()) {
         pos0 = routine[0];
-        qDebug()<<pos0;
-        qDebug()<<"1";
     }
     //行走的方向和次数
     stepCount=0;
@@ -33,7 +32,7 @@ Enemy::Enemy(const QVector<QPoint>& routine_, QGraphicsItem *parent)
             }else{
                 direct=2;//下
             }
-            step=(routine[1].y()-routine[0].y())/10;
+            step=abs(routine[1].y()-routine[0].y())/STEP;
 
         }else if(routine[0].y()==routine[1].y()){
             if(routine[0].x()>routine[1].x()){
@@ -41,24 +40,26 @@ Enemy::Enemy(const QVector<QPoint>& routine_, QGraphicsItem *parent)
             }else{
                 direct=4;//右
             }
-            step=(routine[1].x()-routine[0].x())/10;
+            step=abs(routine[1].x()-routine[0].x())/STEP;
         }
         moveTimer = new QTimer(this);
         connect(moveTimer, &QTimer::timeout, this, &Enemy::move);
         moveTimer->start(1000 / speed);
     }
 
+    this->setPos(pos0);
+
     healthDisplay = new QGraphicsTextItem(this);
     healthDisplay->setParentItem(this);
     healthDisplay->setPlainText(QString::number(health));
     healthDisplay->setDefaultTextColor(Qt::red);
     healthDisplay->setFont(QFont("Arial", 12));
-    healthDisplay->setPos(pos0.x()+20,pos0.y() -20);  // 设置在敌人图片上方居中显示
+    healthDisplay->setPos(size/2-healthDisplay->boundingRect().width()/2,-50+healthDisplay->boundingRect().height());  // 设置在敌人图片上方居中显示
 }
 
 QRectF Enemy::boundingRect() const
 {
-    return QRectF(pos0.x(), pos0.y(), size, size); // 返回一个包含敌人图像的矩形
+    return QRectF(0, 0, size, size); // 返回一个包含敌人图像的矩形
 }
 
 void Enemy::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -66,9 +67,13 @@ void Enemy::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
     Q_UNUSED(option);
     Q_UNUSED(widget);
     if(isFire){
-        if(fireCount<10){
+
+        // qDebug()<<fireCount;
+        if(fireCount<500){
             fireCount++;
-            health--;
+            if(fireCount%50==0){
+                health--;
+            }
         }else{
             isFire=false;
             fireCount=0;
@@ -89,16 +94,16 @@ void Enemy::move()
     stepCount++;
     switch (direct){
     case 1:
-        pos0.setY(pos0.y()-10);
+        pos0.setY(pos0.y()-STEP);
         break;
     case 2:
-        pos0.setY(pos0.y()+10);
+        pos0.setY(pos0.y()+STEP);
         break;
     case 3:
-        pos0.setX(pos0.x()-10);
+        pos0.setX(pos0.x()-STEP);
         break;
     case 4:
-        pos0.setX(pos0.x()+10);
+        pos0.setX(pos0.x()+STEP);
         break;
     default:
         break;
@@ -106,7 +111,7 @@ void Enemy::move()
 
     if(stepCount>=step){
         index++;
-        if(index>routine.size()){
+        if(index>=routine.size()){
             isEnterBase=true;
             emit isArrived(damage,this);
             return;
@@ -118,14 +123,14 @@ void Enemy::move()
             }else{
                 direct=2;//下
             }
-            step=(routine[index].y()-routine[index-1].y())/10;
+            step=abs(routine[index].y()-routine[index-1].y())/STEP;
         }else{
             if(routine[index-1].x()>routine[index].x()){
                 direct=3;//左
             }else{
                 direct=4;//右
             }
-            step=(routine[index].x()-routine[index-1].x())/10;
+            step=abs(routine[index].x()-routine[index-1].x())/STEP;
         }
     }
 
@@ -134,15 +139,14 @@ void Enemy::move()
         emit isArrived(damage,this); // 发出进入基地的信号
 
     }else{
-        // 更新图形项的位置
-        healthDisplay->setPos(pos0.x() + (size / 2) -(healthDisplay->boundingRect().width() / 2),
-                              pos0.y() - healthDisplay->boundingRect().height());
-        updateHealthDisplay();
         this->setPos(pos0); // 更新 QGraphicsItem 的位置
+        // 更新图形项的位置
+        healthDisplay->setPos(size / 2 - healthDisplay->boundingRect().width() / 2,
+                              -50+healthDisplay->boundingRect().height());
+        updateHealthDisplay();
     }
-
-    qDebug()<<pos0;
 }
+
 
 void Enemy::takeDamage(int damage_)
 {
@@ -185,4 +189,5 @@ void Enemy::updateHealthDisplay() {
 
 void Enemy::receiveSnow(int damage_){
     takeDamage(damage_);
+    qDebug()<<"jinijin"<<pos0;
 }

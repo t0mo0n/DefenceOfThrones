@@ -1,5 +1,7 @@
 #include "TowerFrame.h"
 //子弹在发射之后马上把塔删掉，会导致子弹没有归属
+int TowerFrame::buyCost=0;
+
 TowerFrame::TowerFrame(QPoint pos_, int type)
 {
     if (type == 0)
@@ -143,12 +145,11 @@ QList<QGraphicsItem *> TowerFrame::checkForItemsInBoundingRect()
 
 void TowerFrame::towerPause()
 {
+    qDebug()<<"hh111";
     if (aimTimer->isActive()) {
-        remainingTime1 = aimTimer->interval() - elapsedTimer->elapsed();
         aimTimer->stop();
     }
     if (attackTimer->isActive()) {
-        remainingTime2 = attackTimer->interval() - elapsedTimer->elapsed();
         attackTimer->stop();
     }
     for (auto bullet :projectileList)
@@ -162,14 +163,13 @@ void TowerFrame::towerPause()
 
 void TowerFrame::towerResume()
 {
+    qDebug()<<"hhhhhhh";
     if (!aimTimer->isActive()) {
-        aimTimer->start(remainingTime1);
-        elapsedTimer->restart();
+        aimTimer->start(10);
     }
 
     if (!attackTimer->isActive()) {
-        attackTimer->start(remainingTime2);
-        elapsedTimer->restart();
+        attackTimer->start(attackSpeed);
     }
     for (auto bullet :projectileList)
     {
