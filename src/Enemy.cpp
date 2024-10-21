@@ -160,7 +160,7 @@ void Enemy::takeDamage(int damage_)
 
 
 void Enemy::receive(int damage_,int type){
-    takeDamage(damage_);
+
     switch (type) {
     case 1:
         isFire=true;
@@ -180,6 +180,8 @@ void Enemy::receive(int damage_,int type){
     default:
         break;
     }
+    qDebug() << "hurted"<<health;
+    takeDamage(damage_);
 }
 
 void Enemy::updateHealthDisplay() {

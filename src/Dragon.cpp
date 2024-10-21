@@ -169,7 +169,17 @@ void Dragon::FindEnemy()
         towerAngle = angle;
 
         // 设置塔的旋转（如果需要旋转显示）
-        setRotation(angle * 180.0 / M_PI); // 将弧度转换为度
+        qreal targetAngle= (angle * 180.0) / M_PI; // 将弧度转换为度
+
+        // 获取当前角度
+        qreal currentAngle = rotation();
+
+        // 插值计算，控制转动的速度。0.1 表示转动速度，可以根据需要调整这个系数
+        qreal rotationSpeed = 0.08;
+        qreal newAngle = currentAngle + rotationSpeed * (targetAngle - currentAngle);
+
+        // 设置新的旋转角度
+        setRotation(newAngle);
     }
     QList<QGraphicsItem *> itemsInBoundingRect = checkForItemsInBoundingRect();
     Enemy*ob=nullptr;

@@ -30,6 +30,7 @@ void Projectile::setTarget(Enemy *target)
     {
         connect(target, &Enemy::destroy, this, [this]()
                 { emit outrange(); });
+        qDebug()<<"bound"<<target->pos();
         connect(this, &Projectile::collision, target, &Enemy::receive);
     }
 }
@@ -97,10 +98,10 @@ void Projectile::checkCollision()
 {
     if (this->collidesWithItem(enemys))
     {
+
         emit collision(damage, type);
         emit outrange();
         // int enemy_type=enemys->getEnemyType();
-        /*这里还有一个条件判断是不是异鬼*/
         qDebug() << "碰到敌人";
     }
 }
