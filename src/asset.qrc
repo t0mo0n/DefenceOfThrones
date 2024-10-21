@@ -3,44 +3,54 @@
         <file>asset/1.png</file>
         <file>asset/2.png</file>
         <file>asset/3.png</file>
+        <file>asset/Archer2.png</file>
+        <file>asset/ArcherButton_1.png</file>
+        <file>asset/ArcherButton_2.png</file>
+        <file>asset/Dragon.png</file>
+        <file>asset/FireArrow.png</file>
+        <file>asset/FireBall.png</file>
+        <file>asset/Flame.png</file>
         <file>asset/GOT.jpg</file>
+        <file>asset/JohnSnow.png</file>
+        <file>asset/JohnSnowButton.png</file>
+        <file>asset/JohnSnowButton_2.png</file>
+        <file>asset/Stone.png</file>
+        <file>asset/StoneThrower.png</file>
+        <file>asset/Wall.jpg</file>
+        <file>asset/Wolf.png</file>
+        <file>asset/badge.png</file>
         <file>asset/button.png</file>
         <file>asset/button1.png</file>
         <file>asset/button2.png</file>
-        <file>asset/mainMenuBackground.png</file>
-        <file>asset/otherMenu.jpg</file>
-        <file>levelData/levelOne.json</file>
-        <file>asset/mainMenuBackground.jpg</file>
-        <file>asset/shield.png</file>
-        <file>asset/sword.png</file>
-        <file>asset/badge.png</file>
         <file>asset/button3.png</file>
-        <file>font/Game of Thrones.ttf</file>
         <file>asset/chap1-wall.jpg</file>
         <file>asset/chap2-winterfell.jpg</file>
         <file>asset/chap3-kingslanding.jpg</file>
-        <file>asset/Wall.jpg</file>
-        <file>asset/ArcherButton_1.png</file>
-        <file>asset/ArcherButton_2.png</file>
         <file>asset/close_1.png</file>
         <file>asset/close_2.png</file>
         <file>asset/dragonButton.png</file>
         <file>asset/dragonButton_2.png</file>
-        <file>asset/JohnSnowButton.png</file>
-        <file>asset/JohnSnowButton_2.png</file>
+        <file>asset/mainMenuBackground.jpg</file>
+        <file>asset/mainMenuBackground.png</file>
+        <file>asset/otherMenu.jpg</file>
         <file>asset/resume_1.png</file>
         <file>asset/resume_2.png</file>
+        <file>asset/shield.png</file>
         <file>asset/stoneButton.png</file>
         <file>asset/stoneButton_2.png</file>
         <file>asset/stop_1.png</file>
         <file>asset/stop_2.png</file>
+        <file>asset/sword.png</file>
+        <file>font/Game of Thrones.ttf</file>
+        <file>levelData/levelOne.json</file>
+        <file>asset/Arrow.png</file>
     </qresource>
     <qresource prefix="/sound">
-        <file>music/The_Rains_of_Castamere.mp3</file>
+        <file>music/Jenny_of_Oldstones_.mp3</file>
         <file>music/Light_of_Nibel_-_Ori_and_the_Blind_Forest.mp3</file>
         <file>music/Light_of_the_Seven_-_Ramin_Djawadi_Complete_Transcription.mp3</file>
         <file>music/The_Night_King_-_Ramin_Djawadi.mp3</file>
-        <file>music/Jenny_of_Oldstones_.mp3</file>
+        <file>music/The_Rains_of_Castamere.mp3</file>
     </qresource>
     <qresource prefix="/font">
         <file>font/Argor Got Scaqh.ttf</file>

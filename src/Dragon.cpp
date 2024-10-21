@@ -9,9 +9,8 @@ Dragon::Dragon(QPoint pos_)
     buyCost = 500;
     sellPrice .push_back( 250);
     sellPrice .push_back( 600);
-    picDir = ":/img/asset/GOT.jpg";
+    picDir = ":/img/asset/Dragon.png";
     towerType = 4;
-
     upgradeFee=1100;
 
     attackTimer->start(attackSpeed); // 根据攻击速度设置定时器间隔
@@ -56,8 +55,13 @@ void Dragon::attack()
 
             for (auto bullet : smallBullet)
             {
-                if(target)
+                if(target&&bullet)
                 {
+                    if(bullet)
+                    {
+                        bullet->setDire0();
+                    }
+
                     if(target->isEnemy())
                     {
                         if (enemyNum >= 2)
@@ -184,46 +188,50 @@ void Dragon::FindEnemy()
     QList<QGraphicsItem *> itemsInBoundingRect = checkForItemsInBoundingRect();
     Enemy*ob=nullptr;
 
-    if (!itemsInBoundingRect.isEmpty())
+    if(!target)
     {
-        for (auto *item : itemsInBoundingRect)
+        if (!itemsInBoundingRect.isEmpty())
         {
-            Enemy *enemy_p = dynamic_cast<Enemy *>(item);
-            if (enemy_p != nullptr)
+            for (auto *item : itemsInBoundingRect)
             {
-                if(enemy_p->isEnemy()==true)
+                Enemy *enemy_p = dynamic_cast<Enemy *>(item);
+                if (enemy_p != nullptr)
                 {
-                    qreal distance = QLineF(enemy_p->pos(), this->pos()).length();
-                    if (distance <= attackRange+25)
+                    if(enemy_p->isEnemy()==true)
                     {
-                        connect(enemy_p, &Enemy::destroy, this, [this, enemy_p]()
-                                {
-                                    enemyList.removeOne(enemy_p);/*敌人类中是否会自己调用removescene？？*/ });
-                        enemyList.push_back(enemy_p);
+                        qreal distance = QLineF(enemy_p->pos(), this->pos()).length();
+                        if (distance <= attackRange+25)
+                        {
+                            connect(enemy_p, &Enemy::destroy, this, [this, enemy_p]()
+                                    {
+                                        enemyList.removeOne(enemy_p);/*敌人类中是否会自己调用removescene？？*/ });
+                            enemyList.push_back(enemy_p);
+                        }
+                    }
+                    else
+                    {
+                        ob=enemy_p;
+
                     }
                 }
-                else
-                {
-                    ob=enemy_p;
 
-                }
             }
+        }
+        if (!enemyList.isEmpty())
+        {
+            setTarget(enemyList.front());
+        }
+        else if (enemyList.isEmpty()&&ob!=nullptr)
+        {
+
+            setTarget(ob);
+
+        }
+        else
+        {
+            resetTarget();
 
         }
     }
-    if (!enemyList.isEmpty())
-    {
-        setTarget(enemyList.front());
-    }
-    else if (enemyList.isEmpty()&&ob!=nullptr)
-    {
 
-    setTarget(ob);
-
-    }
-    else
-    {
-        resetTarget();
-
-    }
 }

@@ -74,6 +74,7 @@ void Obstacle::takeDamage(int damage_)
         health-=damage_;
         healthDisplay->setPlainText(QString::number(health));
         if(health<=0){
+            health=0;
             emit isDamaged(reward,this);
         }
     }

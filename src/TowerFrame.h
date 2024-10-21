@@ -22,7 +22,6 @@ class TowerFrame : public QObject, public QGraphicsItem
 protected:
     int projectType; // 投掷物的种类
     int towerType;   // 防御塔的种类
-    int level;       // 防御塔现在的等级
 
     int attackRange;
     int attackSpeed;
@@ -47,6 +46,8 @@ public:
     virtual void attack() = 0;
     static int towerSize;
     virtual void FindEnemy() = 0; // 跟踪并且瞄准敌人
+    int level;       // 防御塔现在的等级
+
 
     static int getBuyCost() { return buyCost; };
     int getSellPrice() { assert(1<=level&&level<=2&&!sellPrice.empty()); return sellPrice[level-1]; };

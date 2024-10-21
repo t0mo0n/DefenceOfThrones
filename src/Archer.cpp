@@ -9,7 +9,7 @@ Archer::Archer(QPoint pos_)
     buyCost = 200;
     sellPrice .push_back( 100);
     sellPrice.push_back(250);
-    picDir = ":/img/asset/1.png";
+    picDir = ":/img/asset/Archer2.png";
     towerType = 1;
 
     upgradeFee=250;
@@ -23,6 +23,7 @@ void Archer::attack()
     {
         if (this->collidesWithItem(target))
         {
+
 
             // 获取塔的位置
             QPointF towerPos = this->pos();
@@ -45,6 +46,8 @@ void Archer::attack()
             if (bullet)
             {
                 projectileList.push_back(bullet);
+
+                bullet->setDire0();
 
                 connect(bullet, &Projectile::outrange, this, [this, bullet]()
                         {

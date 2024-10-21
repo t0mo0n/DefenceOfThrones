@@ -72,6 +72,7 @@ void Enemy::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
             fireCount++;
             if(fireCount%50==0){
                 health--;
+
             }
         }else{
             isFire=false;
@@ -153,8 +154,12 @@ void Enemy::takeDamage(int damage_)
     health -= damage_;
     if (health <= 0) {
         health = 0;
+        if(moveTimer)
+        {
+            moveTimer->stop();
+        }
         emit isDead(reward,this); // 发出死亡信号
-        moveTimer->stop();
+
     }
 }
 
@@ -180,7 +185,6 @@ void Enemy::receive(int damage_,int type){
     default:
         break;
     }
-    qDebug() << "hurted"<<health;
     takeDamage(damage_);
 }
 
@@ -190,5 +194,4 @@ void Enemy::updateHealthDisplay() {
 
 void Enemy::receiveSnow(int damage_){
     takeDamage(damage_);
-    qDebug()<<"jinijin"<<pos0;
 }

@@ -10,7 +10,7 @@ StoneThrower::StoneThrower(QPoint pos_)
     sellPrice .push_back( 220);
     sellPrice .push_back( 450);
 
-    picDir = ":/img/asset/GOT.jpg";
+    picDir = ":/img/asset/StoneThrower.png";
     towerType = 2;
 
     upgradeFee=420;
@@ -26,8 +26,8 @@ void StoneThrower::attack()
     {
         if (target)
         {
-            if (this->collidesWithItem(target))
-            {
+            // if (this->collidesWithItem(target))
+            // {
 
                 // 获取塔的位置
                 QPointF towerPos = this->pos();
@@ -44,6 +44,8 @@ void StoneThrower::attack()
                 if (bullet)
                 {
                     projectileList.push_back(bullet);
+                    bullet->setDire0();
+
                     connect(bullet, &Projectile::collision, target, &Enemy::receive);
 
                     connect(bullet, &Projectile::outrange, this, [this, bullet]()
@@ -54,12 +56,12 @@ void StoneThrower::attack()
                     bullet->setTarget(target);
                     scene()->addItem(bullet);
                 }
-            }
-            else
-            {
+            // }
+            // else
+            // {
 
-                resetTarget();
-            }
+            //     resetTarget();
+            // }
         }
     }
     else
@@ -103,6 +105,11 @@ void StoneThrower::attack()
             int count = 0;
             for (auto bullet : smallBullet)
             {
+
+                if(bullet)
+                {
+                    bullet->setDire0();
+                }
                 if(target->isEnemy()==true)
                 {
                     if (enemyNum >= 3)
@@ -173,6 +180,7 @@ void StoneThrower::FindEnemy()
 {
     if (target != nullptr)
     {
+        qDebug()<<target->pos();
         // 获取塔的位置
         QPointF towerPos = this->pos();
         // 获取目标的位置
@@ -198,53 +206,60 @@ void StoneThrower::FindEnemy()
     QList<QGraphicsItem *> itemsInBoundingRect = checkForItemsInBoundingRect();
     if (level == 1)
     {
-        if (!itemsInBoundingRect.isEmpty())
+        if(!target)
         {
-            Enemy *ob=nullptr;
-            Enemy *min_item = nullptr;
-            qreal min_distance = attackRange;
-            for (auto *item : itemsInBoundingRect)
+            if (!itemsInBoundingRect.isEmpty())
             {
-                Enemy *enemy_p = dynamic_cast<Enemy *>(item);
-                if (enemy_p == nullptr || std::find(enemyList.begin(), enemyList.end(), enemy_p) != enemyList.end())
+                Enemy *ob=nullptr;
+                Enemy *min_item = nullptr;
+                qreal min_distance = attackRange;
+                for (auto *item : itemsInBoundingRect)
                 {
-                    continue;
-                }
-                if(enemy_p!=nullptr)
-                {
-                    if(enemy_p->isEnemy()==true)
+                    Enemy *enemy_p = dynamic_cast<Enemy *>(item);
+                    if (enemy_p == nullptr || std::find(enemyList.begin(), enemyList.end(), enemy_p) != enemyList.end())
                     {
-                        qreal distance = QLineF(enemy_p->pos(), this->pos()).length();
-                        if (distance < min_distance)
+                        continue;
+                    }
+                    if(enemy_p!=nullptr)
+                    {
+                        if(enemy_p->isEnemy()==true)
                         {
-                            min_item = enemy_p;
+                            qreal distance = QLineF(enemy_p->pos(), this->pos()).length();
+                            if (distance < min_distance)
+                            {
+                                min_item = enemy_p;
+                            }
+                        }
+                        else
+                        {
+                            ob=enemy_p;
                         }
                     }
-                    else
-                    {
-                        ob=enemy_p;
-                    }
+
+                }
+                if (min_item)
+                {
+                    // qDebug()<<"find_enemy";
+                    setTarget(min_item);
                 }
 
-            }
-            if (min_item)
-            {
-                setTarget(min_item);
-            }
+                else if(min_item==nullptr&&ob!=nullptr)
+                {
+                    // qDebug()<<"ob"<<ob->pos();
 
-            else if(min_item==nullptr&&ob!=nullptr)
-            {
-                setTarget(ob);
+                    setTarget(ob);
+                }
+                else
+                {
+                    resetTarget();
+                }
             }
             else
             {
                 resetTarget();
             }
         }
-        else
-        {
-            resetTarget();
-        }
+
     }
     else
     {
