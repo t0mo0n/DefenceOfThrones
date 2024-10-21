@@ -4,7 +4,7 @@ Dragon::Dragon(QPoint pos_)
     : TowerFrame(pos_, 2)
 {
     projectType = 4;
-    attackRange = 4*towerSize;
+    attackRange = 2*towerSize;
     attackSpeed = 4500;
     buyCost = 500;
     sellPrice .push_back( 250);
@@ -12,7 +12,7 @@ Dragon::Dragon(QPoint pos_)
     picDir = ":/img/asset/GOT.jpg";
     towerType = 4;
 
-    upgradeFee=800;
+    upgradeFee=1100;
 
     attackTimer->start(attackSpeed); // 根据攻击速度设置定时器间隔
 }
@@ -148,7 +148,7 @@ void Dragon::upgrade()
         return;
     }
     level++;
-    attackRange = 6*towerSize;
+    attackRange = 3*towerSize;
     attackSpeed = 2500;
     projectType = 5;
     update();

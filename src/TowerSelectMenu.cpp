@@ -1,5 +1,4 @@
 #include "TowerSelectMenu.h"
-#include "TowerFrame.h"
 #include "Archer.h"
 #include "StoneThrower.h"
 #include "JohnSnow.h"
@@ -8,8 +7,8 @@ TowerSelectMenu::TowerSelectMenu(QPoint pressPos, int currentMoney, QGraphicsObj
     : QGraphicsObject(parent), currentMoney(currentMoney), pressPos(pressPos)
 {
 
-    Archer archerExample;
-    int enough = (archerExample.getBuyCost() > currentMoney) ? (-1) : 1;
+    // Archer archerExample;
+    int enough = (Archer::getBuyCost() > currentMoney) ? (-1) : 1;
     Button *selectArcher = new Button(":/img/asset/3.png", ":/img/asset/3.png", 0, 0, enough, this);
     selectArcher->setParentItem(this);
     selectArcher->setPos(QPoint(100, 100));
@@ -22,8 +21,8 @@ TowerSelectMenu::TowerSelectMenu(QPoint pressPos, int currentMoney, QGraphicsObj
         });
     }
 
-    StoneThrower stoneThrowerExample;
-    enough = (stoneThrowerExample.getBuyCost() > currentMoney) ? (-1) : 1;
+    // StoneThrower stoneThrowerExample;
+    enough = (StoneThrower::getBuyCost() > currentMoney) ? (-1) : 1;
     Button *selectStoneThrower = new Button(":/img/asset/2.png", ":/img/asset/2.png", 0, 0, enough, this);
     selectStoneThrower->setParentItem(this);
     selectStoneThrower->setPos(QPoint(300, 100));
@@ -34,8 +33,8 @@ TowerSelectMenu::TowerSelectMenu(QPoint pressPos, int currentMoney, QGraphicsObj
                 { emit selectTowerType(pressPos, 2);  emit closeTowerSelectMenu();});
     }
 
-    JohnSnow johnSnowExample;
-    enough = (johnSnowExample.getBuyCost() > currentMoney) ? (-1) : 1;
+    // JohnSnow johnSnowExample;
+    enough = (JohnSnow::getBuyCost() > currentMoney) ? (-1) : 1;
     Button *selectJohnSnow = new Button(":/img/asset/3.png", ":/img/asset/3.png", 0, 0, enough, this);
     selectJohnSnow->setParentItem(this);
     selectJohnSnow->setPos(QPoint(100, 300));
@@ -46,8 +45,8 @@ TowerSelectMenu::TowerSelectMenu(QPoint pressPos, int currentMoney, QGraphicsObj
                 { emit selectTowerType(pressPos, 3);  emit closeTowerSelectMenu();});
     }
 
-    Dragon dragonExample;
-    enough = (dragonExample.getBuyCost() > currentMoney) ? (-1) : 1;
+    // Dragon dragonExample;
+    enough = (Dragon::getBuyCost() > currentMoney) ? (-1) : 1;
     Button *selectDragon = new Button(":/img/asset/1.png", ":/img/asset/1.png", 0, 0, enough, this);
     selectDragon->setParentItem(this);
     selectDragon->setPos(QPoint(300, 100));
@@ -68,7 +67,7 @@ TowerSelectMenu::~TowerSelectMenu() {};
 
 QRectF TowerSelectMenu::boundingRect() const
 {
-    return QRectF(pressPos.x(), pressPos.y(), 500, 500);
+    return QRectF(pressPos.x()-110, pressPos.y()-110, 300, 300);
 }
 
 void TowerSelectMenu::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

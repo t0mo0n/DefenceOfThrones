@@ -26,7 +26,7 @@ protected:
 
     int attackRange;
     int attackSpeed;
-    int buyCost;
+    static int buyCost;
     QVector<int> sellPrice;
     Enemy *target;
     int upgradeFee;
@@ -48,7 +48,7 @@ public:
     static int towerSize;
     virtual void FindEnemy() = 0; // 跟踪并且瞄准敌人
 
-    int getBuyCost() { return buyCost; };
+    static int getBuyCost() { return buyCost; };
     int getSellPrice() { assert(1<=level&&level<=2&&!sellPrice.empty()); return sellPrice[level-1]; };
     int getUpdateCost() { return upgradeFee; }; // 这里可能出问题，升级的坐标不能超过界限！！1-2级
     void setTarget(Enemy *target_out = nullptr);       // 仍有仅作测试的内容！！！！！！？？？？？

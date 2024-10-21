@@ -4,7 +4,7 @@ JohnSnow::JohnSnow(QPoint pos_)
     : TowerFrame(pos_, 3)
 {
     projectType = 10; // 没有投掷物
-    attackRange = 3*towerSize;
+    attackRange = 1.5*towerSize;
     attackSpeed = 1500;
     attackTime = 0;
     buyCost = 280;
@@ -14,7 +14,7 @@ JohnSnow::JohnSnow(QPoint pos_)
     towerType = 3;
     hurt = 25;
     hurt2=35;
-    upgradeFee=400;
+    upgradeFee=750;
 
     attackTimer->start(attackSpeed);
 }
@@ -134,7 +134,7 @@ void JohnSnow::attack()
         }
         else
         {
-
+            disconnect(this, &JohnSnow::snowAttack, target, &Enemy::receiveSnow);
             resetTarget();
         }
     }

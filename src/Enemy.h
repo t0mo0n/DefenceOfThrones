@@ -11,6 +11,9 @@
 #include <QImage>
 #include<QWidget>
 #include<QGraphicsTextItem>
+
+const int STEP = 1;
+
 class Enemy : public QGraphicsObject
 {
 

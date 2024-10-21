@@ -4,7 +4,7 @@ StoneThrower::StoneThrower(QPoint pos_)
     : TowerFrame(pos_, 2)
 {
     projectType = 2;
-    attackRange = 5*towerSize;
+    attackRange = 2.5*towerSize;
     attackSpeed = 3000;
     buyCost = 350;
     sellPrice .push_back( 220);
@@ -163,7 +163,7 @@ void StoneThrower::upgrade()
         return;
     }
     level++;
-    attackRange += 1*towerSize;
+    attackRange = 3*towerSize;
     attackSpeed -= 1000;
     projectType = 1;
     update();
