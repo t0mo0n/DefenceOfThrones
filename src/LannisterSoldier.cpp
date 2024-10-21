@@ -8,7 +8,9 @@ LannisterSoldier::LannisterSoldier(const QVector<QPoint>& routine_, QGraphicsIte
         qDebug() << "Failed to load enemy image from" << path;
     }
     health=60;
-    speed=4;
+    speed=80;
     reward=150;
     enemyType=0;
+
+    moveTimer->start(1000 / speed);
 }

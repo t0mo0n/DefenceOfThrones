@@ -11,7 +11,8 @@ KingSlayer::KingSlayer(const QVector<QPoint>& routine_, QGraphicsItem *parent):E
     health=550;
     reward=2000;
     enemyType=0;
-    speed=10;
+    speed=170;
     damage=3;
 
+    moveTimer->start(1000 / speed);
 }

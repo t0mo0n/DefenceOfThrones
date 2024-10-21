@@ -8,7 +8,9 @@ DeadAlive::DeadAlive(const QVector<QPoint>& routine_, QGraphicsItem *parent ):En
     }
     damage=1;
     health=50;
-    speed=4;
+    speed=80;
     reward=100;
     enemyType=1;
+
+    moveTimer->start(1000 / speed);
 }

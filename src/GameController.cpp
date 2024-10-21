@@ -115,6 +115,7 @@ void GameController::startGame()
     gameScene_ = new GameScene(currentLevel,hardMode);
     mainMenu_->hide();
     connect(gameScene_,&GameScene::gameEnd,this,&GameController::endGame);
+    connect(gameScene_,&GameScene::gameWin,this,&GameController::nextChap);
     gameScene_->show();
 }
 

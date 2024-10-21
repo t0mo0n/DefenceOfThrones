@@ -16,7 +16,7 @@ Button::Button(QString UnHoverImagePath, QString HoverImagePath,int posX,int pos
 
 QRectF Button::boundingRect() const
 {
-    return QRectF(posX,posY,100,100);
+    return QRectF(posX,posY,80,80);
 }
 
 void Button::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

@@ -25,35 +25,35 @@ Obstacle::Obstacle(int type_,QPoint init_pos, QGraphicsItem *parent ):Enemy(QVec
     }else if(type==2){
         health=160;
         reward=420;
-        path = ":/img/asset/GOT.jpg"; // 假设图片路径
+        path = ":/img/asset/iceBurg.png"; // 假设图片路径
     }else if(type==3){
         health=100;
         reward=360;
-        path = ":/img/asset/GOT.jpg"; // 假设图片路径
+        path = ":/img/asset/iceLake.png"; // 假设图片路径
     }else if(type==4){
         health=70;
         reward=200;
-        path = ":/img/asset/GOT.jpg"; // 假设图片路径
+        path = ":/img/asset/iceElephant.png"; // 假设图片路径
     }else if(type==5){
         health=120;
         reward=400;
-        path = ":/img/asset/GOT.jpg"; // 假设图片路径
+        path = ":/img/asset/cabin0.png"; // 假设图片路径
     }else if(type==6){
         health=100;
         reward=250;
-        path = ":/img/asset/GOT.jpg"; // 假设图片路径
+        path = ":/img/asset/market.png"; // 假设图片路径
     }else if(type==7){
         health=100;
         reward=250;
-        path = ":/img/asset/GOT.jpg"; // 假设图片路径
+        path = ":/img/asset/house1.png"; // 假设图片路径
     }else if(type==8){
         health=200;
         reward=450;
-        path = ":/img/asset/GOT.jpg"; // 假设图片路径
+        path = ":/img/asset/ruinWall.png"; // 假设图片路径
     }else if(type==9){
         health=350;
         reward=750;
-        path = ":/img/asset/GOT.jpg"; // 假设图片路径
+        path = ":/img/asset/house2.png"; // 假设图片路径
     }
 
     if (!enemyPix.load(path)) {
@@ -72,6 +72,8 @@ void Obstacle::takeDamage(int damage_)
 {
     if(health>0){
         health-=damage_;
+        qDebug()<<"damage:"<<damage_;
+        qDebug()<<"health:"<<health;
         healthDisplay->setPlainText(QString::number(health));
         if(health<=0){
             emit isDamaged(reward,this);
@@ -88,8 +90,14 @@ void Obstacle::takeDamage(int damage_)
 // }
 
 
-void Obstacle::receive(int damage_,int type){
-    Q_UNUSED(type);
+void Obstacle::receive(int damage_,int type_){
+    Q_UNUSED(type_);
     takeDamage(damage_);
+}
+
+void Obstacle::receiveSnow(int damage_){
+    takeDamage(damage_);
+    qDebug()<<"health after snow"<<health;
+    qDebug()<<"jinijin"<<pos0;
 }
 

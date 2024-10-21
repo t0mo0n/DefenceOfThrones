@@ -101,6 +101,30 @@ void Map::load(int level,bool isHardMode) {
             }else if(type=="iceburg"){
                 QPair<QPoint,int> tempPair(temp,2);
                 obsPos.push_back(tempPair);
+            }else if(type=="lake"){
+                QPair<QPoint,int> tempPair(temp,3);
+                obsPos.push_back(tempPair);
+            }else if(type=="stable"){
+                QPair<QPoint,int> tempPair(temp,4);
+                obsPos.push_back(tempPair);
+            }else if(type=="cabin"){
+                QPair<QPoint,int> tempPair(temp,5);
+                obsPos.push_back(tempPair);
+            }else if(type=="building1"){
+                QPair<QPoint,int> tempPair(temp,6);
+                obsPos.push_back(tempPair);
+            }else if(type=="building2"){
+                QPair<QPoint,int> tempPair(temp,7);
+                obsPos.push_back(tempPair);
+            }else if(type=="wall"){
+                QPair<QPoint,int> tempPair(temp,8);
+                obsPos.push_back(tempPair);
+            }else if(type=="bellBuilding"){
+                QPair<QPoint,int> tempPair(temp,9);
+                obsPos.push_back(tempPair);
+            }
+            else{
+                qDebug()<<"others";
             }
         }
 

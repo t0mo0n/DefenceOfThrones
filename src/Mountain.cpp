@@ -9,9 +9,10 @@ Mountain::Mountain(const QVector<QPoint>& routine_, QGraphicsItem *parent):Enemy
     }
 
     health=500;
-    speed=3;
+    speed=80;
     reward=600;
     enemyType=0;
     damage=5;
 
+    moveTimer->start(1000 / speed);
 }

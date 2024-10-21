@@ -3,14 +3,14 @@
 
 Enemy::Enemy(const QVector<QPoint>& routine_, QGraphicsItem *parent)
     : QGraphicsObject(parent), isEnterBase(false), index(1),
-    health(50), speed(100), damage(1), reward(100)
+    health(50), speed(50), damage(1), reward(100)
 {
     //斩击效果
     isSlash=false;
     slashTimer=new QTimer(this);
     connect(slashTimer, &QTimer::timeout, this, &Enemy::onSlashTimeout);
 
-    slashPath=":/img/asset/shield.png";
+    slashPath=":/img/asset/wolfHand.png";
     if (!slashPix.load(slashPath)) {
         qDebug() << "Failed to load slash image from" << slashPath;
     }
@@ -54,7 +54,6 @@ Enemy::Enemy(const QVector<QPoint>& routine_, QGraphicsItem *parent)
         }
         moveTimer = new QTimer(this);
         connect(moveTimer, &QTimer::timeout, this, &Enemy::move);
-        moveTimer->start(1000 / speed);
         healthDisplay = new QGraphicsTextItem(this);
         healthDisplay->setParentItem(this);
         healthDisplay->setPlainText(QString::number(health));
@@ -191,7 +190,8 @@ void Enemy::receive(int damage_,int type){
         fireCount=0;
         break;
     case 2:
-        speed-=10;
+        if (speed >= 50) speed-=15;
+        else speed = 50;
         break;
     case 4:
         isFire=true;

@@ -1,4 +1,6 @@
+#include <QFontDatabase>
 #include <QGraphicsBlurEffect>
+#include<QGraphicsPixmapItem>
 #include "GameScene.h"
 #include "Deadalive.h"
 #include "GreyjoySoldier.h"
@@ -39,28 +41,41 @@ GameScene::GameScene(int level, bool isHardMode, QGraphicsView *parent)
     pauseGameButton->setZValue(90);
     connect(pauseGameButton,&Button::clicked,this,&GameScene::onPauseButtonClicked);
 
-    gameEndButton = new Button(":/img/asset/btnEnd.jpeg", ":/img/asset/btnEndLight.jpeg", 1100, 700);//结束按钮图片
+    gameEndButton = new Button(":/img/asset/close_1.png", ":/img/asset/close_2.png", 1100, 700);//结束按钮图片
     scene->addItem(gameEndButton);
     gameEndButton->setZValue(90);
     connect(gameEndButton,&Button::clicked,this,&GameScene::onGameEndButtonClicked);
     resumeGameButton = nullptr;
     pausedMenu = nullptr;
 
+    QGraphicsPixmapItem* board = new QGraphicsPixmapItem(QPixmap(":/img/asset/woodlabel.png"));
+    scene->addItem(board);
+    board->setPos(900,0);
+    board->setZValue(2);
+    //init font
+    int fontId = QFontDatabase::addApplicationFont(":/font/font/Mason Regular.ttf");
+    QString fontFamily =QFontDatabase::applicationFontFamilies(fontId).at(0);
+    QFont labelFont(fontFamily);
+    labelFont.setPointSize(15);
+    labelFont.setWeight(QFont::Bold);
+
+
     healthTextItem = new QGraphicsTextItem(QString("HEALTH: %1").arg(map->getPlayerHealth()));
     scene->addItem(healthTextItem);
-    healthTextItem->setPos(1000, 0);
-    healthTextItem->setDefaultTextColor(Qt::red);
+    healthTextItem->setFont(labelFont);
+    healthTextItem->setPos(960, 60);
+    // healthTextItem->setDefaultTextColor(Qt::red);
     healthTextItem->setZValue(90);
     connect(player, &Player::lifeChanged, this, &GameScene::updatePlayerLives);
 
     moneyTextItem = new QGraphicsTextItem(QString("SHILLING: %1").arg(map->getPlayerMoney()));
     scene->addItem(moneyTextItem);
-    moneyTextItem->setPos(500, 0);
-    moneyTextItem->setDefaultTextColor(Qt::yellow);
-    healthTextItem->setZValue(90);
+    moneyTextItem->setFont(labelFont);
+    moneyTextItem->setPos(960, 130);
+    // moneyTextItem->setDefaultTextColor(Qt::yellow);
+    moneyTextItem->setZValue(90);
     connect(player, &Player::moneyChanged, this, [=](int newAmount)
             { this->moneyTextItem->setPlainText(QString("SHILLING: %1").arg(newAmount)); });
-
     towerSelectMenu = nullptr;
 
     updateTimer = new QTimer(this);
@@ -152,8 +167,12 @@ void GameScene::onEnemyDead(int reward, Enemy *enemyToBeDelete)
     scene->removeItem(enemyToBeDelete);
     enemies.removeOne(enemyToBeDelete);
     delete enemyToBeDelete;
-    if (win_signal && enemies.isEmpty()) {
-        emit gameWin(level);
+    if (enemies.isEmpty()) {
+        win_signal2 = true;
+        if (win_signal1){
+            emit gameWin(level);
+            qDebug()<<"win";
+        }
     }
 }
 
@@ -162,8 +181,12 @@ void GameScene::onEnemyArrive(int damage, Enemy *enemyToBeDelete)
     scene->removeItem(enemyToBeDelete);
     enemies.removeOne(enemyToBeDelete);
     delete enemyToBeDelete;
-    if(win_signal && enemies.isEmpty()){
-        emit gameWin(level);
+    if (enemies.isEmpty()) {
+        win_signal2 = true;
+        if (win_signal1){
+            emit gameWin(level);
+            // qDebug()<<"win";
+        }
     } else{
         player->loseLife(damage);
     }
@@ -409,10 +432,10 @@ void GameScene::addEnemy()
         break;
     }
     default:
-        // todo
         //-1时敌人传输完成
         enemyTimer->stop();
-        win_signal = true;
+        win_signal1 = true;
+        if (win_signal2) emit gameWin(level);
         break;
     }
     if(enemyType!=0&&enemyType!=-1)
@@ -537,6 +560,13 @@ void GameScene::closeEvent(QCloseEvent *event)
     }
     // 加入pathCell
     QVector<QPoint> pathPos = map->getPath();
+    QPoint startPoint = pathPos[0];
+    QGraphicsPixmapItem* start = new QGraphicsPixmapItem(QPixmap(":/img/asset/spawnPoint.png"));
+    start->setPos(QPoint((startPoint.x()-1)*CELL_SIZE,(startPoint.y()-1)*CELL_SIZE));
+    qDebug()<<"stPos"<<startPoint;
+    start->setZValue(10);
+    scene->addItem(start);
+
     for (int i = 0; i < pathPos.size() - 1; i++)
     {
         QPoint startPoint = pathPos[i];
@@ -567,10 +597,9 @@ void GameScene::closeEvent(QCloseEvent *event)
         }
     }
     QPoint playerPos = map->getPlayerPosition();
-    PathCell *endPlayer = new PathCell("终点玩家方块",QPoint(playerPos.x()*CELL_SIZE,playerPos.y()*CELL_SIZE));
+    PathCell *endPlayer = new PathCell(":/img/asset/endPoint.png",QPoint((playerPos.x()-1)*CELL_SIZE,(playerPos.y()-1)*CELL_SIZE));
     scene->addItem(endPlayer);
     endPlayer->setZValue(5);
-
 
 }
 

@@ -9,7 +9,9 @@ Wilder::Wilder(const QVector<QPoint>& routine_, QGraphicsItem *parent ):Enemy(ro
     }
     health=90;//血量较多
     damage=1;
-    speed=4;
+    speed=120;
     reward=160;
     enemyType=0;
+
+    moveTimer->start(1000 / speed);
 }

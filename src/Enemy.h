@@ -65,7 +65,7 @@ signals:
     void destroy();
 public slots:
     void receive(int damage_,int type);
-    void receiveSnow(int damage_);
+    virtual void receiveSnow(int damage_);
     void onSlashTimeout() ;
 };
 

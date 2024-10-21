@@ -27,6 +27,7 @@ signals:
     void destory();
 public slots:
     void receive(int damage_,int type);//可能有bug
+    void receiveSnow(int damage_);
 };
 
 #endif // OBSTACLE_H

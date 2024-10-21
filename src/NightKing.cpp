@@ -10,7 +10,7 @@ NightKing::NightKing(const QVector<QPoint>& routine_, QGraphicsItem *parent ):En
     }
 
     health=500;
-    speed=4;
+    speed=110;
     reward=2000;
     damage=3;
     enemyType=1;
@@ -18,6 +18,7 @@ NightKing::NightKing(const QVector<QPoint>& routine_, QGraphicsItem *parent ):En
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &NightKing::generate);
     timer->start(8000);
+    moveTimer->start(1000 / speed);
 }
 
 void NightKing::generate()

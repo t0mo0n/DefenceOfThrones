@@ -37,10 +37,10 @@ void TowerFrame::paint(QPainter *painterconst, const QStyleOptionGraphicsItem *o
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-    QRectF rect = boundingRect();
-    painterconst->setPen(Qt::red);                                                                                         // 设置边界框颜色
-    painterconst->drawRect(rect);                                                                                          // 绘制边界矩形
-    painterconst->drawEllipse(towerSize / 2 - attackRange, towerSize / 2 - attackRange, 2 * attackRange, 2 * attackRange); // 绘制边界矩形
+    // QRectF rect = boundingRect();
+    // painterconst->setPen(Qt::red);                                                                                         // 设置边界框颜色
+    // painterconst->drawRect(rect);                                                                                          // 绘制边界矩形
+    // painterconst->drawEllipse(towerSize / 2 - attackRange, towerSize / 2 - attackRange, 2 * attackRange, 2 * attackRange); // 绘制边界矩形
 
     painterconst->drawPixmap(QRect(0, 0, towerSize, towerSize), QPixmap(picDir));
 }
@@ -66,6 +66,9 @@ void TowerFrame::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
     if (QRectF(0, 0, towerSize, towerSize).contains(event->pos()))
     {
         QMenu menu;
+        menu.setStyleSheet("QMenu { background-color: #6F736A; color: black; border-radius: 10px; } "
+                           "QMenu::item { font-family: Arial; font-size: 14px; padding: 5px 20px; } "
+                           "QMenu::item:selected { background-color: #6F736A; color: white;border-radius: 10px; }");
         QAction *action1 = menu.addAction("upgrade");
         QAction *action2 = menu.addAction("sell");
         connect(action1, &QAction::triggered, this, [this](){

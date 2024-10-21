@@ -86,7 +86,8 @@ private:
     QGraphicsRectItem *pausedMenu;
     int level;
     bool isHardMode;
-    bool win_signal = false;
+    bool win_signal1 = false;
+    bool win_signal2 = false;
 
     int ecount = 0;
 

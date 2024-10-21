@@ -52,6 +52,18 @@
         <file>asset/button3.png</file>
         <file>asset/mainMenuBackground.jpg</file>
         <file>asset/shield.png</file>
+        <file>asset/cabin.png</file>
+        <file>asset/close_2.png</file>
+        <file>asset/house1.png</file>
+        <file>asset/house2.png</file>
+        <file>asset/iceBurg.png</file>
+        <file>asset/iceElephant.png</file>
+        <file>asset/iceLake.png</file>
+        <file>asset/market.png</file>
+        <file>asset/ruinWall.png</file>
+        <file>asset/wolfHand.png</file>
+        <file>asset/woodlabel.png</file>
+        <file>asset/cabin0.png</file>
     </qresource>
     <qresource prefix="/sound">
         <file>music/The_Rains_of_Castamere.mp3</file>

@@ -9,12 +9,14 @@ Melisandre::Melisandre(const QVector<QPoint>& routine_, QGraphicsItem *parent ):
         qDebug() << "Failed to load enemy image from" << path;
     }
     health=60;
-    speed=7;
+    speed=100;
     reward=270;
     enemyType=0;
     damage=1;
     use=0;
     reviveHealth=health;
+
+    moveTimer->start(1000 / speed);
 }
 
 void Melisandre::takeDamage(int damage_)

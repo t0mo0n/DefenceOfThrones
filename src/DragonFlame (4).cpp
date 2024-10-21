@@ -50,9 +50,9 @@ void StoneThrower::attack()
 
                     connect(bullet, &Projectile::outrange, this, [this, bullet]()
                             {
-                                projectileList.removeOne(bullet);  // 从列表中移除该子弹
-                                scene()->removeItem(bullet);
-                                delete bullet; });
+                        projectileList.removeOne(bullet);  // 从列表中移除该子弹
+                        scene()->removeItem(bullet);
+                        delete bullet; });
                     bullet->setTarget(target);
                     scene()->addItem(bullet);
                 }
@@ -191,56 +191,56 @@ void StoneThrower::FindEnemy()
     {
         // if(!target)
         // {
-        if (!itemsInBoundingRect.isEmpty())
-        {
-            Enemy *ob=nullptr;
-            Enemy *min_item = nullptr;
-            qreal min_distance = attackRange;
-            for (auto *item : itemsInBoundingRect)
+            if (!itemsInBoundingRect.isEmpty())
             {
-                Enemy *enemy_p = dynamic_cast<Enemy *>(item);
-                if (enemy_p == nullptr || std::find(enemyList.begin(), enemyList.end(), enemy_p) != enemyList.end())
+                Enemy *ob=nullptr;
+                Enemy *min_item = nullptr;
+                qreal min_distance = attackRange;
+                for (auto *item : itemsInBoundingRect)
                 {
-                    continue;
-                }
-                if(enemy_p!=nullptr)
-                {
-                    if(enemy_p->isEnemy()==true)
+                    Enemy *enemy_p = dynamic_cast<Enemy *>(item);
+                    if (enemy_p == nullptr || std::find(enemyList.begin(), enemyList.end(), enemy_p) != enemyList.end())
                     {
-                        qreal distance = QLineF(enemy_p->pos(), this->pos()).length();
-                        if (distance < min_distance)
+                        continue;
+                    }
+                    if(enemy_p!=nullptr)
+                    {
+                        if(enemy_p->isEnemy()==true)
                         {
-                            min_item = enemy_p;
+                            qreal distance = QLineF(enemy_p->pos(), this->pos()).length();
+                            if (distance < min_distance)
+                            {
+                                min_item = enemy_p;
+                            }
+                        }
+                        else
+                        {
+                            ob=enemy_p;
                         }
                     }
-                    else
-                    {
-                        ob=enemy_p;
-                    }
+
+                }
+                if (min_item)
+                {
+                    // qDebug()<<"find_enemy";
+                    setTarget(min_item);
                 }
 
-            }
-            if (min_item)
-            {
-                // qDebug()<<"find_enemy";
-                setTarget(min_item);
-            }
+                else if(min_item==nullptr&&ob!=nullptr)
+                {
+                    // qDebug()<<"ob"<<ob->pos();
 
-            else if(min_item==nullptr&&ob!=nullptr)
-            {
-                // qDebug()<<"ob"<<ob->pos();
-
-                setTarget(ob);
+                    setTarget(ob);
+                }
+                else
+                {
+                    resetTarget();
+                }
             }
             else
             {
                 resetTarget();
             }
-        }
-        else
-        {
-            resetTarget();
-        }
         // }
 
     }
@@ -265,7 +265,7 @@ void StoneThrower::FindEnemy()
                                 connect(enemy_p, &Enemy::destroy, this, [this, enemy_p]()
                                         {
                                             enemyList.removeOne(enemy_p);/*敌人类中是否会自己调用removescene？？*/
-                                        });
+                                });
                                 enemyList.push_back(enemy_p);
                                 qDebug()<<enemyList.length();
                             }

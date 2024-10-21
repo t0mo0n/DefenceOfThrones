@@ -203,7 +203,7 @@ void Dragon::FindEnemy()
                         if (distance <= attackRange)
                         {
                             connect(enemy_p, &Enemy::destroy, this, [this, enemy_p](){
-                                enemyList.removeOne(enemy_p);
+                                        enemyList.removeOne(enemy_p);
                             });
                             enemyList.push_back(enemy_p);
                         }

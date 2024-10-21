@@ -8,9 +8,11 @@ Vesalion::Vesalion(const QVector<QPoint>& routine_, QGraphicsItem *parent ):Enem
     if (!enemyPix.load(path)) {
         qDebug() << "Failed to load enemy image from" << path;
     }
-    health=150;
-    speed=10;
+    health=240;
+    speed=190;
     damage=5;
     reward=500;
     enemyType=1;
+
+    moveTimer->start(1000 / speed);
 }
