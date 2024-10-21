@@ -12,6 +12,7 @@ Obstacle::Obstacle(int type_,QPoint init_pos, QGraphicsItem *parent ):Enemy(QVec
     speed = 0; // 假设障碍物不移动
     damage = 0; // 假设障碍物没有攻击伤害
     pos0 = init_pos; // 初始位置
+    this->setPos(pos0);
     type=type_;
     if(type==0){
         health=50;
@@ -59,14 +60,19 @@ Obstacle::Obstacle(int type_,QPoint init_pos, QGraphicsItem *parent ):Enemy(QVec
         qDebug() << "Failed to load enemy image from" << path;
     }
 
-    // reward=10;
-    // health=10;
+    healthDisplay = new QGraphicsTextItem(this);
+    healthDisplay->setParentItem(this);
+    healthDisplay->setPlainText(QString::number(health));
+    healthDisplay->setDefaultTextColor(Qt::red);
+    healthDisplay->setFont(QFont("Arial", 12));
+    healthDisplay->setPos(size/2-healthDisplay->boundingRect().width()/2,-50+healthDisplay->boundingRect().height());  // 设置在敌人图片上方居中显示
 }
 
 void Obstacle::takeDamage(int damage_)
 {
     if(health>0){
         health-=damage_;
+        healthDisplay->setPlainText(QString::number(health));
         if(health<=0){
             emit isDamaged(reward,this);
         }
