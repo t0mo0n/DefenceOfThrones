@@ -89,8 +89,14 @@ void TowerFrame::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     // 处理鼠标按下事件
     qDebug() << "Item clicked!";
-
-    QGraphicsItem::mousePressEvent(event); // 确保调用基类实现
+    if (QRectF(0, 0, towerSize, towerSize).contains(event->pos()))
+    {
+        QGraphicsItem::mousePressEvent(event); // 确保调用基类实现
+    }
+    else
+    {
+        event->ignore();
+    }
 }
 
 void TowerFrame::resetTarget() // 把塔的敌人制空，同时把所有子弹的敌人置空
