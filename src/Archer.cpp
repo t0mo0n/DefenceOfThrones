@@ -6,13 +6,13 @@ Archer::Archer(QPoint pos_)
     projectType = 0;
     attackRange = 1.5*towerSize;
     attackSpeed = 1500;
-    buyCost = 200;
-    sellPrice .push_back( 100);
-    sellPrice.push_back(250);
+    buyCost = 330;
+    sellPrice .push_back( 250);
+    sellPrice.push_back(480);
     picDir = ":/img/asset/Archer.png";
     towerType = 1;
 
-    upgradeFee=250;
+    upgradeFee=400;
 
     attackTimer->start(attackSpeed); // 根据攻击速度设置定时器间隔
 }

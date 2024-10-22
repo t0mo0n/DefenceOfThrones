@@ -116,6 +116,8 @@ void GameController::startGame()
     mainMenu_->hide();
     connect(gameScene_,&GameScene::gameEnd,this,&GameController::endGame);
     connect(gameScene_,&GameScene::gameWin,this,&GameController::nextChap);
+    QRect oldGeometry = mainMenu_->geometry();
+    gameScene_->setGeometry(oldGeometry);
     gameScene_->show();
 }
 

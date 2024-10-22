@@ -7,7 +7,7 @@ LannisterSoldier::LannisterSoldier(const QVector<QPoint>& routine_, QGraphicsIte
     if (!enemyPix.load(path)) {
         qDebug() << "Failed to load enemy image from" << path;
     }
-    health=60;
+    health=65;
     speed=80;
     reward=150;
     enemyType=0;

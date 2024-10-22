@@ -7,14 +7,14 @@ JohnSnow::JohnSnow(QPoint pos_)
     attackRange = 1.5*towerSize;
     attackSpeed = 1500;
     attackTime = 0;
-    buyCost = 280;
-    sellPrice .push_back( 200);
+    buyCost = 520;
+    sellPrice .push_back( 240);
     sellPrice .push_back( 420);
     picDir = ":/img/asset/JohnSnow.png";
     towerType = 3;
     hurt = 25;
-    hurt2=35;
-    upgradeFee=750;
+    hurt2= 35;
+    upgradeFee=800;
 
     attackTimer->start(attackSpeed);
 }

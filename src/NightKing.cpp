@@ -9,7 +9,7 @@ NightKing::NightKing(const QVector<QPoint>& routine_, QGraphicsItem *parent ):En
         qDebug() << "Failed to load enemy image from" << path;
     }
 
-    health=500;
+    health=550;
     speed=110;
     reward=2000;
     damage=3;

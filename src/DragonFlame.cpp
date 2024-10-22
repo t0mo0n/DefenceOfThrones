@@ -6,9 +6,9 @@ DragonFlame::DragonFlame(QPointF pos,QPointF Tower_c,qreal attack_range)
 {
     src=":/img/asset/Flame.png";
     type=5;
-    damage=5;
+    damage=6;
     w_=100;
-    h_=200;
+    h_=210;
     moveTimer->stop();
     moveTimer2->stop();
     flameTimer=new QTimer(this);

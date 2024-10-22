@@ -6,12 +6,12 @@ Dragon::Dragon(QPoint pos_)
     projectType = 4;
     attackRange = 2*towerSize;
     attackSpeed = 4500;
-    buyCost = 500;
-    sellPrice .push_back( 250);
-    sellPrice .push_back( 600);
+    buyCost = 800;
+    sellPrice .push_back( 350);
+    sellPrice .push_back( 750);
     picDir = ":/img/asset/Dragon.png";
     towerType = 4;
-    upgradeFee=1100;
+    upgradeFee=1000;
 
     attackTimer->start(attackSpeed); // 根据攻击速度设置定时器间隔
 }
@@ -188,7 +188,7 @@ void Dragon::FindEnemy()
     QList<QGraphicsItem *> itemsInBoundingRect = checkForItemsInBoundingRect();
     Enemy*ob=nullptr;
 
-    if(!target)
+    if(!target || !target->isEnemy())
     {
         if (!itemsInBoundingRect.isEmpty())
         {

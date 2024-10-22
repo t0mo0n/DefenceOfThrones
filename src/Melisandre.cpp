@@ -8,8 +8,8 @@ Melisandre::Melisandre(const QVector<QPoint>& routine_, QGraphicsItem *parent ):
     if (!enemyPix.load(path)) {
         qDebug() << "Failed to load enemy image from" << path;
     }
-    health=60;
-    speed=100;
+    health=70;
+    speed=110;
     reward=270;
     enemyType=0;
     damage=1;

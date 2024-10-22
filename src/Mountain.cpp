@@ -8,8 +8,8 @@ Mountain::Mountain(const QVector<QPoint>& routine_, QGraphicsItem *parent):Enemy
         qDebug() << "Failed to load enemy image from" << path;
     }
 
-    health=500;
-    speed=80;
+    health=600;
+    speed=95;
     reward=600;
     enemyType=0;
     damage=5;

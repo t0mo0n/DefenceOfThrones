@@ -56,7 +56,7 @@ Enemy::Enemy(const QVector<QPoint>& routine_, QGraphicsItem *parent)
         connect(moveTimer, &QTimer::timeout, this, &Enemy::move);
         healthDisplay = new QGraphicsTextItem(this);
         healthDisplay->setParentItem(this);
-        healthDisplay->setPlainText(QString::number(health));
+        healthDisplay->setPlainText("HP:"+QString::number(health));
         healthDisplay->setDefaultTextColor(Qt::red);
         healthDisplay->setFont(QFont("Arial", 12));
         healthDisplay->setPos(size/2-healthDisplay->boundingRect().width()/2,-50+healthDisplay->boundingRect().height());  // 设置在敌人图片上方居中显示
@@ -209,7 +209,7 @@ void Enemy::receive(int damage_,int type){
 }
 
 void Enemy::updateHealthDisplay() {
-    healthDisplay->setPlainText(QString::number(health));
+    healthDisplay->setPlainText("HP:"+QString::number(health));
 }
 
 void Enemy::receiveSnow(int damage_){

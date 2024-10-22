@@ -52,7 +52,7 @@ Obstacle::Obstacle(int type_,QPoint init_pos, QGraphicsItem *parent ):Enemy(QVec
         path = ":/img/asset/ruinWall.png"; // 假设图片路径
     }else if(type==9){
         health=350;
-        reward=750;
+        reward=520;
         path = ":/img/asset/house2.png"; // 假设图片路径
     }
 
@@ -62,7 +62,7 @@ Obstacle::Obstacle(int type_,QPoint init_pos, QGraphicsItem *parent ):Enemy(QVec
 
     healthDisplay = new QGraphicsTextItem(this);
     healthDisplay->setParentItem(this);
-    healthDisplay->setPlainText(QString::number(health));
+    healthDisplay->setPlainText("HP:"+QString::number(health));
     healthDisplay->setDefaultTextColor(Qt::red);
     healthDisplay->setFont(QFont("Arial", 12));
     healthDisplay->setPos(size/2-healthDisplay->boundingRect().width()/2,-50+healthDisplay->boundingRect().height());  // 设置在敌人图片上方居中显示
@@ -74,7 +74,7 @@ void Obstacle::takeDamage(int damage_)
         health-=damage_;
         qDebug()<<"damage:"<<damage_;
         qDebug()<<"health:"<<health;
-        healthDisplay->setPlainText(QString::number(health));
+        healthDisplay->setPlainText("HP:"+QString::number(health));
         if(health<=0){
             emit isDamaged(reward,this);
         }

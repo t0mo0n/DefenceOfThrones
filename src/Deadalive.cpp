@@ -7,7 +7,7 @@ DeadAlive::DeadAlive(const QVector<QPoint>& routine_, QGraphicsItem *parent ):En
         qDebug() << "Failed to load enemy image from" << path;
     }
     damage=1;
-    health=50;
+    health=60;
     speed=80;
     reward=100;
     enemyType=1;

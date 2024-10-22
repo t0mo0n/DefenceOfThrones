@@ -48,7 +48,7 @@ GameScene::GameScene(int level, bool isHardMode, QGraphicsView *parent)
     resumeGameButton = nullptr;
     pausedMenu = nullptr;
 
-    QGraphicsPixmapItem* board = new QGraphicsPixmapItem(QPixmap(":/img/asset/woodlabel.png"));
+    QGraphicsPixmapItem* board = new QGraphicsPixmapItem(QPixmap(":/img/asset/levelboard0.png"));
     scene->addItem(board);
     board->setPos(900,0);
     board->setZValue(2);
