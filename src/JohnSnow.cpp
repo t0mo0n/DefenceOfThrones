@@ -4,17 +4,17 @@ JohnSnow::JohnSnow(QPoint pos_)
     : TowerFrame(pos_, 3)
 {
     projectType = 10; // 没有投掷物
-    attackRange = 3*towerSize;
+    attackRange = 1.5*towerSize;
     attackSpeed = 1500;
     attackTime = 0;
-    buyCost = 280;
-    sellPrice .push_back( 200);
+    buyCost = 520;
+    sellPrice .push_back( 240);
     sellPrice .push_back( 420);
-    picDir = ":/img/asset/1.png";
+    picDir = ":/img/asset/JohnSnow.png";
     towerType = 3;
     hurt = 25;
-    hurt2=35;
-    upgradeFee=400;
+    hurt2= 35;
+    upgradeFee=800;
 
     attackTimer->start(attackSpeed);
 }
@@ -32,7 +32,17 @@ void JohnSnow::FindEnemy()
         qreal angle = std::atan2(targetPos.y() - towerPos.y(), targetPos.x() - towerPos.x());
 
         // 设置塔的旋转（如果需要旋转显示）
-        setRotation(angle * 180.0 / M_PI); // 将弧度转换为度
+        qreal targetAngle= (angle * 180.0) / M_PI; // 将弧度转换为度
+
+        // 获取当前角度
+        qreal currentAngle = rotation();
+
+        // 插值计算，控制转动的速度。0.1 表示转动速度，可以根据需要调整这个系数
+        qreal rotationSpeed = 0.08;
+        qreal newAngle = currentAngle + rotationSpeed * (targetAngle - currentAngle);
+
+        // 设置新的旋转角度
+        setRotation(newAngle);
     }
     if (target == nullptr||target->isEnemy()==false)
     {
@@ -122,6 +132,8 @@ void JohnSnow::attack()
                 {
                     projectileList.push_back(bullet);
 
+                        bullet->setDire0();
+
                     connect(bullet, &Projectile::outrange, this, [this, bullet]()
                             {
                         projectileList.removeOne(bullet);  // 从列表中移除该子弹
@@ -134,7 +146,7 @@ void JohnSnow::attack()
         }
         else
         {
-
+            disconnect(this, &JohnSnow::snowAttack, target, &Enemy::receiveSnow);
             resetTarget();
         }
     }

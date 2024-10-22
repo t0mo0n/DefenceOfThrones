@@ -22,11 +22,10 @@ class TowerFrame : public QObject, public QGraphicsItem
 protected:
     int projectType; // 投掷物的种类
     int towerType;   // 防御塔的种类
-    int level;       // 防御塔现在的等级
 
     int attackRange;
     int attackSpeed;
-    int buyCost;
+    static int buyCost;
     QVector<int> sellPrice;
     Enemy *target;
     int upgradeFee;
@@ -47,8 +46,10 @@ public:
     virtual void attack() = 0;
     static int towerSize;
     virtual void FindEnemy() = 0; // 跟踪并且瞄准敌人
+    int level;       // 防御塔现在的等级
 
-    int getBuyCost() { return buyCost; };
+
+    static int getBuyCost() { return buyCost; };
     int getSellPrice() { assert(1<=level&&level<=2&&!sellPrice.empty()); return sellPrice[level-1]; };
     int getUpdateCost() { return upgradeFee; }; // 这里可能出问题，升级的坐标不能超过界限！！1-2级
     void setTarget(Enemy *target_out = nullptr);       // 仍有仅作测试的内容！！！！！！？？？？？
@@ -68,7 +69,7 @@ public:
 
 signals:
     void destroy();
-    void sell();
+    void sell(TowerFrame*it);
     void towerUpdate(int cost,TowerFrame* it);
 public slots:
     virtual void upgrade() = 0; // 升级植物,界面设计者要根据现有的钱和updatecost比较获得是否可行,别忘了扣钱

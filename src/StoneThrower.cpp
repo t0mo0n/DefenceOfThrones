@@ -4,16 +4,16 @@ StoneThrower::StoneThrower(QPoint pos_)
     : TowerFrame(pos_, 2)
 {
     projectType = 2;
-    attackRange = 5*towerSize;
+    attackRange = 2.5*towerSize;
     attackSpeed = 3000;
-    buyCost = 350;
-    sellPrice .push_back( 220);
-    sellPrice .push_back( 450);
+    buyCost = 640;
+    sellPrice .push_back( 320);
+    sellPrice .push_back( 550);
 
-    picDir = ":/img/asset/GOT.jpg";
+    picDir = ":/img/asset/StoneThrower.png";
     towerType = 2;
 
-    upgradeFee=420;
+    upgradeFee=780;
 
 
     attackTimer->start(attackSpeed); // 根据攻击速度设置定时器间隔
@@ -44,13 +44,15 @@ void StoneThrower::attack()
                 if (bullet)
                 {
                     projectileList.push_back(bullet);
+                    bullet->setDire0();
+
                     connect(bullet, &Projectile::collision, target, &Enemy::receive);
 
                     connect(bullet, &Projectile::outrange, this, [this, bullet]()
                             {
-                        projectileList.removeOne(bullet);  // 从列表中移除该子弹
-                        scene()->removeItem(bullet);
-                        delete bullet; });
+                                projectileList.removeOne(bullet);  // 从列表中移除该子弹
+                                scene()->removeItem(bullet);
+                                delete bullet; });
                     bullet->setTarget(target);
                     scene()->addItem(bullet);
                 }
@@ -78,8 +80,7 @@ void StoneThrower::attack()
 
             Stone *bullet1 = new Stone(bulletStartPos, TowerCentral, attackRange);
             Stone *bullet2 = new Stone(bulletStartPos, TowerCentral, attackRange);
-            Stone *bullet3 = new Stone(bulletStartPos, TowerCentral, attackRange);
-
+            assert(smallBullet.isEmpty()==true);
             if (bullet1)
             {
                 smallBullet.push_back(bullet1);
@@ -90,61 +91,51 @@ void StoneThrower::attack()
                 smallBullet.push_back(bullet2);
                 projectileList.push_back(bullet2);
             }
-            if (bullet3)
-            {
-                smallBullet.push_back(bullet3);
-                projectileList.push_back(bullet2);
-            }
+
             int enemyNum = enemyList.length();
-            if(target->isEnemy()==true)
-            {
-                assert(enemyNum > 0);
-            }
-            int count = 0;
+
+            // if(target->isEnemy())
+            // {
+            //     assert(enemyNum > 0);
+            // }
+
             for (auto bullet : smallBullet)
             {
-                if(target->isEnemy()==true)
+                if(target&&bullet)
                 {
-                    if (enemyNum >= 3)
+                    if(bullet)
                     {
-                        connect(bullet, &Projectile::collision, enemyList.front(), &Enemy::receive);
-                        bullet->setTarget(enemyList.front());
-                        enemyList.pop_front();
+                        bullet->setDire0();
                     }
-                    else if (enemyNum == 2)
+
+                    if(target->isEnemy())
                     {
-                        if (count == 0)
+                        if (enemyNum >= 2)
                         {
                             connect(bullet, &Projectile::collision, enemyList.front(), &Enemy::receive);
                             bullet->setTarget(enemyList.front());
                             enemyList.pop_front();
                         }
-                        else
+                        else if (enemyNum == 1)
                         {
                             connect(bullet, &Projectile::collision, enemyList.front(), &Enemy::receive);
                             bullet->setTarget(enemyList.front());
                         }
                     }
-                    else if (enemyNum == 1)
+                    else if(!target->isEnemy())
                     {
-                        connect(bullet, &Projectile::collision, enemyList.front(), &Enemy::receive);
-                        bullet->setTarget(enemyList.front());
+                        connect(bullet, &Projectile::collision, target, &Enemy::receive);
+                        bullet->setTarget(target);
+                        // qDebug()<<"set target"<<target->pos();
                     }
-                }
-                else
-                {
-                    connect(bullet, &Projectile::collision, target, &Enemy::receive);
-                    bullet->setTarget(target);
-                }
+                    connect(bullet, &Projectile::outrange, this, [this, bullet]()
+                            {
+                                projectileList.removeOne(bullet);  // 从列表中移除该子弹
+                                scene()->removeItem(bullet);
+                                delete bullet; });
 
-                connect(bullet, &Projectile::outrange, this, [this, bullet]()
-                        {
-                        projectileList.removeOne(bullet);  // 从列表中移除该子弹
-                        scene()->removeItem(bullet);
-                        delete bullet; });
-
-                scene()->addItem(bullet);
-                count++;
+                    scene()->addItem(bullet);
+                }
             }
             smallBullet.clear(); // 会不会把投掷物也一起析构了？
             enemyList.clear();
@@ -163,16 +154,16 @@ void StoneThrower::upgrade()
         return;
     }
     level++;
-    attackRange += 1*towerSize;
+    attackRange = 3*towerSize;
     attackSpeed -= 1000;
     projectType = 1;
-    update();
 }
 
 void StoneThrower::FindEnemy()
 {
     if (target != nullptr)
     {
+        // qDebug()<<target->pos();
         // 获取塔的位置
         QPointF towerPos = this->pos();
         // 获取目标的位置
@@ -182,12 +173,24 @@ void StoneThrower::FindEnemy()
         qreal angle = std::atan2(targetPos.y() - towerPos.y(), targetPos.x() - towerPos.x());
 
         // 设置塔的旋转（如果需要旋转显示）
-        setRotation(angle * 180.0 / M_PI); // 将弧度转换为度
+        qreal targetAngle= (angle * 180.0) / M_PI; // 将弧度转换为度
+
+        // 获取当前角度
+        qreal currentAngle = rotation();
+
+        // 插值计算，控制转动的速度。0.1 表示转动速度，可以根据需要调整这个系数
+        qreal rotationSpeed = 0.08;
+        qreal newAngle = currentAngle + rotationSpeed * (targetAngle - currentAngle);
+
+        // 设置新的旋转角度
+        setRotation(newAngle);
     }
 
     QList<QGraphicsItem *> itemsInBoundingRect = checkForItemsInBoundingRect();
     if (level == 1)
     {
+        // if(!target)
+        // {
         if (!itemsInBoundingRect.isEmpty())
         {
             Enemy *ob=nullptr;
@@ -235,47 +238,58 @@ void StoneThrower::FindEnemy()
         {
             resetTarget();
         }
+        // }
+
     }
     else
     {
-        enemyList.clear();
-        assert(enemyList.isEmpty());
-        Enemy* ob=nullptr;
-        if (!itemsInBoundingRect.isEmpty())
+        Enemy*ob=nullptr;
+
+        if(!target)
         {
-            for (auto *item : itemsInBoundingRect)
+            if (!itemsInBoundingRect.isEmpty())
             {
-                Enemy *enemy_p = dynamic_cast<Enemy *>(item);
-                if (enemy_p != nullptr)
+                for (auto *item : itemsInBoundingRect)
                 {
-                    if(enemy_p->isEnemy()==true)
+                    Enemy *enemy_p = dynamic_cast<Enemy *>(item);
+                    if (enemy_p != nullptr)
                     {
-                        qreal distance = QLineF(enemy_p->pos(), this->pos()).length();
-                        if (distance <= attackRange + 25)
+                        if(enemy_p->isEnemy()==true &&std::find(enemyList.begin(), enemyList.end(), enemy_p) == enemyList.end())
                         {
-                            connect(enemy_p, &Enemy::destroy, this, [this, enemy_p]()
-                                    {
-                                        enemyList.removeOne(enemy_p);/*敌人类中是否会自己调用removescene？？*/ });
-                            enemyList.push_back(enemy_p);
+                            qreal distance = QLineF(enemy_p->pos(), this->pos()).length();
+                            if (distance <= attackRange+25)
+                            {
+                                connect(enemy_p, &Enemy::destroy, this, [this, enemy_p]()
+                                        {
+                                            enemyList.removeOne(enemy_p);/*敌人类中是否会自己调用removescene？？*/
+                                        });
+                                enemyList.push_back(enemy_p);
+                                qDebug()<<enemyList.length();
+                            }
                         }
-                    }
-                    else
-                    {
-                        ob=enemy_p;
+                        else
+                        {
+                            ob=enemy_p;
+
+                        }
                     }
 
                 }
             }
-        }
-        if (!enemyList.isEmpty())
-        {
-            setTarget(enemyList.front());
-        }
-        else if (enemyList.isEmpty())
-        {
-            resetTarget();
-            if(ob)
+            if (!enemyList.isEmpty())
+            {
+                setTarget(enemyList.front());
+            }
+            else if (enemyList.isEmpty()&&ob!=nullptr)
+            {
                 setTarget(ob);
+
+            }
+            else
+            {
+                resetTarget();
+
+            }
         }
     }
 }

@@ -32,14 +32,14 @@ private slots:
     void startGame();
     void endGame();
     void exitGame();
-    void showSettingMenu();
     void showLevelSelectMenu();
     void loadLevel(int level);
     void changeVolumn(float volumn);
     void startHardMode(bool hardmode);
     void changeGameBgm(int bgm);
+    void nextChap(int prevLevel);
 
-signals://By TrroJay
+signals:
     void emitMaxLevel(int maxLevel_);
 
 };

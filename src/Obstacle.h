@@ -15,10 +15,10 @@ private:
     QPoint pos;
 
 public:
-    explicit Obstacle(int type_,QVector<QPoint> routine_, QGraphicsItem *parent = nullptr);
+    explicit Obstacle(int type_,QPoint point, QGraphicsItem *parent = nullptr);
     void takeDamage  (int damage_) override;//击碎发出信号
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
-    // 绘制障碍物
+    // void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
+    // //绘制障碍物
     bool isEnemy() override {return false;}
     ~Obstacle(){emit destory();}
 
@@ -27,6 +27,7 @@ signals:
     void destory();
 public slots:
     void receive(int damage_,int type);//可能有bug
+    void receiveSnow(int damage_);
 };
 
 #endif // OBSTACLE_H

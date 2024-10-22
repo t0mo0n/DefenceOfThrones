@@ -22,7 +22,7 @@ public:
 
     bool isPlaceAble(QPoint pos_){
         //TODO:
-        if(map[pos_.x()][pos_.y()]=='1'){
+        if(map[pos_.y()][pos_.x()]=='1'){
             return true;
         }
         return false;
@@ -33,13 +33,11 @@ public:
     const QVector<QPoint>& getPath() const{
         return enemyPath;
     }
-    int getEnemySpawnInterval() const{
-        return enemySpawnInterval;
-    }
     int getEnemyTypes() {
         enemyNum++;
         if(enemyNum>=enemyTotalNum){
             qDebug()<<"get too much enemy";
+            return -1;
         }
         return enemyTypes[enemyNum];
     }
@@ -65,12 +63,11 @@ private:
 
 
     //map info
-    char map[15][10]={0};
+    char map[16][16]={0};
     QPoint spawnPoints;
 
     //enermy info
     QVector<QPoint> enemyPath;
-    int enemySpawnInterval;
     QVector<int> enemyTypes;// 用于存储敌人的类型
     int enemyNum=-1;
     int enemyTotalNum=0;

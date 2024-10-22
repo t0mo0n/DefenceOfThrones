@@ -1,5 +1,7 @@
 #include "TowerFrame.h"
 //子弹在发射之后马上把塔删掉，会导致子弹没有归属
+int TowerFrame::buyCost=0;
+
 TowerFrame::TowerFrame(QPoint pos_, int type)
 {
     if (type == 0)
@@ -35,10 +37,10 @@ void TowerFrame::paint(QPainter *painterconst, const QStyleOptionGraphicsItem *o
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-    QRectF rect = boundingRect();
-    painterconst->setPen(Qt::red);                                                                                         // 设置边界框颜色
-    painterconst->drawRect(rect);                                                                                          // 绘制边界矩形
-    painterconst->drawEllipse(towerSize / 2 - attackRange, towerSize / 2 - attackRange, 2 * attackRange, 2 * attackRange); // 绘制边界矩形
+    // QRectF rect = boundingRect();
+    // painterconst->setPen(Qt::red);                                                                                         // 设置边界框颜色
+    // painterconst->drawRect(rect);                                                                                          // 绘制边界矩形
+    // painterconst->drawEllipse(towerSize / 2 - attackRange, towerSize / 2 - attackRange, 2 * attackRange, 2 * attackRange); // 绘制边界矩形
 
     painterconst->drawPixmap(QRect(0, 0, towerSize, towerSize), QPixmap(picDir));
 }
@@ -48,22 +50,25 @@ QRectF TowerFrame::boundingRect() const
     return QRectF(towerSize / 2 - attackRange, towerSize / 2 - attackRange, 2 * attackRange, 2 * attackRange);
 }
 
-void TowerFrame::sell()
-{
-    QGraphicsScene *game_map = this->scene();
-    if (game_map != nullptr)
-    {
-        game_map->removeItem(this);
+// void TowerFrame::sell(TowerFrame *it)
+// {
+//     QGraphicsScene *game_map = this->scene();
+//     if (game_map != nullptr)
+//     {
+//         game_map->removeItem(this);
 
-        delete this; // 这里可以考虑外部delete
-    }
-}
+//         delete this; // 这里可以考虑外部delete
+//     }
+// }
 
 void TowerFrame::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
     if (QRectF(0, 0, towerSize, towerSize).contains(event->pos()))
     {
         QMenu menu;
+        menu.setStyleSheet("QMenu { background-color: #6F736A; color: black; border-radius: 10px; } "
+                           "QMenu::item { font-family: Arial; font-size: 14px; padding: 5px 20px; } "
+                           "QMenu::item:selected { background-color: #6F736A; color: white;border-radius: 10px; }");
         QAction *action1 = menu.addAction("upgrade");
         QAction *action2 = menu.addAction("sell");
         connect(action1, &QAction::triggered, this, [this](){
@@ -71,7 +76,7 @@ void TowerFrame::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 
         });
         connect(action2,&QAction:: triggered, this, [this](){
-            emit sell();
+            emit sell(this);
         });
         menu.exec(event->screenPos()); // 在按下鼠标左键的地方弹出菜单
         QGraphicsItem::contextMenuEvent(event);
@@ -86,9 +91,14 @@ void TowerFrame::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 void TowerFrame::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     // 处理鼠标按下事件
-    qDebug() << "Item clicked!";
-
-    QGraphicsItem::mousePressEvent(event); // 确保调用基类实现
+    if (QRectF(0, 0, towerSize, towerSize).contains(event->pos()))
+    {
+        QGraphicsItem::mousePressEvent(event); // 确保调用基类实现
+    }
+    else
+    {
+        event->ignore();
+    }
 }
 
 void TowerFrame::resetTarget() // 把塔的敌人制空，同时把所有子弹的敌人置空
@@ -144,11 +154,9 @@ QList<QGraphicsItem *> TowerFrame::checkForItemsInBoundingRect()
 void TowerFrame::towerPause()
 {
     if (aimTimer->isActive()) {
-        remainingTime1 = aimTimer->interval() - elapsedTimer->elapsed();
         aimTimer->stop();
     }
     if (attackTimer->isActive()) {
-        remainingTime2 = attackTimer->interval() - elapsedTimer->elapsed();
         attackTimer->stop();
     }
     for (auto bullet :projectileList)
@@ -163,13 +171,11 @@ void TowerFrame::towerPause()
 void TowerFrame::towerResume()
 {
     if (!aimTimer->isActive()) {
-        aimTimer->start(remainingTime1);
-        elapsedTimer->restart();
+        aimTimer->start(10);
     }
 
     if (!attackTimer->isActive()) {
-        attackTimer->start(remainingTime2);
-        elapsedTimer->restart();
+        attackTimer->start(attackSpeed);
     }
     for (auto bullet :projectileList)
     {

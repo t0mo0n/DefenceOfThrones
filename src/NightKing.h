@@ -1,8 +1,9 @@
 #ifndef NIGHTKING_H
 #define NIGHTKING_H
-#include"Enemy.h"
+#include "Enemy.h"
 class NightKing:public Enemy
 {
+    Q_OBJECT
 public:
     QTimer* timer;
 public:
@@ -12,7 +13,7 @@ public:
     void enemyPause(){moveTimer->stop();timer->stop();}
     void enemyResume(){moveTimer->start();timer->start();};
 signals:
-    void generateDeadalive(QPoint pos_);
+   void generateDeadalive(QVector<QPoint> routine_);
 };
 
 #endif // NIGHTKING_H

@@ -4,19 +4,19 @@
 DragonFlame::DragonFlame(QPointF pos,QPointF Tower_c,qreal attack_range)
     :Projectile(pos,Tower_c,attack_range)
 {
-    src=":/img/asset/GOT.jpg";
+    src=":/img/asset/Flame.png";
     type=5;
-    damage=80;
+    damage=6;
     w_=100;
-    h_=400;
+    h_=210;
     moveTimer->stop();
     moveTimer2->stop();
     flameTimer=new QTimer(this);
     die=new QTimer(this);
     connect(flameTimer, &QTimer::timeout, this, &DragonFlame::detect);
-    flameTimer->start(10);
+    flameTimer->start(200);
     connect(die, &QTimer::timeout, this, [this](){emit outrange();});
-    die->start(300);
+    die->start(500);
     setTarget();//不要接collision，换成detect，并且已经链接，不用移动，不用检测碰撞，敌人是null所以消亡信号不接
     setTransformOriginPoint(QPointF(0,0));
 
@@ -25,13 +25,16 @@ void DragonFlame:: paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 {
     Q_UNUSED(option);
     Q_UNUSED(widget);
+    QTransform transform;
+    transform.rotate(90); // 旋转90度
     if(src==nullptr)
     {
         qDebug()<<"projectile pix error";
     }
     if(painter)
     {
-        painter->drawPixmap(QRect(-w_/2,0,w_,h_),QPixmap(src)); // 绘制激光
+        painter->drawPixmap(QRect(-w_/2,0,w_,h_),QPixmap(src).transformed(transform)); // 绘制激光
+
     }
 
 
@@ -46,24 +49,24 @@ QRectF DragonFlame::boundingRect() const
 
 void DragonFlame::detect()
 {
-        QRectF sceneBoundingRect = mapRectToScene(boundingRect());
+    QRectF sceneBoundingRect = mapRectToScene(boundingRect());
 
-        QList<QGraphicsItem*> itemsInBoundingRect = scene()->items(sceneBoundingRect);
+    QList<QGraphicsItem*> itemsInBoundingRect = scene()->items(sceneBoundingRect);
 
-        itemsInBoundingRect.removeOne(this);
+    itemsInBoundingRect.removeOne(this);
 
-        if (!itemsInBoundingRect.isEmpty()) {
-            for (auto* item : itemsInBoundingRect) {
-                Enemy* enemy_p = dynamic_cast<Enemy*>(item);
-                if(enemy_p==nullptr)
-                {
-                    continue;
-                }
-                connect(this,&DragonFlame::collision,enemy_p,&Enemy::receive);
-                emit collision(damage,type);
+    if (!itemsInBoundingRect.isEmpty()) {
+        for (auto* item : itemsInBoundingRect) {
+            Enemy* enemy_p = dynamic_cast<Enemy*>(item);
+            if(enemy_p==nullptr)
+            {
+                continue;
             }
+            connect(this,&DragonFlame::collision,enemy_p,&Enemy::receive);
+            emit collision(damage,type);
         }
-        assert(enemys==nullptr);
+    }
+    assert(enemys==nullptr);
 }
 void DragonFlame::setDire(qreal angle_)
 {

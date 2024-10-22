@@ -14,7 +14,6 @@ MainMenu::MainMenu(QWidget *parent)
     pixMainMenuBackground.load(":/img/asset/mainMenuBackground.jpg");
     pixShield.load(":/img/asset/shield.png");
 
-    //set preAnimation
 
 
 
@@ -30,16 +29,21 @@ MainMenu::MainMenu(QWidget *parent)
     QFont btnFont(fontFamily);
     QFont labelFont(fontFamily);
     QFont comboFont(fontFamily);
+    QFont titleFont(fontFamily);
     btnFont.setPointSize(OriginSize);
     btnFont.setWeight(QFont::Bold);
     labelFont.setPointSize(OriginSize+4);
     labelFont.setWeight(QFont::Bold);
     comboFont.setPointSize(OriginSize-4);
+    titleFont.setPointSize(OriginSize+50);
+
+
 
     //init original buttons
     for(int i=0;i<4;i++){
         buttons[i]->setGeometry(510+i*5,260+i*75,BTNW-i*10,BTNH-i*5);
         buttons[i]->setFont(btnFont);
+        buttons[i]->hide();
         QString styleSheet =QString(
             "QPushButton{"
             "color: black;"
@@ -78,16 +82,15 @@ MainMenu::MainMenu(QWidget *parent)
     backMainMenu1->hide();
 
         //set volume
-    volumeLabel =new QLabel("VOLUME:50",this);
+    volumeLabel =new QLabel("VOL:50",this);
     volumeLabel->setFont(labelFont);
-    volumeLabel->move(labelX,250);
-    volumeLabel->setFixedSize(150,60);
+    volumeLabel->move(labelX,240);
+    volumeLabel->setFixedSize(150,80);
     volumeLabel->hide();
     volumeLabel->setStyleSheet(
         "QLabel{"
         "background-position:center;"
         "background-repeat:no-repeat;"
-        "color:#DEDEDE;"
         "}"
         );
 
@@ -116,7 +119,7 @@ MainMenu::MainMenu(QWidget *parent)
 
 
     connect(volumeSlider,&QSlider::valueChanged,this,[=](int value){
-        volumeLabel->setText(QString("VOLUME:%1").arg(value));
+        volumeLabel->setText(QString("VOL:%1").arg(value));
         emit volumeChanged(value/100.0);
     });
 
@@ -152,7 +155,7 @@ MainMenu::MainMenu(QWidget *parent)
         "QComboBox::drop-down {"
         "    subcontrol-origin: padding;"
         "    subcontrol-position: top right;"
-        "    width: 18px;"
+        "    width: 0px;"
         "    border-left-width: 0px;"
         "    border-left-color: #918376;"
         "    border-left-style: solid;"
@@ -209,8 +212,8 @@ MainMenu::MainMenu(QWidget *parent)
         "QComboBox::drop-down {"
         "    subcontrol-origin: padding;"
         "    subcontrol-position: top right;"
-        "    width: 18px;"
-        "    border-left-width: 1px;"
+        "    width: 0px;"
+        "    border-left-width: 0px;"
         "    border-left-color: #918376;"
         "    border-left-style: solid;"
         "    border-top-right-radius: 3px;"
@@ -288,16 +291,33 @@ MainMenu::MainMenu(QWidget *parent)
         emit selectLevel(3);
     });
 
+    //set preAnimation
+
+    backgroundLabel=new QLabel(" ",this);
+    backgroundLabel->setStyleSheet("background-color:black;");
+    backgroundLabel->setGeometry(0,0,1200,800);
+    backgroundLabel->setAttribute(Qt::WA_StyledBackground, true);
+    titleLabel=new QLabel("DEFENCE OF \n   THRONES",this);
+    titleLabel->setStyleSheet("color: white;");
+    titleLabel->setFont(titleFont);
+    titleLabel->setGeometry(300,300,600,200);
+
+    fadeInTitle();
+
+
     //set change widget signal
     connect(buttons[0],&QPushButton::clicked,this,[=](){
         emit startNewGame();
     });
     connect(buttons[1],&QPushButton::clicked,this,[=](){
-        qDebug()<<maxLevel<<1111;
         emit openLevelMenu();
+        qDebug()<<maxLevel<<1111;
         showLevelSelect();
     });
     connect(buttons[2],&QPushButton::clicked,this,&MainMenu::showSettings);
+    connect(buttons[2],&QPushButton::clicked,this,[=]{
+        emit openSettingMenu();
+    });
     connect(buttons[3],&QPushButton::clicked,this,[=](){
         emit exitGame();
     });
@@ -310,6 +330,7 @@ void MainMenu::paintEvent(QPaintEvent *event){
     //实例化画家
     QPainter painter(this);
 
+
     //QPixmap pix()
     painter.drawPixmap(yOffset,0,this->width(),this->height(),pixMainMenuBackground);
     painter.drawPixmap(yOffset+this->width(),0,this->width(),this->height(),pixMainMenuBackground);
@@ -317,7 +338,51 @@ void MainMenu::paintEvent(QPaintEvent *event){
     if(yOffset<=-(this->width())){
         yOffset=0;
     }
+    if(showTitle){
+        painter.fillRect(this->rect(),Qt::black);
+        QTimer::singleShot(5000,[=]{
+            showTitle=0;
+        });
+    }
 
+}
+
+void MainMenu::fadeInTitle(){
+    QGraphicsOpacityEffect *opacityEffect=new QGraphicsOpacityEffect(titleLabel);
+    QGraphicsOpacityEffect *opacityEffect2=new QGraphicsOpacityEffect(backgroundLabel);
+    titleLabel->setGraphicsEffect(opacityEffect);
+    backgroundLabel->setGraphicsEffect(opacityEffect2);
+
+    QPropertyAnimation *fadeIn =new QPropertyAnimation(opacityEffect,"opacity");
+    fadeIn->setDuration(2000);
+    fadeIn->setStartValue(0);
+    fadeIn->setEndValue(1);
+    fadeIn->start();
+
+    QTimer::singleShot(3000,[=]{
+        QPropertyAnimation *fadeOut =new QPropertyAnimation(opacityEffect,"opacity");
+        fadeOut->setDuration(2000);
+        fadeOut->setStartValue(1);
+        fadeOut->setEndValue(0);
+        fadeOut->start();
+    });
+
+    QTimer::singleShot(5000,[=]{
+        QPropertyAnimation *fadeOut =new QPropertyAnimation(opacityEffect2,"opacity");
+        fadeOut->setDuration(4000);
+        fadeOut->setStartValue(1);
+        fadeOut->setEndValue(0);
+        fadeOut->start();
+
+        connect(fadeOut,&QPropertyAnimation::finished,this,[=]{
+            backgroundLabel->hide();
+            titleLabel->hide();
+            for (int var = 0; var < 4; ++var) {
+                buttons[var]->show();
+            }
+            return;
+        });
+    });
 }
 
 MainMenu::~MainMenu()

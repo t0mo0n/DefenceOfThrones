@@ -1,21 +1,70 @@
 <RCC>
     <qresource prefix="/img">
-        <file>asset/1.png</file>
-        <file>asset/2.png</file>
-        <file>asset/3.png</file>
-        <file>asset/GOT.jpg</file>
-        <file>asset/button.png</file>
-        <file>asset/button1.png</file>
-        <file>asset/button2.png</file>
-        <file>asset/mainMenuBackground.png</file>
-        <file>asset/otherMenu.jpg</file>
-        <file>levelData/levelOne.json</file>
+        <file>asset/chap1-wall.jpg</file>
+        <file>asset/chap2-winterfell.jpg</file>
+        <file>asset/chap3-kingslanding.jpg</file>
+        <file>asset/ArcherButton_1.png</file>
+        <file>asset/ArcherButton_2.png</file>
+        <file>asset/close_1.png</file>
+        <file>asset/JohnSnowButton.png</file>
+        <file>asset/JohnSnowButton_2.png</file>
+        <file>asset/resume_1.png</file>
+        <file>asset/resume_2.png</file>
+        <file>asset/stoneButton.png</file>
+        <file>asset/stoneButton_2.png</file>
+        <file>asset/stop_1.png</file>
+        <file>asset/stop_2.png</file>
+        <file>asset/Archer.png</file>
+        <file>asset/Arrow.png</file>
+        <file>asset/btnEnd.jpeg</file>
+        <file>asset/btnEndLight.jpeg</file>
+        <file>asset/Deadalive.png</file>
+        <file>asset/Dragon.png</file>
+        <file>asset/endPoint.png</file>
+        <file>asset/FireArrow.png</file>
+        <file>asset/FireBall.png</file>
+        <file>asset/Flame.png</file>
+        <file>asset/GreyJoySoldier.png</file>
+        <file>asset/IceDragon.png</file>
+        <file>asset/Jamie.png</file>
+        <file>asset/JohnSnow.png</file>
+        <file>asset/LannistSoldier.png</file>
+        <file>asset/Mountain.png</file>
+        <file>asset/obstacleStone.png</file>
+        <file>asset/obstacleTree.png</file>
+        <file>asset/RedWitch.png</file>
+        <file>asset/road.jpg</file>
+        <file>asset/selectArrow.jpeg</file>
+        <file>asset/selectArrowBlack.jpeg</file>
+        <file>asset/selectDragon.jpeg</file>
+        <file>asset/selectDragonBlack.jpeg</file>
+        <file>asset/selectJohn.jpeg</file>
+        <file>asset/selectJohnBlack.jpeg</file>
+        <file>asset/setTower.png</file>
+        <file>asset/spawnPoint.png</file>
+        <file>asset/stone.png</file>
+        <file>asset/StoneThrower.png</file>
+        <file>asset/Wild1.png</file>
+        <file>asset/Wolf.png</file>
+        <file>asset/dragonButton.png</file>
+        <file>asset/dragonButton_2.png</file>
+        <file>asset/NightKing2.png</file>
+        <file>asset/button3.png</file>
         <file>asset/mainMenuBackground.jpg</file>
         <file>asset/shield.png</file>
-        <file>asset/sword.png</file>
-        <file>asset/badge.png</file>
-        <file>asset/button3.png</file>
-        <file>font/Game of Thrones.ttf</file>
+        <file>asset/cabin.png</file>
+        <file>asset/close_2.png</file>
+        <file>asset/house1.png</file>
+        <file>asset/house2.png</file>
+        <file>asset/iceBurg.png</file>
+        <file>asset/iceElephant.png</file>
+        <file>asset/iceLake.png</file>
+        <file>asset/market.png</file>
+        <file>asset/ruinWall.png</file>
+        <file>asset/wolfHand.png</file>
+        <file>asset/woodlabel.png</file>
+        <file>asset/cabin0.png</file>
+        <file>asset/levelboard0.png</file>
     </qresource>
     <qresource prefix="/sound">
         <file>music/The_Rains_of_Castamere.mp3</file>
@@ -28,5 +77,14 @@
         <file>font/Argor Got Scaqh.ttf</file>
         <file>font/Hodor.ttf</file>
         <file>font/Mason Regular.ttf</file>
+        <file>font/Game of Thrones.ttf</file>
+    </qresource>
+    <qresource prefix="/data">
+        <file>levelData/levelOne.json</file>
+        <file>levelData/levelOneHard.json</file>
+        <file>levelData/levelThree.json</file>
+        <file>levelData/levelThreeHard.json</file>
+        <file>levelData/levelTwo.json</file>
+        <file>levelData/levelTwoHard.json</file>
     </qresource>
 </RCC>

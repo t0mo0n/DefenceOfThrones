@@ -1,6 +1,6 @@
 #ifndef MELISANDRE_H
 #define MELISANDRE_H
-#include"Enemy.h""
+#include "Enemy.h"
 class Melisandre:public Enemy
 {
 private:
@@ -9,6 +9,7 @@ private:
 public:
     Melisandre(const QVector<QPoint>& routine_, QGraphicsItem *parent = nullptr);
     void takeDamage(int damage_) override;
+    void move() override;
 };
 
 #endif // MELISANDRE_H

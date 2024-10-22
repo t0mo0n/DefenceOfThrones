@@ -1,49 +1,88 @@
+#include <QFontDatabase>
 #include <QGraphicsBlurEffect>
+#include<QGraphicsPixmapItem>
 #include "GameScene.h"
+#include "Deadalive.h"
+#include "GreyjoySoldier.h"
+#include "KingSlayer.h"
+#include "LannisterSoldier.h"
+#include "Melisandre.h"
+#include "NightKing.h"
+#include "Mountain.h"
+#include "Vesalion.h"
+#include "Wilder.h"
+#include "TowerCell.h"
+#include "PathCell.h"
+#include "Archer.h"
+#include "StoneThrower.h"
+#include "JohnSnow.h"
+#include "Dragon.h"
 #define SHILLING 100
 #define HEALTH 20
 GameScene::GameScene(int level, bool isHardMode, QGraphicsView *parent)
     : QGraphicsView(parent)
 {
+    this->setWindowIcon(QIcon(":/img/asset/btnPause.jpeg"));
+    this->setFixedSize(1200,800);
+    this->setWindowTitle("Let's Play");
+    this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->level = level;
     this->isHardMode = isHardMode;
     this->map = new Map();
+    scene = new QGraphicsScene(0,0,1200,800,this);
+    this->setScene(scene);
+    this->setGeometry(0,0,1200,800);
     loadMap(level);
-    player = new Player(map->getPlayerMoney,map->getPlayerHealth());
-    pauseGameButton = new Button("路径1", "路径2", 1000, 700);//暂停按钮图片1为正常时，2为鼠标点击时
-    scene = new QGraphicsScene(this);
+    player = new Player(map->getPlayerMoney(),map->getPlayerHealth());
+    connect(player,&Player::gameOver,this,&GameScene::gameEnd);
+    pauseGameButton = new Button(":/img/asset/stop_1.png", ":/img/asset/stop_2.png", 1000, 700);//暂停按钮图片1为正常时，2为鼠标点击时
     scene->addItem(pauseGameButton);
     pauseGameButton->setZValue(90);
     connect(pauseGameButton,&Button::clicked,this,&GameScene::onPauseButtonClicked);
 
-    gameEndButton = new Button("路径1", "路径2", 1100, 700);//结束按钮图片
+    gameEndButton = new Button(":/img/asset/close_1.png", ":/img/asset/close_2.png", 1100, 700);//结束按钮图片
     scene->addItem(gameEndButton);
     gameEndButton->setZValue(90);
     connect(gameEndButton,&Button::clicked,this,&GameScene::onGameEndButtonClicked);
     resumeGameButton = nullptr;
     pausedMenu = nullptr;
 
+    QGraphicsPixmapItem* board = new QGraphicsPixmapItem(QPixmap(":/img/asset/levelboard0.png"));
+    scene->addItem(board);
+    board->setPos(900,0);
+    board->setZValue(2);
+    //init font
+    int fontId = QFontDatabase::addApplicationFont(":/font/font/Mason Regular.ttf");
+    QString fontFamily =QFontDatabase::applicationFontFamilies(fontId).at(0);
+    QFont labelFont(fontFamily);
+    labelFont.setPointSize(15);
+    labelFont.setWeight(QFont::Bold);
+
+
     healthTextItem = new QGraphicsTextItem(QString("HEALTH: %1").arg(map->getPlayerHealth()));
     scene->addItem(healthTextItem);
-    healthTextItem->setPos(1000, 0);
-    healthTextItem->setDefaultTextColor(Qt::red);
+    healthTextItem->setFont(labelFont);
+    healthTextItem->setPos(960, 60);
+    // healthTextItem->setDefaultTextColor(Qt::red);
     healthTextItem->setZValue(90);
     connect(player, &Player::lifeChanged, this, &GameScene::updatePlayerLives);
 
     moneyTextItem = new QGraphicsTextItem(QString("SHILLING: %1").arg(map->getPlayerMoney()));
-    moneyTextItem->setPos(1000, 100);
-    moneyTextItem->setDefaultTextColor(Qt::yellow);
-    healthTextItem->setZValue(90);
+    scene->addItem(moneyTextItem);
+    moneyTextItem->setFont(labelFont);
+    moneyTextItem->setPos(960, 130);
+    // moneyTextItem->setDefaultTextColor(Qt::yellow);
+    moneyTextItem->setZValue(90);
     connect(player, &Player::moneyChanged, this, [=](int newAmount)
             { this->moneyTextItem->setPlainText(QString("SHILLING: %1").arg(newAmount)); });
-
     towerSelectMenu = nullptr;
 
-    QTimer *updateTimer = new QTimer(this);
+    updateTimer = new QTimer(this);
     updateTimer->start(50);
     connect(updateTimer, &QTimer::timeout, this, &GameScene::updateScene);
 
-    QTimer *enemyTimer = new QTimer(this);
+    enemyTimer = new QTimer(this);
     if (isHardMode)
     {
         enemyTimer->start(1500);
@@ -53,14 +92,31 @@ GameScene::GameScene(int level, bool isHardMode, QGraphicsView *parent)
         enemyTimer->start(2000);
     }
 
-    connect(enemyTimer, &QTimer::timeout, [=](){
+    ecount = 0;
+    connect(enemyTimer, &QTimer::timeout, this,[=](){
+        ecount++;
+        qDebug() << ecount;
         addEnemy();
     });
 
+
+    // if(level ==1)
+    // {
+    //     background = new BackGround(":/img/asset/chap1-wall.jpg");
+    // }
+    // else if(level ==2)
+    // {
+    //     background = new BackGround(":/img/asset/chap2-winterfell.jpg");
+    // }
+    // else
+    // {
+    //     background = new BackGround(":/img/asset/chap3-kingslanding.jpg");
+    // }
+    // scene->addItem(background);
+    // background->setZValue(0);
 }
 void GameScene::onGameEndButtonClicked()
 {
-    emit gameEnd();
     close();
 }
 void GameScene::onPauseButtonClicked()
@@ -71,12 +127,14 @@ void GameScene::onPauseButtonClicked()
         pausedMenu = new QGraphicsRectItem(QRectF(scene->sceneRect()));
         pausedMenu->setBrush(QBrush(QColor(255, 255, 255, 128)));
         pausedMenu->setZValue(100);
+        pausedMenu->setFlag(QGraphicsItem::ItemIsSelectable,true);
+        // bug code:
+        // QGraphicsBlurEffect *pauseMenuEffect = new QGraphicsBlurEffect();
+        // pauseMenuEffect->setBlurRadius(100);
+        // pausedMenu->setGraphicsEffect(pauseMenuEffect);
 
-        QGraphicsBlurEffect *pauseMenuEffect = new QGraphicsBlurEffect();
-        pauseMenuEffect->setBlurRadius(100);
-        pausedMenu->setGraphicsEffect(pauseMenuEffect);
         scene->addItem(pausedMenu);
-        resumeGameButton = new Button("路径1", "路径2", 550, 350);
+        resumeGameButton = new Button(":/img/asset/resume_1.png", ":/img/asset/resume_2.png", 550, 350);
         resumeGameButton->setParentItem(pausedMenu);
         resumeGameButton->setZValue(101);
         scene->addItem(resumeGameButton);
@@ -91,8 +149,9 @@ void GameScene::onResumeButtonClicked()
     {
         scene->removeItem(pausedMenu);
         scene->removeItem(resumeGameButton);
-        delete pausedMenu;
+
         delete resumeGameButton;
+        delete pausedMenu;
         pausedMenu = nullptr;
         resumeGameButton = nullptr;
     }
@@ -108,14 +167,29 @@ void GameScene::onEnemyDead(int reward, Enemy *enemyToBeDelete)
     scene->removeItem(enemyToBeDelete);
     enemies.removeOne(enemyToBeDelete);
     delete enemyToBeDelete;
+    if (enemies.isEmpty()) {
+        win_signal2 = true;
+        if (win_signal1){
+            emit gameWin(level);
+            qDebug()<<"win";
+        }
+    }
 }
 
 void GameScene::onEnemyArrive(int damage, Enemy *enemyToBeDelete)
 {
-    player->loseLife(damage);
     scene->removeItem(enemyToBeDelete);
     enemies.removeOne(enemyToBeDelete);
     delete enemyToBeDelete;
+    if (enemies.isEmpty()) {
+        win_signal2 = true;
+        if (win_signal1){
+            emit gameWin(level);
+            // qDebug()<<"win";
+        }
+    } else{
+        player->loseLife(damage);
+    }
 }
 
 void GameScene::onTowerSelectButtonClicked(QPoint cellPos, int type)
@@ -126,15 +200,19 @@ void GameScene::onTowerSelectButtonClicked(QPoint cellPos, int type)
     {
         Archer *archer = new Archer(cellPos);
         scene->addItem(archer);
+        archer->setFlag(QGraphicsItem::ItemIsSelectable,true);
         towers.append(archer);
         archer->setZValue(20);
         //扣钱
         player->spendMoney(archer->getBuyCost());
-        connect(archer,&Archer::towerUpdate,[=](int cost,Archer* toBeUpgrade){
+        connect(archer,&Archer::towerUpdate,this,[=](int cost,TowerFrame* toBeUpgrade){
             if(cost <= player->curMoney())
             {
-                toBeUpgrade->upgrade();
-                onTowerUpdated(cost);
+                if(toBeUpgrade->level<2)
+                {
+                    toBeUpgrade->upgrade();
+                    onTowerUpdated(cost);
+                }
             }
         });
         connect(archer, &Archer::sell,[=](TowerFrame* towerToBeDelete){
@@ -150,14 +228,18 @@ void GameScene::onTowerSelectButtonClicked(QPoint cellPos, int type)
     {
         StoneThrower *stoneThrower = new StoneThrower(cellPos);
         scene->addItem(stoneThrower);
+        stoneThrower->setFlag(QGraphicsItem::ItemIsSelectable,true);
         towers.append(stoneThrower);
         stoneThrower->setZValue(20);
         player->spendMoney(stoneThrower->getBuyCost());
-        connect(stoneThrower,&StoneThrower::towerUpdate,[=](int cost,StoneThrower* toBeUpgrade){
+        connect(stoneThrower,&StoneThrower::towerUpdate,[=](int cost,TowerFrame* toBeUpgrade){
             if(cost <= player->curMoney())
             {
-                toBeUpgrade->upgrade();
-                onTowerUpdated(cost);
+                if(toBeUpgrade->level<2)
+                {
+                    toBeUpgrade->upgrade();
+                    onTowerUpdated(cost);
+                }
             }
         });
 
@@ -174,14 +256,18 @@ void GameScene::onTowerSelectButtonClicked(QPoint cellPos, int type)
     {
         JohnSnow *johnSnow = new JohnSnow(cellPos);
         scene->addItem(johnSnow);
+        johnSnow->setFlag(QGraphicsItem::ItemIsSelectable,true);
         towers.append(johnSnow);
         johnSnow->setZValue(20);
         player->spendMoney(johnSnow->getBuyCost());
-        connect(johnSnow ,&JohnSnow::towerUpdate,[=](int cost,JohnSnow* toBeUpgrade){
+        connect(johnSnow ,&JohnSnow::towerUpdate,this,[=](int cost,TowerFrame* toBeUpgrade){
             if(cost <= player->curMoney())
             {
-                toBeUpgrade->upgrade();
-                onTowerUpdated(cost);
+                if(toBeUpgrade->level<2)
+                {
+                    toBeUpgrade->upgrade();
+                    onTowerUpdated(cost);
+                }
             }
         });
         connect(johnSnow, &JohnSnow::sell,[=](TowerFrame* towerToBeDelete){
@@ -196,14 +282,19 @@ void GameScene::onTowerSelectButtonClicked(QPoint cellPos, int type)
     {
         Dragon *dragon = new Dragon(cellPos);
         scene->addItem(dragon);
+        dragon->setFlag(QGraphicsItem::ItemIsSelectable,true);
         towers.append(dragon);
         dragon->setZValue(20);
         player->spendMoney(dragon->getBuyCost());
-        connect(dragon,&Dragon::towerUpdate,[=](int cost,Dragon *toBeUpgrade){
+        connect(dragon,&Dragon::towerUpdate,[=](int cost,TowerFrame* toBeUpgrade){
             if(cost <= player->curMoney())
             {
-                toBeUpgrade->upgrade();
-                onTowerUpdated(cost);
+                if(toBeUpgrade->level<2)
+                {
+                    toBeUpgrade->upgrade();
+                    onTowerUpdated(cost);
+                }
+
             }
         });
         connect(dragon, &Dragon::sell,[=](TowerFrame* towerToBeDelete){
@@ -228,6 +319,24 @@ void GameScene::onTowerUpdated(int cost)
 {
     player->spendMoney(cost);
 }
+
+void GameScene::drawBackground(QPainter *painter, const QRectF &rect)
+{
+    QPixmap bgPix;
+    switch (level){
+    case 1:
+        bgPix.load(":/img/asset/chap1-wall.jpg");
+        break;
+    case 2:
+        bgPix.load(":/img/asset/chap2-winterfell.jpg");
+        break;
+    case 3:
+        bgPix.load(":/img/asset/chap3-kingslanding.jpg");
+        break;
+    }
+
+    painter->drawPixmap(0,0,this->width(),this->height(),bgPix);
+}
 void GameScene::addTower(TowerFrame *tower)
 {
     scene->addItem(tower);
@@ -245,8 +354,8 @@ void GameScene::addEnemy()
     case 1:
     {
         DeadAlive *deadAlive = new DeadAlive(map->getPath());
-        scene->addItem(deadAlive);
         deadAlive->setZValue(10);
+        scene->addItem(deadAlive);
         enemies.append(deadAlive);
         break;
     }
@@ -280,6 +389,14 @@ void GameScene::addEnemy()
         scene->addItem(nightKing);
         nightKing->setZValue(10);
         enemies.append(nightKing);
+        connect(nightKing,&NightKing::generateDeadalive,[=](QVector<QPoint> newPath){
+            DeadAlive *deadAlive = new DeadAlive(newPath);
+            scene->addItem(deadAlive);
+            deadAlive->setZValue(10);
+            enemies.append(deadAlive);
+            connect(deadAlive,&DeadAlive::isDead,this,&GameScene::onEnemyDead);
+            connect(deadAlive,&DeadAlive::isArrived,this,&GameScene::onEnemyArrive);
+        });
         break;
     }
     case 6:
@@ -315,12 +432,18 @@ void GameScene::addEnemy()
         break;
     }
     default:
-        // todo
         //-1时敌人传输完成
+        enemyTimer->stop();
+        win_signal1 = true;
+        if (win_signal2) emit gameWin(level);
         break;
     }
-    connect(enemies.last(), &Enemy::isDead, this, &GameScene::onEnemyDead);
-    connect(enemies.last(), &Enemy::isArrived, this, &GameScene::onEnemyArrive);
+    if(enemyType!=0&&enemyType!=-1)
+    {
+        connect(enemies.last(), &Enemy::isDead, this, &GameScene::onEnemyDead);
+        connect(enemies.last(), &Enemy::isArrived, this, &GameScene::onEnemyArrive);
+    }
+
 }
 
 void GameScene::addObstacles()
@@ -328,9 +451,10 @@ void GameScene::addObstacles()
     QVector<QPair<QPoint, int>> obsPos = map->getObsPosType();
     for (int i = 0; i < obsPos.size(); i++)
     {
-        QPoint toScenePos(obsPos[i].first.x() * CELL_SIZE, obsPos[i].first.y() * CELL_SIZE);
+        QPoint toScenePos((obsPos[i].first.x()-1) * CELL_SIZE, (obsPos[i].first.y()-1) * CELL_SIZE);
         // todo加上price和health
-        Obstacle *obstacle = new Obstacle(toScenePos, obsPos[i].second);
+        Obstacle *obstacle = new Obstacle(obsPos[i].second, toScenePos);
+        obstacle->setFlag(QGraphicsItem::ItemIsSelectable,true);
         scene->addItem(obstacle);
         obstacle->setZValue(10);
         obstacles.append(obstacle);
@@ -351,6 +475,8 @@ void GameScene::updateScene()
 
 void GameScene::pauseScene()
 {
+
+    enemyTimer->stop();
     for (Enemy *i : enemies)
     {
         i->enemyPause();
@@ -362,6 +488,7 @@ void GameScene::pauseScene()
 }
 void GameScene::resumeScene()
 {
+    enemyTimer->start();
     for (Enemy *i : enemies)
     {
         i->enemyResume();
@@ -389,15 +516,22 @@ void GameScene::resumeScene()
 void GameScene::onTowerCellClicked(QPoint clickPos)
 {
     pauseScene();
-    towerSelectMenu = new TowerSelectMenu(clickPos, player->curMoney());
-    scene->addItem(towerSelectMenu);
-    towerSelectMenu->setZValue(95);
-    connect(towerSelectMenu, &TowerSelectMenu::selectTowerType, this, &GameScene::onTowerSelectButtonClicked);
-    connect(towerSelectMenu, &TowerSelectMenu::closeTowerSelectMenu, [=]()
-            {
-                resumeScene();
-                scene->removeItem(towerSelectMenu);
-                delete towerSelectMenu; });
+    if(!towerSelectMenu)
+    {
+        towerSelectMenu = new TowerSelectMenu(clickPos, player->curMoney());
+        scene->addItem(towerSelectMenu);
+        towerSelectMenu->setZValue(95);
+        towerSelectMenu->setVisible(true); // 确保可见
+        scene->update(); // 确保场景更新
+        connect(towerSelectMenu, &TowerSelectMenu::selectTowerType, this, &GameScene::onTowerSelectButtonClicked);
+        connect(towerSelectMenu, &TowerSelectMenu::closeTowerSelectMenu, [=]()
+                {
+                    resumeScene();
+                    scene->removeItem(towerSelectMenu);
+                    delete towerSelectMenu;
+                    towerSelectMenu=nullptr;        });
+    }
+
 }
 
 void GameScene::closeEvent(QCloseEvent *event)
@@ -406,7 +540,7 @@ void GameScene::closeEvent(QCloseEvent *event)
     event->accept();
 }
 
-void GameScene::loadMap(int level)
+    void GameScene::loadMap(int level)
 {
     map->load(level, isHardMode);
     addObstacles();
@@ -426,19 +560,28 @@ void GameScene::loadMap(int level)
     }
     // 加入pathCell
     QVector<QPoint> pathPos = map->getPath();
+    QPoint startPoint = pathPos[0];
+    QGraphicsPixmapItem* start = new QGraphicsPixmapItem(QPixmap(":/img/asset/spawnPoint.png"));
+    start->setPos(QPoint((startPoint.x()-1)*CELL_SIZE,(startPoint.y()-1)*CELL_SIZE));
+    qDebug()<<"stPos"<<startPoint;
+    start->setZValue(10);
+    scene->addItem(start);
+
     for (int i = 0; i < pathPos.size() - 1; i++)
     {
         QPoint startPoint = pathPos[i];
         QPoint endPoint = pathPos[i + 1];
         int dx = endPoint.x() - startPoint.x();
         int dy = endPoint.y() - startPoint.y();
+        qDebug()<<startPoint<<" "<<endPoint;
+        qDebug()<<dx<<" "<<dy;
         int nx = (dx > 0) ? dx : (-dx);
         int ny = (dy > 0) ? dy : (-dy);
         if (dx != 0)
         {
             for (int j = 0; j < nx; j++)
             {
-                PathCell *pathCell = new PathCell("普通道路方块",QPoint((startPoint.x() + j) * CELL_SIZE, startPoint.y() * CELL_SIZE));
+                PathCell *pathCell = new PathCell(":/img/asset/road.jpg",QPoint((startPoint.x() + j*(nx/dx)-1) * CELL_SIZE, (startPoint.y()-1) * CELL_SIZE));
                 scene->addItem(pathCell);
                 pathCell->setZValue(1);
             }
@@ -447,18 +590,17 @@ void GameScene::loadMap(int level)
         {
             for (int j = 0; j < ny; j++)
             {
-                PathCell *pathCell = new PathCell("普通道路方块",QPoint(startPoint.x() * CELL_SIZE, (startPoint.y() + j) * CELL_SIZE));
+                PathCell *pathCell = new PathCell(":/img/asset/road.jpg",QPoint((startPoint.x()-1) * CELL_SIZE, (startPoint.y() + j*(dy/ny)-1) * CELL_SIZE));
                 scene->addItem(pathCell);
                 pathCell->setZValue(1);
             }
         }
     }
     QPoint playerPos = map->getPlayerPosition();
-    PathCell *endPlayer = new PathCell("终点玩家方块",QPoint(playerPos.x()*CELL_SIZE,playerPos.y()*CELL_SIZE));
+    PathCell *endPlayer = new PathCell(":/img/asset/endPoint.png",QPoint((playerPos.x()-1)*CELL_SIZE,(playerPos.y()-1)*CELL_SIZE));
     scene->addItem(endPlayer);
     endPlayer->setZValue(5);
-    // todo
-    // 背景怎么办
+
 }
 
 // void GameScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)

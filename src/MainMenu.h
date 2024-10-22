@@ -12,6 +12,8 @@
 #include <QLabel>
 #include <QSlider>
 #include <QComboBox>
+#include <QGraphicsOpacityEffect>
+#include <QPropertyAnimation>
 #include <QDebug>
 
 #define WIDTH 1200
@@ -33,6 +35,7 @@ public:
     explicit MainMenu(QWidget *parent = nullptr);
     ~MainMenu();
     void paintEvent(QPaintEvent *event);
+    void fadeInTitle();
 
 signals:
     void startNewGame();
@@ -59,9 +62,12 @@ private:
     //0:startButton 1:levelSelectButton 2:settingButton 4:exitButton;
     QPixmap pixMainMenuBackground;
     QPixmap pixShield;
+    QLabel *titleLabel;
+    QLabel *backgroundLabel;
 
     //Timer
     int yOffset=0;
+    int showTitle=0;
 
     //Layout
     QVBoxLayout *mainMenuLayout;

@@ -35,7 +35,9 @@ void Player::loseLife(int damage)
         if (health <= 0) {
             emit gameOver();  // 发出游戏结束的信号
         }
-    }
+    } else if(health <= 0) {
+            emit gameOver();  // 发出游戏结束的信号
+        }
 }
 
 int Player::curMoney()

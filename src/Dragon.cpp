@@ -4,15 +4,14 @@ Dragon::Dragon(QPoint pos_)
     : TowerFrame(pos_, 2)
 {
     projectType = 4;
-    attackRange = 4*towerSize;
+    attackRange = 2*towerSize;
     attackSpeed = 4500;
-    buyCost = 500;
-    sellPrice .push_back( 250);
-    sellPrice .push_back( 600);
-    picDir = ":/img/asset/GOT.jpg";
+    buyCost = 800;
+    sellPrice .push_back( 350);
+    sellPrice .push_back( 750);
+    picDir = ":/img/asset/Dragon.png";
     towerType = 4;
-
-    upgradeFee=800;
+    upgradeFee=1000;
 
     attackTimer->start(attackSpeed); // 根据攻击速度设置定时器间隔
 }
@@ -56,8 +55,13 @@ void Dragon::attack()
 
             for (auto bullet : smallBullet)
             {
-                if(target)
+                if(target&&bullet)
                 {
+                    if(bullet)
+                    {
+                        bullet->setDire0();
+                    }
+
                     if(target->isEnemy())
                     {
                         if (enemyNum >= 2)
@@ -148,7 +152,7 @@ void Dragon::upgrade()
         return;
     }
     level++;
-    attackRange = 6*towerSize;
+    attackRange = 3*towerSize;
     attackSpeed = 2500;
     projectType = 5;
     update();
@@ -169,51 +173,65 @@ void Dragon::FindEnemy()
         towerAngle = angle;
 
         // 设置塔的旋转（如果需要旋转显示）
-        setRotation(angle * 180.0 / M_PI); // 将弧度转换为度
+        qreal targetAngle= (angle * 180.0) / M_PI; // 将弧度转换为度
+
+        // 获取当前角度
+        qreal currentAngle = rotation();
+
+        // 插值计算，控制转动的速度。0.1 表示转动速度，可以根据需要调整这个系数
+        qreal rotationSpeed = 0.08;
+        qreal newAngle = currentAngle + rotationSpeed * (targetAngle - currentAngle);
+
+        // 设置新的旋转角度
+        setRotation(newAngle);
     }
     QList<QGraphicsItem *> itemsInBoundingRect = checkForItemsInBoundingRect();
     Enemy*ob=nullptr;
 
-    if (!itemsInBoundingRect.isEmpty())
+    if(!target || !target->isEnemy())
     {
-        for (auto *item : itemsInBoundingRect)
+        if (!itemsInBoundingRect.isEmpty())
         {
-            Enemy *enemy_p = dynamic_cast<Enemy *>(item);
-            if (enemy_p != nullptr)
+            for (auto *item : itemsInBoundingRect)
             {
-                if(enemy_p->isEnemy()==true)
+                Enemy *enemy_p = dynamic_cast<Enemy *>(item);
+                if (enemy_p != nullptr)
                 {
-                    qreal distance = QLineF(enemy_p->pos(), this->pos()).length();
-                    if (distance <= attackRange+25)
+                    if(enemy_p->isEnemy()==true&&std::find(enemyList.begin(), enemyList.end(), enemy_p) == enemyList.end())
                     {
-                        connect(enemy_p, &Enemy::destroy, this, [this, enemy_p]()
-                                {
-                                    enemyList.removeOne(enemy_p);/*敌人类中是否会自己调用removescene？？*/ });
-                        enemyList.push_back(enemy_p);
+                        qreal distance = QLineF(enemy_p->pos(), this->pos()).length();
+                        if (distance <= attackRange)
+                        {
+                            connect(enemy_p, &Enemy::destroy, this, [this, enemy_p](){
+                                enemyList.removeOne(enemy_p);
+                            });
+                            enemyList.push_back(enemy_p);
+                        }
+                    }
+                    else if(enemy_p->isEnemy()==false)
+                    {
+                        ob=enemy_p;
+
                     }
                 }
-                else
-                {
-                    ob=enemy_p;
 
-                }
             }
 
         }
-    }
-    if (!enemyList.isEmpty())
-    {
-        setTarget(enemyList.front());
-    }
-    else if (enemyList.isEmpty()&&ob!=nullptr)
-    {
+        if (!enemyList.isEmpty())
+        {
+            setTarget(enemyList.front());
+        }
+        else if (enemyList.isEmpty()&&ob!=nullptr)
+        {
 
-    setTarget(ob);
+            setTarget(ob);
 
-    }
-    else
-    {
-        resetTarget();
+        }
+        else
+        {
+            resetTarget();
 
+        }
     }
 }

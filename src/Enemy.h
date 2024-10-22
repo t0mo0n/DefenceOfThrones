@@ -11,6 +11,9 @@
 #include <QImage>
 #include<QWidget>
 #include<QGraphicsTextItem>
+
+const int STEP = 1;
+
 class Enemy : public QGraphicsObject
 {
 
@@ -37,10 +40,15 @@ protected:
     bool isFire;//是否点燃
     int fireCount;
     QGraphicsTextItem* healthDisplay;
+
+    QPixmap slashPix;
+    QString slashPath;
+    QTimer *slashTimer;
+    bool isSlash;
 public:
 
     explicit Enemy(const QVector<QPoint>& routine_, QGraphicsItem *parent = nullptr); // 构造函数，传入路径
-    void move(); // 移动到下一个位置
+    virtual void move(); // 移动到下一个位置
     virtual void takeDamage(int damage_); // 接受伤害，检查是否死亡，死亡则触发信号
 
     // 重写 QGraphicsItem 的虚函数
@@ -57,7 +65,8 @@ signals:
     void destroy();
 public slots:
     void receive(int damage_,int type);
-    void receiveSnow(int damage_);
+    virtual void receiveSnow(int damage_);
+    void onSlashTimeout() ;
 };
 
 #endif // ENEMY_H

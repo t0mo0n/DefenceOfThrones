@@ -32,14 +32,14 @@
             6,3,6,6,8,0,0,0,8,9,
             8,6,3,6,0,6,6,6,0,-1
         ],
-        "paths":[[7, 5], [7, 3], [4, 3], [4, 7], [7, 7], [9, 7], [9, 9], [9, 4], [13, 4], [13, 6],[11,6]]
+        "paths":[[7, 5], [7, 3], [4, 3], [4, 7], [7, 7], [7, 9], [9, 9], [9, 4], [13, 4], [13, 6],[11,6]]
     },
     "obstacles": [
         {"type": "building1", "position": [6, 5]},
         {"type": "building1", "position": [5, 8]},
         {"type": "building1", "position": [10, 5]},
-        {"type": "building2", "position": [10, 7]},
-        {"type": "building2", "position": [11, 6]},
+        {"type": "building2", "position": [10, 8]},
+        {"type": "building2", "position": [11, 7]},
         {"type": "wall", "position": [2, 6]},
         {"type":"wall", "position":[14, 8]},
         {"type":"wall", "position":[15, 4]},

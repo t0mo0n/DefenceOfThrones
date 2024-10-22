@@ -2,7 +2,7 @@
 #define PLAYER_H
 #include<QWidget>
 #include <QObject>
-#include"enemy.h"
+#include"Enemy.h"
 
 class Player : public QWidget
 {

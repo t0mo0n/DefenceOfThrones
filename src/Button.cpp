@@ -16,7 +16,7 @@ Button::Button(QString UnHoverImagePath, QString HoverImagePath,int posX,int pos
 
 QRectF Button::boundingRect() const
 {
-    return QRectF(posX,posY,UnHoverImage.width(),HoverImage.height());
+    return QRectF(posX,posY,80,80);
 }
 
 void Button::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -25,20 +25,20 @@ void Button::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
     {
         if(option->state & QStyle::State_MouseOver)
         {
-            painter->drawPixmap(0,0,HoverImage);
+            painter->drawPixmap(boundingRect(),HoverImage,HoverImage.rect());
         }
         else
         {
-            painter->drawPixmap(0,0,UnHoverImage);
+            painter->drawPixmap(boundingRect(),UnHoverImage,UnHoverImage.rect());
         }
     }
     else if(inTowerSelect == -1)
     {
-        painter->drawPixmap(0,0,UnHoverImage);
+        painter->drawPixmap(boundingRect(),UnHoverImage,UnHoverImage.rect());
     }
     else if(inTowerSelect == 1)
     {
-        painter->drawPixmap(0,0,HoverImage);
+        painter->drawPixmap(boundingRect(),HoverImage,HoverImage.rect());
     }
 
 }
